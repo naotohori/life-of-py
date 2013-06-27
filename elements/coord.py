@@ -4,6 +4,7 @@
 '''
 
 import math
+from numpy import dot
 
 class Coord(object) :
     def __init__(self, x=0.0, y=0.0, z=0.0) :
@@ -26,3 +27,10 @@ class Coord(object) :
         self.x += delta_coord.x
         self.y += delta_coord.y
         self.z += delta_coord.z
+
+    def transform(self, mtx): 
+        c = [self.x, self.y, self.z, 0.0] 
+        c = dot(mtx,c)
+        self.x = c[0]
+        self.y = c[1]
+        self.z = c[2]
