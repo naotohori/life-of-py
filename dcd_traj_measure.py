@@ -6,14 +6,14 @@ Created on 2011/03/17
 '''
 
 import sys
+import math
+import copy
+import re
 from cafysis.file_io.dcd import DcdFile
 from cafysis.file_io.ninfo import NinfoFile
 from cafysis.elements.ninfo import NinfoSet
-import math
 from numpy import array, dot, arccos
 from numpy.linalg import norm
-import copy
-import re
 
 class DCD_END(Exception):
     pass
@@ -24,6 +24,8 @@ if len(sys.argv) != 3:
     print '      ##########################################'
     print '      #frameskip 5                             #'
     print '      #display 1000                            #'
+    print '      #out_time 1                              #'
+    print '      #          (0:nothing, 1:frame, 2:time)  #'
     print '      #                                        #'
     print '      #distance  1   2                         #'
     print '      #distance  3   8                         #'
@@ -49,6 +51,8 @@ if len(sys.argv) != 3:
     print '      #     :    :   :                         #'
     print '      #enc contact mol mol 10.0 100.0          #'
     print '      #     :    :   :                         #'
+    print '      #polar com1                              #'
+    print '      #     :    :   :                         #'
     print '      ##########################################'
     sys.exit(2)
 
@@ -69,13 +73,31 @@ defs = {}
 ninfo_files = {}
 frameskip = 1
 display = 0
+out_time = 0
 for line in f_cmd :
     if line.find('#') != -1:
         continue
     linesp = line.split()
     if len(linesp) == 0:
         continue
-    if linesp[0] == 'distance':
+        
+    if linesp[0] == 'frameskip':
+        if int(linesp[1]) > 0:
+            frameskip = int(linesp[1])
+        else :
+            frameskip = 1
+            
+    elif linesp[0] == 'display' :
+        if int(linesp[1]) > 0:
+            display = int(linesp[1])
+            
+    elif linesp[0] == 'out_time' :
+        out_time = int(linesp[1])
+        if not out_time in (0,1,2):
+            print ('out_time is should be 0,1 or 2\n>>>>' + line)
+            sys.exit(2)
+            
+    elif linesp[0] == 'distance':
         re1 = re.match('^\d+$', linesp[1])
         re2 = re.match('^\d+$', linesp[2])
         if re1 :
@@ -169,15 +191,8 @@ for line in f_cmd :
     elif linesp[0] == 'enc':
         cmds.append(tuple(linesp))
         
-    elif linesp[0] == 'frameskip':
-        if int(linesp[1]) > 0:
-            frameskip = int(linesp[1])
-        else :
-            frameskip = 1
-            
-    elif linesp[0] == 'display' :
-        if int(linesp[1]) > 0:
-            display = int(linesp[1])
+    elif linesp[0] == 'polar':
+        cmds.append(tuple(linesp))
 
 #    elif linesp[0] == 'distance_com_com' :
 #        linesp[1] = int(linesp[1])
@@ -339,10 +354,28 @@ for cmd in cmds :
             out_files[-1].write('%i\n' % cmd[3])
         out_files[-1].write('# 3 cutoff distance : %s\n' % cmd[4])
         out_files[-1].write('# 4 cutoff distance for skip : %s\n' % cmd[5])
+    elif cmd[0] == 'polar':
+        filename = 'polar'
+        if cmd[1] in defs :
+            filename += '_%s' % cmd[1]
+        else :
+            filename += '_%i' % cmd[1]
+        out_files.append(open(filename + '.out', 'w'))
+        out_files[-1].write('# distance between 1 and 2\n')
+        out_files[-1].write('# Spherical polar coordinates')
+        out_files[-1].write('# targets:')
+        if cmd[1] in defs:
+            out_files[-1].write(' %s' % defs[cmd[1]][0])
+            for imp in defs[cmd[1]][1] :
+                out_files[-1].write(' %i' % imp)
+            out_files[-1].write('\n')
+        else :
+            out_files[-1].write('%i\n' % cmd[1])
+        out_files[-1].write('%8s %6s %6s %7s %7s\n' % ('# r','theta','phi','theta[deg]','phi[deg]'))
         
 
 iframe = 0
-flg_initial_data = False
+flg_initial_data = True
 try:
     while dcd.has_more_data() :
         iframe += 1
@@ -359,36 +392,32 @@ try:
         # Read one step
         data = dcd.read_onestep()
         
-        if not flg_initial_data:
+        if flg_initial_data:
             data_ini = copy.deepcopy(data)
-            flg_initial_data = True
+            flg_initial_data = False
+            
+        coms = {}
+        for key, d in defs.items():
+            if d[0] == 'com':
+                com = [0.0, 0.0, 0.0]
+                for imp in d[1] :
+                    com[0] += data[imp - 1][0]
+                    com[1] += data[imp - 1][1]
+                    com[2] += data[imp - 1][2]
+                coms[key] = [x / float(len(d[1])) for x in com]
         
         for (icmd, cmd) in enumerate(cmds):
             if cmd[0] == 'distance' :
                 if cmd[1] in defs :
                     if defs[cmd[1]][0] == 'com' :
-                        com = [0.0, 0.0, 0.0]
-                        n = 0
-                        for imp in defs[cmd[1]][1] :
-                            n += 1
-                            com[0] += data[imp - 1][0]
-                            com[1] += data[imp - 1][1]
-                            com[2] += data[imp - 1][2]
-                        xyz_i = [com[0] / float(n), com[1] / float(n), com[2] / float(n)]
+                        xyz_i = coms[cmd[1]]
                     elif defs[cmd[1]][0] == 'mp' :
                         xyz_i = data[defs[cmd[1]][1][0] - 1]
                 else:
                     xyz_i = data[cmd[1] - 1]
                 if cmd[2] in defs :
                     if defs[cmd[2]][0] == 'com' :
-                        com = [0.0, 0.0, 0.0]
-                        n = 0
-                        for imp in defs[cmd[2]][1] :
-                            n += 1
-                            com[0] += data[imp - 1][0]
-                            com[1] += data[imp - 1][1]
-                            com[2] += data[imp - 1][2]
-                        xyz_j = [com[0] / float(n), com[1] / float(n), com[2] / float(n)]
+                        xyz_j = coms[cmd[2]]
                     elif defs[cmd[2]][0] == 'mp' :
                         xyz_j = data[defs[cmd[2]][1][0] - 1]
                 else:
@@ -443,42 +472,21 @@ try:
             elif cmd[0] == 'locaxis' :
                 if cmd[1] in defs :
                     if defs[cmd[1]][0] == 'com' :
-                        com = [0.0, 0.0, 0.0]
-                        n = 0
-                        for imp in defs[cmd[1]][1] :
-                            n += 1
-                            com[0] += data[imp - 1][0]
-                            com[1] += data[imp - 1][1]
-                            com[2] += data[imp - 1][2]
-                        xyz_i = [com[0] / float(n), com[1] / float(n), com[2] / float(n)]
+                        xyz_i = coms[cmd[1]]
                     elif defs[cmd[1]][0] == 'mp' :
                         xyz_i = data[defs[cmd[1]][1][0] - 1]
                 else:
                     xyz_i = data[cmd[1] - 1]
                 if cmd[2] in defs :
                     if defs[cmd[2]][0] == 'com' :
-                        com = [0.0, 0.0, 0.0]
-                        n = 0
-                        for imp in defs[cmd[2]][1] :
-                            n += 1
-                            com[0] += data[imp - 1][0]
-                            com[1] += data[imp - 1][1]
-                            com[2] += data[imp - 1][2]
-                        xyz_a = [com[0] / float(n), com[1] / float(n), com[2] / float(n)]
+                        xyz_a = coms[cmd[2]]
                     elif defs[cmd[2]][0] == 'mp' :
                         xyz_a = data[defs[cmd[2]][1][0] - 1]
                 else:
                     xyz_a = data[cmd[2] - 1]
                 if cmd[3] in defs :
                     if defs[cmd[3]][0] == 'com' :
-                        com = [0.0, 0.0, 0.0]
-                        n = 0
-                        for imp in defs[cmd[3]][1] :
-                            n += 1
-                            com[0] += data[imp - 1][0]
-                            com[1] += data[imp - 1][1]
-                            com[2] += data[imp - 1][2]
-                        xyz_b = [com[0] / float(n), com[1] / float(n), com[2] / float(n)]
+                        xyz_b = coms[cmd[3]]
                     elif defs[cmd[3]][0] == 'mp' :
                         xyz_b = data[defs[cmd[3]][1][0] - 1]
                 else:
@@ -655,6 +663,22 @@ try:
                 out_files[icmd].write('%12i %8i %8i %8i\n' 
                                       % (iframe,len(within_1),len(within_2),
                                          n_within))
+            elif cmd[0] == 'polar':
+                if cmd[1] in defs :
+                    if defs[cmd[1]][0] == 'com' :
+                        xyz = coms[cmd[1]]
+                    elif defs[cmd[1]][0] == 'mp' :
+                        xyz = data[defs[cmd[1]][1][0] - 1]
+                else:
+                    xyz = data[cmd[1] - 1]
+                dist = math.sqrt(xyz[0]**2 + xyz[1]**2 + xyz[2]**2)
+                theta = math.acos(xyz[2]/dist)
+                phi = math.atan2(xyz[1], xyz[0])
+                
+                out_files[icmd].write('%8.2f %6.3f %6.3f %7.2f %7.2f\n' 
+                                      % (dist,theta,phi,
+                                         math.degrees(theta), math.degrees(phi)) )
+            
 except DCD_END:
     pass
 

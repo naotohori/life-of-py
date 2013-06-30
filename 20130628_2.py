@@ -11,7 +11,7 @@ chain1 1-353
 chain2 354-868
 よって、Ste7のコアドメインは、542-824であり、
  Q189 = 542
- N201 = 672
+ N201 = 554
  
 '''
 
@@ -25,7 +25,7 @@ if len(sys.argv) != 3:
     sys.exit(2)
 
 ID_Q = 542 - 1
-ID_N = 672 - 1
+ID_N = 554 - 1
 ID_STE7_DOM_INI = 542 - 1  # 重心を求める際に必要
 ID_STE7_DOM_END = 824 - 1
 RESIDUE_TOTAL = 868

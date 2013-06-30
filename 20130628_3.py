@@ -61,7 +61,7 @@ while dcd.has_more_data() :
     dist = sqrt(com[0]**2 + com[1]**2 + com[2]**2)
     
     theta = acos(com[2]/dist)
-    phi = atan2(com[0], com[1])
+    phi = atan2(com[1], com[0])
     
     file_out.write('%f8.3 %f8.3\n' % (theta,phi))
     
