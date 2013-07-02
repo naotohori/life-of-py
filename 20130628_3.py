@@ -24,11 +24,7 @@ if len(sys.argv) != 3:
     print 'Usage: SCRIPT [input DCD] [output file]'
     sys.exit(2)
 
-ID_Q = 542 - 1
-ID_N = 672 - 1
-ID_STE7_DOM_INI = 542 - 1  # 重心を求める際に必要
-ID_STE7_DOM_END = 824 - 1
-RESIDUE_TOTAL = 868
+#RESIDUE_TOTAL = 868
 ID_FUS3_DOM_INI = 1 - 1
 ID_FUS3_DOM_END = 353 - 1
 
@@ -40,9 +36,9 @@ file_out = open(sys.argv[2], 'w')
 dcd.read_header()
 nmp = dcd.get_header().nmp_real
 
-if nmp != RESIDUE_TOTAL:
-    print 'ERROR: nmp != RESIDUE_TOTAL'
-    sys.exit(2)
+#if nmp != RESIDUE_TOTAL:
+#    print 'ERROR: nmp != RESIDUE_TOTAL'
+#    sys.exit(2)
 
 while dcd.has_more_data() :
     data = dcd.read_onestep()
