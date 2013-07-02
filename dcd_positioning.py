@@ -20,19 +20,26 @@ from cafysis.file_io.dcd import DcdFile
 import sys
 from math import hypot, atan2
 
-if len(sys.argv) != 3:
-    print 'Usage: SCRIPT [input DCD] [output DCD]'
+if len(sys.argv) != 7:
+    #print 'Usage: SCRIPT [input DCD] [output DCD]'
+    print 'Usage: SCRIPT [input DCD] [ID domain begin] [ID domain end] [ID for North] [ID for Greenwich] [output DCD]'
     sys.exit(2)
 
-ID_Q = 542 - 1
-ID_N = 554 - 1
-ID_STE7_DOM_INI = 542 - 1  # 重心を求める際に必要
-ID_STE7_DOM_END = 824 - 1
-RESIDUE_TOTAL = 868
+ID_STE7_DOM_INI = int(sys.argv[2]) - 1  # 重心を求める際に必要
+ID_STE7_DOM_END = int(sys.argv[3]) - 1
+ID_Q = int(sys.argv[4]) - 1
+ID_N = int(sys.argv[5]) - 1
+#RESIDUE_TOTAL = 868
+
+#ID_Q = 542 - 1
+#ID_N = 554 - 1
+#ID_STE7_DOM_INI = 542 - 1  # 重心を求める際に必要
+#ID_STE7_DOM_END = 824 - 1
+#RESIDUE_TOTAL = 868
 
 dcd = DcdFile(sys.argv[1])
 dcd.open_to_read()
-dcd_out = DcdFile(sys.argv[2])
+dcd_out = DcdFile(sys.argv[-1])
 dcd_out.open_to_write()
 
 # header
@@ -42,9 +49,9 @@ dcd_out.set_header(header)
 dcd_out.write_header()
 
 nmp = header.nmp_real
-if nmp != RESIDUE_TOTAL:
-    print 'ERROR: nmp != RESIDUE_TOTAL'
-    sys.exit(2)
+#if nmp != RESIDUE_TOTAL:
+#    print 'ERROR: nmp != RESIDUE_TOTAL'
+#    sys.exit(2)
 
 while dcd.has_more_data() :
     data = dcd.read_onestep()
