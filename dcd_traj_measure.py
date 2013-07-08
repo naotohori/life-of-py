@@ -735,7 +735,7 @@ try:
                 name = cmd[1] + '_RgCom'
                 if name in defs :
                     if defs[name][0] == 'RgCom' :
-                        xyz_com = coms[cmd[1]]
+                        xyz_com = coms[name]
                     else:
                         print ('Error: Rg 1')
                         sys.exit(2)
@@ -754,9 +754,9 @@ try:
                     sys.exit(2)
                 s = 0.0
                 for mp1 in mps1 :
-                    s += math.sqrt((data[mp1-1][0] - xyz_com[0]) ** 2
-                                 + (data[mp1-1][1] - xyz_com[1]) ** 2
-                                 + (data[mp1-1][2] - xyz_com[2]) ** 2)
+                    s += ((data[mp1-1][0] - xyz_com[0]) ** 2
+                        + (data[mp1-1][1] - xyz_com[1]) ** 2
+                        + (data[mp1-1][2] - xyz_com[2]) ** 2)
                 s = math.sqrt( s / float(len(mps1)) )
                 out_files[icmd].write('%12.5f\n' % s)
             
