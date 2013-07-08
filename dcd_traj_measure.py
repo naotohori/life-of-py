@@ -27,32 +27,52 @@ if len(sys.argv) != 3:
     print '      #out_time 1                              #'
     print '      #          (0:nothing, 1:frame, 2:time)  #'
     print '      #                                        #'
-    print '      #distance  1   2                         #'
-    print '      #distance  3   8                         #'
-    print '      #distance 100 120                        #'
+    print '      #def_mp  mp1  34                         #'
+    print '      #def_mp  mp2  189                        #'
+    print '      #def_mp   A   200                        #'
     print '      #     :    :   :                         #'
-    print '      #angle     10  11  12  13                #'
-    print '      #     :    :   :                         #'
+    print '      #                                        #'
     print '      #def_com com1 2 3 4 5 - 10 12 14 - 20    #'
     print '      #def_com com2 2 3 4 5 - 10 12 14 - 20    #'
     print '      #     :    :   :                         #'
+    print '      #                                        #'
+    print '      #def_mol mol1 2 3 4 5 - 10 12 14 - 20    #'
+    print '      #def_mol mol2 2 3 4 5 - 10 12 14 - 20    #'
+    print '      #     :    :   :                         #'
+    print '      #                                        #'
+    print '      #distance  1   2                         #'
+    print '      #distance  3   A                         #'
+    print '      #distance 100  com2                      #'
     print '      #distance com1 com2                      #'
     print '      #     :    :   :                         #'
+    print '      #                                        #'
+    print '      #angle     10  11  12  13                #'
+    print '      #angle     com1  11  com2  13            #'
+    print '      #     :    :   :                         #'
+    print '      #                                        #'
     print '      #locaxis com1 com2 com3                  #'
     print '      # !location of com1 on axis (com2->com3) #'
     print '      #     :    :   :                         #'
+    print '      #                                        #'
     print '      #def_ninfo ninfo1 filename               #'
     print '      #q all ninfo1                            #'
     print '      #q contact ninfo1                        #'
     print '      #q basepair ninfo1                       #'
     print '      #q basestack ninfo1                      #'
     print '      #     :    :   :                         #'
+    print '      #                                        #'
     print '      #dock mol mol 10.0 4                     #'
     print '      #     :    :   :                         #'
+    print '      #                                        #'
     print '      #enc contact mol mol 10.0 100.0          #'
     print '      #     :    :   :                         #'
+    print '      #                                        #'
     print '      #polar com1                              #'
     print '      #     :    :   :                         #'
+    print '      #                                        #'
+    print '      #rg    mol                               #'
+    print '      #     :    :   :                         #'
+    print '      #                                        #'
     print '      ##########################################'
     sys.exit(2)
 
@@ -192,6 +212,9 @@ for line in f_cmd :
         cmds.append(tuple(linesp))
         
     elif linesp[0] == 'polar':
+        cmds.append(tuple(linesp))
+        
+    elif linesp[0] == 'rg':
         cmds.append(tuple(linesp))
 
 #    elif linesp[0] == 'distance_com_com' :
@@ -361,7 +384,6 @@ for cmd in cmds :
         else :
             filename += '_%i' % cmd[1]
         out_files.append(open(filename + '.out', 'w'))
-        out_files[-1].write('# distance between 1 and 2\n')
         out_files[-1].write('# Spherical polar coordinates')
         out_files[-1].write('# targets:')
         if cmd[1] in defs:
@@ -372,6 +394,36 @@ for cmd in cmds :
         else :
             out_files[-1].write('%i\n' % cmd[1])
         out_files[-1].write('%8s %6s %6s %7s %7s\n' % ('# r','theta','phi','theta[deg]','phi[deg]'))
+    elif cmd[0] == 'rg':
+        filename = 'Rg'
+        #if cmd[1] in defs :
+        #    filename += '_%s' % cmd[1]
+        #else :
+        #    filename += '_%i' % cmd[1]
+        if not cmd[1] in defs :
+            print ("For Rg, you have to define mol by 'def_mol'")
+            sys.exit(2)
+        filename += '_%s' % cmd[1]
+        out_files.append(open(filename + '.out', 'w'))
+        out_files[-1].write('# Rg')
+        out_files[-1].write('# targets:')
+        #if cmd[1] in defs:
+        #    out_files[-1].write(' %s' % defs[cmd[1]][0])
+        #    for imp in defs[cmd[1]][1] :
+        #        out_files[-1].write(' %i' % imp)
+        #    out_files[-1].write('\n')
+        #else :
+        #    out_files[-1].write('%i\n' % cmd[1])
+        out_files[-1].write(' %s' % defs[cmd[1]][0])
+        for imp in defs[cmd[1]][1] :
+            out_files[-1].write(' %i' % imp)
+        out_files[-1].write('\n')
+        out_files[-1].write('%8s %6s %6s %7s %7s\n' % ('# r','theta','phi','theta[deg]','phi[deg]'))
+        
+        # Add com definition 
+        name = cmd[1] + '_RgCom'
+        mps = defs[cmd[1]][1]
+        defs[name] = ('RgCom', mps)
         
 
 iframe = 0
@@ -398,7 +450,7 @@ try:
             
         coms = {}
         for key, d in defs.items():
-            if d[0] == 'com':
+            if d[0] in ('com', 'RgCom'):
                 com = [0.0, 0.0, 0.0]
                 for imp in d[1] :
                     com[0] += data[imp - 1][0]
@@ -678,6 +730,35 @@ try:
                 out_files[icmd].write('%8.2f %6.3f %6.3f %7.2f %7.2f\n' 
                                       % (dist,theta,phi,
                                          math.degrees(theta), math.degrees(phi)) )
+
+            elif cmd[0] == 'rg' :
+                name = cmd[1] + '_RgCom'
+                if name in defs :
+                    if defs[name][0] == 'RgCom' :
+                        xyz_com = coms[cmd[1]]
+                    else:
+                        print ('Error: Rg 1')
+                        sys.exit(2)
+                else:
+                    print ('Error: Rg 2')
+                    sys.exit(2)
+
+                if cmd[1] in defs :
+                    if defs[cmd[1]][0] == 'mol' :
+                        mps1 = defs[cmd[1]][1]
+                    else:
+                        print ('Error: Rg 4')
+                        sys.exit(2)
+                else:
+                    print ('Error: Rg 3')
+                    sys.exit(2)
+                s = 0.0
+                for mp1 in mps1 :
+                    s += math.sqrt((data[mp1-1][0] - xyz_com[0]) ** 2
+                                 + (data[mp1-1][1] - xyz_com[1]) ** 2
+                                 + (data[mp1-1][2] - xyz_com[2]) ** 2)
+                s = math.sqrt( s / float(len(mps1)) )
+                out_files[icmd].write('%12.5f\n' % s)
             
 except DCD_END:
     pass
