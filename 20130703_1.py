@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 #!vim:fileencoding=UTF-8
 
-
 import subprocess
 
 jobid = (
@@ -30,11 +29,19 @@ jobid = (
 ("sf_0032", "I_ELE_HIS0_P1all"),
 ("sf_0033", "I_ELE_HIS0_P1all"),
 ("sf_0034", "I_ELE_HIS0_P1all"),
-("sf_0035", "L"), ("sf_0036", "L"),
-("sf_0037", "L"), ("sf_0038", "L"), ("sf_0039", "L"),
-("sf_0040", "T"), ("sf_0041", "T"), ("sf_0042", "T"),
-("sf_0043", "T"), ("sf_0044", "T"), ("sf_0045", "S"),
-("sf_0046", "S"), ("sf_0047", "S"),
+("sf_0035", "L"),
+("sf_0036", "L"),
+("sf_0037", "L"),
+("sf_0038", "L"),
+("sf_0039", "L"),
+("sf_0040", "T"),
+("sf_0041", "T"),
+("sf_0042", "T"),
+("sf_0043", "T"),
+("sf_0044", "T"),
+("sf_0045", "S"),
+("sf_0046", "S"),
+("sf_0047", "S"),
 )
 
 pathroot = "/home/hori/mapk/cafemol/"

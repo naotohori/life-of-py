@@ -5,7 +5,7 @@
 '''
 
 from cafysis.elements.coord import Coord
-from cafysis.elements.error import Error
+from cafysis.elements.error import MyError
 from cafysis.elements.pdb import Atom, Chain, Residue
 
 class PdbFile(object) :
@@ -13,15 +13,17 @@ class PdbFile(object) :
         self._filename = filename
         self._status = 'Closed'
         self.flg_HETATM = False
+        self.modelID = None
+        self.remark = None
         
     def open_to_read(self):
         if self._status != 'Closed' :
-            raise Error('PdbFile', 'open_for_read', 'file is not closed')
+            raise MyError('PdbFile', 'open_for_read', 'file is not closed')
         self._file = open(self._filename, 'r')
         
     def open_to_write(self):
         if self._status != 'Closed' :
-            raise Error('PdbFile', 'open_for_read', 'file is not closed')
+            raise MyError('PdbFile', 'open_for_read', 'file is not closed')
         self._file = open(self._filename, 'w')
 
     def close(self):
@@ -64,8 +66,24 @@ class PdbFile(object) :
             chains.append(c)
         
         return chains
-                
+    
+    def write_remark(self,char):
+        self._file.write('REMARK %s\n' % (char,))
+    
+    def set_remark(self,char):
+        ''' This REMARK will be written between MODEL and ENDMDL'''
+        if self.remark == None:
+            self.remark = 'REMARK %s\n' % (char,)
+        else:
+            self.remark += 'REMARK %s\n' % (char,)
+        
     def write_all(self, chains):
+        if self.modelID != None:
+            self._file.write('MODEL %i\n' % (self.modelID,))
+        if self.remark != None:
+            self._file.write(self.remark)
+            self.remark = None
+            
         ichain = 0
         for chain in chains :
             ichain += 1
@@ -75,12 +93,15 @@ class PdbFile(object) :
             if ichain < len(chains) :
                 self._file.write('TER\n')
                 
-        self._file.write('END')
+        if self.modelID != None:
+            self._file.write('ENDMDL\n')
+        else:
+            self._file.write('END\n')
         
     def _line2atom(self, line):
         line = line.rstrip()
         if line[0:6] != 'ATOM  ' and line[0:6] != 'HETATM' :
-            raise Error('PdbFile', 'decompose_atom', 'line does not begin with "ATOM"')
+            raise MyError('PdbFile', 'decompose_atom', 'line does not begin with "ATOM"')
         
         atom = Atom()
         atom.serial = int(line[6:11])

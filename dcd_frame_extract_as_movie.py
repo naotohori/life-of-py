@@ -12,13 +12,16 @@ from cafysis.file_io.dcd import DcdFile
 from cafysis.file_io.pdb import PdbFile
 
 if (not len(sys.argv) in (6, 7)):
-    print 'Usage: % SCRIPT [input DCD] [beginning (1)] [end] [reference PDB] [output movie]'
-    print '       % SCRIPT [input DCD] [beginning (1)] [end] [stride] [reference PDB] [output movie]'
+    print 'Usage: % SCRIPT [input DCD] [beginning (0)] [end] [reference PDB] [output movie]'
+    print '       % SCRIPT [input DCD] [beginning (0)] [end] [stride] [reference PDB] [output movie]'
     sys.exit(2)
 
 frame_begin = int(sys.argv[2])
+if frame_begin < 0:
+    print 'Error: beginning frame should not less than 0'
+    sys.exit(2)
 frame_end = int(sys.argv[3])
-if (len(sys.argv) == 5) :
+if (len(sys.argv) == 6) :
     frame_stride = 1
 else:
     frame_stride = int(sys.argv[4])
@@ -31,23 +34,23 @@ if frame_num < 1 :
     print 'The number of frames is invalid.'
     sys.exit(2)
 
-dcd = DcdFile(sys.argv[1])
-dcd.open_to_read()
-#if (len(sys.argv) == 5):
-#    dcd_out = DcdFile(sys.argv[4])
-#else:
-#    dcd_out = DcdFile(sys.argv[5])
-#dcd_out.open_to_write()
 
-# header
+# Read the reference PDB
+pdb = PdbFile(sys.argv[-2])
+pdb.open_to_read()
+chains = pdb.read_all()
+pdb.close()
+
+# Output PDB
+pdb = PdbFile(sys.argv[-1])
+pdb.open_to_write()
+
+
+# Open DCD and read the header
+dcd_filename = sys.argv[1]
+dcd = DcdFile(dcd_filename)
+dcd.open_to_read()
 dcd.read_header()
-header = dcd.get_header()
-header.istart = frame_begin
-header.nset = int(frame_num / frame_stride)
-header.nstep = header.nstep_save * (frame_num - 1)
-header.nstep_save = header.nstep_save * frame_stride
-#dcd_out.set_header(header)
-#dcd_out.write_header()
 
 def error_no_data() :
     print 'The number of frames is invalid.'
@@ -57,19 +60,34 @@ def error_no_data() :
 
 # skip
 dcd.skip(frame_begin - 1)
+i_org = frame_begin
 
 # read and write
 icount = -1
 for i in xrange(frame_num) :
     if not dcd.has_more_data() :
         error_no_data()
+        
     icount += 1
-    if icount % frame_stride != 0 :
-        dcd.skip(1)
-        continue
-    else :
+    if icount % frame_stride == 0 :
         icount = 0
-#    dcd_out.write_onestep(dcd.read_onestep())
+    else :
+        dcd.skip(1)
+        i_org += 1
+        continue
+    
+    struct = dcd.read_onestep()
+    iatom = 0
+    for c in chains:
+        for r in c.residues:
+            for a in r.atoms:
+                a.xyz.put_as_list(struct[iatom])
+                iatom += 1
+    pdb.modelID = i
+    pdb.set_remark('ORIGINAL_FILE %s' % (dcd_filename,))
+    pdb.set_remark('ORIGINAL_FRAME %i' % (i_org,))
+    pdb.write_all(chains)
+    i_org += 1
 
 dcd.close()
-#dcd_out.close()
+pdb.close()

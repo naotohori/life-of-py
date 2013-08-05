@@ -4,16 +4,16 @@
 @author: Naoto Hori
 '''
 
-from cafysis.elements.error import Error
+from cafysis.elements.error import MyError
 from cafysis.elements.ninfo import BondLength, BondAngle, Aicg13, Dihedral, AicgDih, Contact, BaseStack, BasePair
 
 def line2bondlength(line) :
     it = iter(line.split())
     num = len(line.split())
     if num != 12 and num != 13:
-        raise Error("func_line2ninfo", "line2bondlength", "")
+        raise MyError("func_line2ninfo", "line2bondlength", "")
     if it.next() != 'bond' :
-        raise Error("func_line2ninfo", "line2bondlength", "This line is not bondlength.")
+        raise MyError("func_line2ninfo", "line2bondlength", "This line is not bondlength.")
     info = BondLength()
     info.id = int(it.next())
     info.iunit1 = int(it.next())
@@ -34,9 +34,9 @@ def line2bondangle(line) :
     it = iter(line.split())
     num = len(line.split())
     if num != 14 and num != 15:
-        raise Error("func_line2ninfo", "line2bondangle", "")
+        raise MyError("func_line2ninfo", "line2bondangle", "")
     if it.next() != 'angl' :
-        raise Error("func_line2ninfo", "line2bondangle", "This line is not bondangle.")
+        raise MyError("func_line2ninfo", "line2bondangle", "This line is not bondangle.")
     info = BondAngle()
     info.id = int(it.next())
     info.iunit1 = int(it.next())
@@ -59,9 +59,9 @@ def line2aicg13(line) :
     it = iter(line.split())
     num = len(line.split())
     if num != 15 and num != 16:
-        raise Error("func_line2ninfo", "line2aicg13", "")
+        raise MyError("func_line2ninfo", "line2aicg13", "")
     if it.next() != 'aicg13' :
-        raise Error("func_line2ninfo", "line2aicg13", "This line is not aicg13.")
+        raise MyError("func_line2ninfo", "line2aicg13", "This line is not aicg13.")
     info = Aicg13()
     info.id = int(it.next())
     info.iunit1 = int(it.next())
@@ -85,9 +85,9 @@ def line2dihedral(line) :
     it = iter(line.split())
     num = len(line.split())
     if num != 17 and num != 18:
-        raise Error("func_line2ninfo", "line2dihedral", "")
+        raise MyError("func_line2ninfo", "line2dihedral", "")
     if it.next() != 'dihd' :
-        raise Error("func_line2ninfo", "line2dihedral", "This line is not dihedral.")
+        raise MyError("func_line2ninfo", "line2dihedral", "This line is not dihedral.")
     info = Dihedral()
     info.id = int(it.next())
     info.iunit1 = int(it.next())
@@ -113,9 +113,9 @@ def line2aicgdih(line) :
     it = iter(line.split())
     num = len(line.split())
     if num != 17 and num != 18:
-        raise Error("func_line2ninfo", "line2aicgdih", "")
+        raise MyError("func_line2ninfo", "line2aicgdih", "")
     if it.next() != 'aicgdih' :
-        raise Error("func_line2ninfo", "line2aicgdih", "This line is not aicgdih.")
+        raise MyError("func_line2ninfo", "line2aicgdih", "This line is not aicgdih.")
     info = AicgDih()
     info.id = int(it.next())
     info.iunit1 = int(it.next())
@@ -141,9 +141,9 @@ def line2contact(line) :
     it = iter(line.split())
     num = len(line.split())
     if num != 12 and num != 13:
-        raise Error("func_line2ninfo", "line2contact", "")
+        raise MyError("func_line2ninfo", "line2contact", "")
     if it.next() != 'contact' :
-        raise Error("func_line2ninfo", "line2contact", "This line is not contact.")
+        raise MyError("func_line2ninfo", "line2contact", "This line is not contact.")
     info = Contact()
     info.id = int(it.next())
     info.iunit1 = int(it.next())
@@ -164,9 +164,9 @@ def line2basepair(line) :
     it = iter(line.split())
     num = len(line.split())
     if num != 14 :
-        raise Error("func_line2ninfo", "line2basepair", "")
+        raise MyError("func_line2ninfo", "line2basepair", "")
     if it.next() != 'basepair' :
-        raise Error("func_line2ninfo", "line2basepair", "This line is not basepair")
+        raise MyError("func_line2ninfo", "line2basepair", "This line is not basepair")
     info = BasePair()
     info.id = int(it.next())
     info.iunit1 = int(it.next())
@@ -187,9 +187,9 @@ def line2basestack(line) :
     it = iter(line.split())
     num = len(line.split())
     if num != 13 :
-        raise Error("func_line2ninfo", "line2basestack", "")
+        raise MyError("func_line2ninfo", "line2basestack", "")
     if it.next() != 'basestack' :
-        raise Error("func_line2ninfo", "line2basestack", "This line is not basestack")
+        raise MyError("func_line2ninfo", "line2basestack", "This line is not basestack")
     info = BaseStack()
     info.id = int(it.next())
     info.iunit1 = int(it.next())

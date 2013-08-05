@@ -4,7 +4,7 @@
 @author: Naoto Hori
 '''
 
-from cafysis.elements.error import Error
+from cafysis.elements.error import MyError
 from cafysis.file_io.func_line2ninfo import *
 from cafysis.file_io.func_ninfo2line import *
 
@@ -15,12 +15,12 @@ class NinfoFile(object):
         
     def open_to_read(self):
         if self._status != 'Closed' :
-            raise Error('NinfoFile', 'open_for_read', 'file is not closed')
+            raise MyError('NinfoFile', 'open_for_read', 'file is not closed')
         self._file = open(self._filename, 'r')
         
     def open_to_write(self):
         if self._status != 'Closed' :
-            raise Error('NinfoFile', 'open_for_read', 'file is not closed')
+            raise MyError('NinfoFile', 'open_for_read', 'file is not closed')
         self._file = open(self._filename, 'w')
 
     def close(self):

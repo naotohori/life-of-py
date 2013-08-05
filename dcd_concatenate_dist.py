@@ -14,7 +14,7 @@ from copy import copy
 ############################
 # cafysis.elements.error
 ############################
-class Error(Exception) :
+class MyError(Exception) :
     def __init__(self, classname='unknown', funcname='unknown', title='unknown'):
         self._class = classname
         self._func = funcname
@@ -74,7 +74,7 @@ class DcdFile :
         
     def read_header(self):
         if not self._file :
-            raise Error('DcdFile', 'read_header', 'Logical: _file is None')
+            raise MyError('DcdFile', 'read_header', 'Logical: _file is None')
         
         self._file.seek(0)
         
@@ -83,7 +83,7 @@ class DcdFile :
         bdata = struct.unpack('4siii5iifi9i', b)
         #bdata = struct.unpack('4siii5iid9i',b)
         if bdata[0] != 'CORD' :
-            raise Error('DcdFile', 'read_header', '%s is not coordinate file' % (self._filename,))
+            raise MyError('DcdFile', 'read_header', '%s is not coordinate file' % (self._filename,))
         self._header.nset = bdata[1]
         self._header.istart = bdata[2]
         self._header.nstep_save = bdata[3]
@@ -108,7 +108,7 @@ class DcdFile :
         
     def write_header(self):
         if not self._header :
-            raise Error('DcdFile', 'write_header', 'Logical: _header is None')
+            raise MyError('DcdFile', 'write_header', 'Logical: _header is None')
         
         self._file.seek(0)
         

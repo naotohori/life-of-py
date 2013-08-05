@@ -61,7 +61,8 @@ if len(sys.argv) != 3:
     print '      #q basestack ninfo1                      #'
     print '      #     :    :   :                         #'
     print '      #                                        #'
-    print '      #dock mol mol 10.0 4                     #'
+    print '      #dock mol mol cutdist cutnum cutcom      #'
+    print '      #dock mol mol   10.0    4     100.0      #'
     print '      #     :    :   :                         #'
     print '      #                                        #'
     print '      #enc contact mol mol 10.0 100.0          #'
@@ -621,7 +622,8 @@ try:
                 d = math.sqrt((com_i[0] - com_j[0]) ** 2
                              +(com_i[1] - com_j[1]) ** 2
                              +(com_i[2] - com_j[2]) ** 2)
-                if d > 100.0 :
+                #if d > 100.0 :
+                if d > float(cmd[5]) :
                     break
                 mps1 = []
                 mps2 = []
@@ -659,7 +661,7 @@ try:
                 if cmd[1] != 'contact':
                     print ('Error: unknown type in "enc"')
                     continue
-                cutoff_skip = float(cmd[5])
+                cutoff_skip = float(cmd[5])  # 100.0
                 com_i = [0.0, 0.0, 0.0]
                 n = 0
                 for imp in defs[cmd[2]][1] :
@@ -698,16 +700,16 @@ try:
                         pass #error
                 else:
                     pass #error
-                cutdist = float(cmd[4])
+                cutdist2 = float(cmd[4]) ** 2
                 within_1 = set()
                 within_2 = set()
                 n_within = 0
                 for mp1 in mps1 :
                     for mp2 in mps2 :
-                        d = math.sqrt((data[mp1-1][0] - data[mp2-1][0]) ** 2
-                                    + (data[mp1-1][1] - data[mp2-1][1]) ** 2
-                                    + (data[mp1-1][2] - data[mp2-1][2]) ** 2)
-                        if d <= cutdist:
+                        d2 = ((data[mp1-1][0] - data[mp2-1][0]) ** 2
+                             +(data[mp1-1][1] - data[mp2-1][1]) ** 2
+                             +(data[mp1-1][2] - data[mp2-1][2]) ** 2)
+                        if d2 <= cutdist2:
                             within_1.add(mp1)
                             within_2.add(mp2)
                             n_within += 1

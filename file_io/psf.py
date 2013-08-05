@@ -4,7 +4,7 @@
 Created on 2011/12/08
 @author: Naoto Hori
 '''
-from cafysis.elements.error import Error
+from cafysis.elements.error import MyError
 from cafysis.elements.psf import Psf, Atom
 
 def line2atom(line):
@@ -43,12 +43,12 @@ class PsfFile(object):
         
     def open_to_read(self):
         if self._status != 'Closed' :
-            raise Error('PsfFile', 'open_for_read', 'file is not closed')
+            raise MyError('PsfFile', 'open_for_read', 'file is not closed')
         self._file = open(self._filename, 'r')
         
     def open_to_write(self):
         if self._status != 'Closed' :
-            raise Error('PsfFile', 'open_for_read', 'file is not closed')
+            raise MyError('PsfFile', 'open_for_read', 'file is not closed')
         self._file = open(self._filename, 'w')
         
     def close(self):

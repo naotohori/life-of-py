@@ -3,7 +3,7 @@
 @author: Naoto Hori
 '''
 
-class Error(Exception) :
+class MyError(Exception) :
     def __init__(self, classname='unknown', funcname='unknown', title='unknown'):
         self._class = classname
         self._func = funcname
