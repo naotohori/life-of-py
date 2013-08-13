@@ -111,7 +111,7 @@ if __name__ == "__main__":
         print 'Usage: SCRIPT [input PDB]'
         sys.exit(2)
         
-    params = TobiParam('/home/hori/')
+    params = TobiParam('/home/hori/python/cafysis/param/')
         
     p = PDB.PDBParser(PERMISSIVE=1)
     ## PDB読み込みのデバッグではPERMISSIVE=0でも試す
