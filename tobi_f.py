@@ -7,6 +7,8 @@ Created on 2013/08/09
 
 import sys
 import Bio.PDB as PDB
+import numpy as np
+import py_calc_tobi
     
 TYPE2I = {'N':0, 'Ca':1, 'C':2, 'O':3, 'GCa':4, 'Cb':5,
           'KNz':6, 'KCd':7, 'DOd':8, 'RNh':9, 'NNd':10,
@@ -17,10 +19,17 @@ class TobiParam(object):
     def __init__(self,dirpath):
         self.r1 = {}
         self.r2 = {}
-        self._read(dirpath+'/tobi_adp2_r1.ssv', 18, self.r1)
+        self.NUM_PARA = 18
+        self._read(dirpath+'/tobi_adp2_r1.ssv', self.NUM_PARA, self.r1)
         self._check(self.r1)
-        self._read(dirpath+'/tobi_adp2_r2.ssv', 18, self.r2)
+        self._read(dirpath+'/tobi_adp2_r2.ssv', self.NUM_PARA, self.r2)
         self._check(self.r2)
+        self.param1 = np.zeros((self.NUM_PARA, self.NUM_PARA))
+        self.param2 = np.zeros((self.NUM_PARA, self.NUM_PARA))
+        for i in xrange(self.NUM_PARA):
+            for j in xrange(self.NUM_PARA):
+                self.param1[i,j] = self.r1[(i,j)]
+                self.param2[i,j] = self.r2[(i,j)]
         
     def _read(self,filename, ntype, para):
         # top line
@@ -149,7 +158,7 @@ if __name__ == "__main__":
             return True
         
     
-    energy = {}
+    #energy = {}
     num_chain = len(chains)
             
     atoms_chain = []
@@ -173,30 +182,50 @@ if __name__ == "__main__":
     
     for i in xrange(num_chain):
         for j in xrange(i+1, num_chain):
-            energy[(i,j)] = 0.0
+            #energy[(i,j)] = 0.0
             
-            #ii=0
-            for a1,t1 in zip(atoms_chain[i],types_chain[i]):
-                #ii+=1
-                #jj=0
-                for a2,t2 in zip(atoms_chain[j],types_chain[j]):
-                    #jj+=1
-                    dist = a2 - a1
-                    if dist > 6.0:
-                        #ene = 0.0
-                        pass
-                    elif dist <= 4.0:
-                        #ene = params.r1[(t1,t2)]
-                        #energy[(i,j)] += ene
-                        energy[(i,j)] += params.r1[(t1,t2)]
-                    elif dist <= 6.0:
-                        #ene = params.r2[(t1,t2)]
-                        #energy[(i,j)] += ene
-                        energy[(i,j)] += params.r2[(t1,t2)]
-                    #print '%i %i %i %i %10.5f' % (ii, jj, t1, t2, ene)
-                    
-    for i in xrange(num_chain):
-        for j in xrange(i+1,num_chain):
-            print '%i %i %12.6f' % (i,j,energy[(i,j)])
+            xyzI = np.zeros((3,len(atoms_chain[i])))
+            xyzJ = np.zeros((3,len(atoms_chain[j])))
+            
+            for k, a in enumerate(atoms_chain[i]):
+                c = a.get_coord()
+                xyzI[0,k] = c[0]
+                xyzI[1,k] = c[1]
+                xyzI[2,k] = c[2]
+            for k, a in enumerate(atoms_chain[j]):
+                c = a.get_coord()
+                xyzJ[0,k] = c[0]
+                xyzJ[1,k] = c[1]
+                xyzJ[2,k] = c[2]
+            
+            ene = py_calc_tobi.calc_tobi(
+                                params.param1, params.param2, 4.0, 6.0,
+                                types_chain[i], types_chain[j], 
+                                xyzI, xyzJ )
+            print i,j,ene
+            
+#            #ii=0
+#            for a1,t1 in zip(atoms_chain[i],types_chain[i]):
+#                #ii+=1
+#                #jj=0
+#                for a2,t2 in zip(atoms_chain[j],types_chain[j]):
+#                    #jj+=1
+#                    dist = a2 - a1
+#                    if dist > 6.0:
+#                        #ene = 0.0
+#                        pass
+#                    elif dist <= 4.0:
+#                        #ene = params.r1[(t1,t2)]
+#                        #energy[(i,j)] += ene
+#                        energy[(i,j)] += params.r1[(t1,t2)]
+#                    elif dist <= 6.0:
+#                        #ene = params.r2[(t1,t2)]
+#                        #energy[(i,j)] += ene
+#                        energy[(i,j)] += params.r2[(t1,t2)]
+#                    #print '%i %i %i %i %10.5f' % (ii, jj, t1, t2, ene)
+#                    
+#    for i in xrange(num_chain):
+#        for j in xrange(i+1,num_chain):
+#            print '%i %i %12.6f' % (i,j,energy[(i,j)])
                     
             
