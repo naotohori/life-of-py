@@ -111,18 +111,32 @@ def get_atom_type(res, atom):
         print 'Error: get_atom_type in tobi.py'
         sys.exit(2)
         
-
-if __name__ == "__main__":
-    
-    
-    if len(sys.argv) != 2:
-        print 'Usage: SCRIPT [input PDB]'
-        sys.exit(2)
+def accept_residue(res):
+    'アミノ酸のみTrue'
+    #ResidueのID(タプル)の第一要素(hetero)が空白以外
+    if res.get_id()[0] != ' ': 
+        return False
+    if res.get_resname() in ('ARG','GLY','ALA','ASP','ASN',
+                             'GLU','GLN','PHE','LYS','ILE',
+                             'LEU','TRP','CYS','THR','HIS',
+                             'MET','PRO','VAL','TYR','SER',
+                             'HIE'):
+        return True
+    else:
+        return False
         
-    import os
-    #params = TobiParam('~/python/cafysis/param/')
-    params = TobiParam(os.path.dirname(__file__) + '/para/')
+def accept_atom(atom):
+    import re
+    re_H = re.compile("^[\dH]")  # 数字またはHではじまる場合は、水素と判定
+    '水素以外True'
+    aname = atom.get_name()
+    if re_H.match(aname):
+        return False
+    else:
+        return True
         
+    
+def calc_tobi_for_pdb(pdb_filepath):
     p = PDB.PDBParser(PERMISSIVE=1)
     ## PDB読み込みのデバッグではPERMISSIVE=0でも試す
     
@@ -131,36 +145,11 @@ if __name__ == "__main__":
     #    structs.append(p.get_structure(i,filename))
     
     #struct = p.get_structure('complex',sys.argv[1])
-    chains = p.get_structure('complex',sys.argv[1])[0].get_list()
-        
-    def accept_residue(res):
-        'アミノ酸のみTrue'
-        #ResidueのID(タプル)の第一要素(hetero)が空白以外
-        if res.get_id()[0] != ' ': 
-            return False
-        if res.get_resname() in ('ARG','GLY','ALA','ASP','ASN',
-                                 'GLU','GLN','PHE','LYS','ILE',
-                                 'LEU','TRP','CYS','THR','HIS',
-                                 'MET','PRO','VAL','TYR','SER',
-                                 'HIE'):
-            return True
-        else:
-            return False
-        
-    import re
-    re_H = re.compile("^[\dH]")  # 数字またはHではじまる場合は、水素と判定
-    def accept_atom(atom):
-        '水素以外True'
-        aname = atom.get_name()
-        if re_H.match(aname):
-            return False
-        else:
-            return True
-        
+    chains = p.get_structure('complex',pdb_filepath)[0].get_list()
     
-    #energy = {}
     num_chain = len(chains)
             
+    '''accept or not'''
     atoms_chain = []
     types_chain = []
     for c in chains:
@@ -178,54 +167,57 @@ if __name__ == "__main__":
         atoms_chain.append(atoms)
         types_chain.append(types)
     
-    print 'start main'
+    '''list to ndarray'''
+    num_atom = [len(x) for x in atoms_chain]
+    xyz = np.zeros((3,max(num_atom),num_chain))
+    atom2type = np.zeros( (max(num_atom),num_chain), dtype=np.int)
     
-    for i in xrange(num_chain):
-        for j in xrange(i+1, num_chain):
-            #energy[(i,j)] = 0.0
+    for ichain in xrange(num_chain):
+        for iatom in xrange(num_atom[ichain]):
+            c = atoms_chain[ichain][iatom].get_coord()
+            xyz[0,iatom,ichain] = c[0]
+            xyz[1,iatom,ichain] = c[1]
+            xyz[2,iatom,ichain] = c[2]
+            atom2type[iatom,ichain] = types_chain[ichain][iatom]
+        
+    #print 'start main'
+    '''call the Fortran module'''
+    ene = py_calc_tobi.calc_tobi( params.param1, params.param2, 4.0, 6.0,
+                                  num_atom, atom2type, xyz)
+    
+    return ene
+
+if __name__ == "__main__":
+    
+    if not len(sys.argv) in (2,3):
+        print 'Usage: SCRIPT [input PDB]'
+        print 'Usage: SCRIPT [input PDB dir] [output file]'
+        sys.exit(2)
+        
+    import os
+    
+    #params = TobiParam('~/python/cafysis/param/')
+    params = TobiParam(os.path.dirname(__file__) + '/para/')
+        
+    if len(sys.argv) == 2:
+        ene = calc_tobi_for_pdb(sys.argv[1])
+        
+        for i in xrange(len(ene)):
+            for j in xrange(i+1,len(ene)):
+                print i+1,j+1,ene[i,j]    
+                
+    elif len(sys.argv) == 3:
+        import glob
+        outfile = open(sys.argv[2], 'w')
+        
+        pdbfiles = glob.glob(sys.argv[1]+'*.pdb')
+        pdbfiles.sort()
+        for pdbfilepath in pdbfiles:
+            ene = calc_tobi_for_pdb(pdbfilepath)
             
-            xyzI = np.zeros((3,len(atoms_chain[i])))
-            xyzJ = np.zeros((3,len(atoms_chain[j])))
+            for i in xrange(len(ene)):
+                for j in xrange(i+1,len(ene)):
+                    outfile.write('%s %i %i %12.6f\n' 
+                      % ( os.path.basename(pdbfilepath)[:-4], i+1, j+1, ene[i,j]))
             
-            for k, a in enumerate(atoms_chain[i]):
-                c = a.get_coord()
-                xyzI[0,k] = c[0]
-                xyzI[1,k] = c[1]
-                xyzI[2,k] = c[2]
-            for k, a in enumerate(atoms_chain[j]):
-                c = a.get_coord()
-                xyzJ[0,k] = c[0]
-                xyzJ[1,k] = c[1]
-                xyzJ[2,k] = c[2]
-            
-            ene = py_calc_tobi.calc_tobi(
-                                params.param1, params.param2, 4.0, 6.0,
-                                types_chain[i], types_chain[j], 
-                                xyzI, xyzJ )
-            print i,j,ene
-            
-#            #ii=0
-#            for a1,t1 in zip(atoms_chain[i],types_chain[i]):
-#                #ii+=1
-#                #jj=0
-#                for a2,t2 in zip(atoms_chain[j],types_chain[j]):
-#                    #jj+=1
-#                    dist = a2 - a1
-#                    if dist > 6.0:
-#                        #ene = 0.0
-#                        pass
-#                    elif dist <= 4.0:
-#                        #ene = params.r1[(t1,t2)]
-#                        #energy[(i,j)] += ene
-#                        energy[(i,j)] += params.r1[(t1,t2)]
-#                    elif dist <= 6.0:
-#                        #ene = params.r2[(t1,t2)]
-#                        #energy[(i,j)] += ene
-#                        energy[(i,j)] += params.r2[(t1,t2)]
-#                    #print '%i %i %i %i %10.5f' % (ii, jj, t1, t2, ene)
-#                    
-#    for i in xrange(num_chain):
-#        for j in xrange(i+1,num_chain):
-#            print '%i %i %12.6f' % (i,j,energy[(i,j)])
-                    
             
