@@ -213,6 +213,7 @@ if __name__ == "__main__":
         pdbfiles = glob.glob(sys.argv[1]+'*.pdb')
         pdbfiles.sort()
         for pdbfilepath in pdbfiles:
+            
             ene = calc_tobi_for_pdb(pdbfilepath)
             
             for i in xrange(len(ene)):
@@ -220,4 +221,5 @@ if __name__ == "__main__":
                     outfile.write('%s %i %i %12.6f\n' 
                       % ( os.path.basename(pdbfilepath)[:-4], i+1, j+1, ene[i,j]))
             
+        outfile.close()
             
