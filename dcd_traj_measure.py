@@ -135,10 +135,10 @@ for line in f_cmd :
         if len(linesp) != 5:
             print ('not enough arguments for angle in the line:' + line)
             sys.exit(2)
-        linesp[1] = int(linesp[1])
-        linesp[2] = int(linesp[2])
-        linesp[3] = int(linesp[3])
-        linesp[4] = int(linesp[4])
+        #linesp[1] = int(linesp[1])
+        #linesp[2] = int(linesp[2])
+        #linesp[3] = int(linesp[3])
+        #linesp[4] = int(linesp[4])
         cmds.append(tuple(linesp))
 
     elif linesp[0] == 'delta_angle':
@@ -256,7 +256,41 @@ for cmd in cmds :
         else :
             out_files[-1].write('%i\n' % cmd[2])
     elif cmd[0] == 'angle' :
-        out_files.append(open('%s_%i_%i_%i_%i.out' % cmd, 'w'))
+        #out_files.append(open('%s_%i_%i_%i_%i.out' % cmd, 'w'))
+        out_files.append(open('%s_%s_%s_%s_%s.out' % cmd, 'w'))
+        out_files[-1].write('# angle between line ij and kl\n')
+        out_files[-1].write('# i:')
+        if cmd[1] in defs:
+            out_files[-1].write(' %s' % defs[cmd[1]][0])
+            for imp in defs[cmd[1]][1] :
+                out_files[-1].write(' %i' % imp)
+            out_files[-1].write('\n')
+        else :
+            out_files[-1].write('%i\n' % cmd[1])
+        out_files[-1].write('# j:')
+        if cmd[2] in defs:
+            out_files[-1].write(' %s' % defs[cmd[2]][0])
+            for imp in defs[cmd[2]][1] :
+                out_files[-1].write(' %i' % imp)
+            out_files[-1].write('\n')
+        else :
+            out_files[-1].write('%i\n' % cmd[2])
+        out_files[-1].write('# k:')
+        if cmd[3] in defs:
+            out_files[-1].write(' %s' % defs[cmd[3]][0])
+            for imp in defs[cmd[3]][1] :
+                out_files[-1].write(' %i' % imp)
+            out_files[-1].write('\n')
+        else :
+            out_files[-1].write('%i\n' % cmd[3])
+        out_files[-1].write('# l:')
+        if cmd[4] in defs:
+            out_files[-1].write(' %s' % defs[cmd[4]][0])
+            for imp in defs[cmd[4]][1] :
+                out_files[-1].write(' %i' % imp)
+            out_files[-1].write('\n')
+        else :
+            out_files[-1].write('%i\n' % cmd[4])
     elif cmd[0] == 'delta_angle' :
         out_files.append(open('%s_%i_%i.out' % cmd, 'w'))
     elif cmd[0] == 'locaxis' :
@@ -479,32 +513,98 @@ try:
                               + (xyz_i[1] - xyz_j[1]) ** 2
                               + (xyz_i[2] - xyz_j[2]) ** 2)
                 out_files[icmd].write('%12.5f\n' % d)
-    
+ 
+#            elif cmd[0] == 'angle' :
+#                i = cmd[1] - 1
+#                j = cmd[2] - 1
+#                k = cmd[3] - 1
+#                l = cmd[4] - 1
+#                v1 = [data[j][0] - data[i][0],
+#                      data[j][1] - data[i][1],
+#                      data[j][2] - data[i][2]]
+#                v2 = [data[k][0] - data[i][0],
+#                      data[k][1] - data[i][1],
+#                      data[k][2] - data[i][2]]
+#                v3 = [data[l][0] - data[i][0],
+#                      data[l][1] - data[i][1],
+#                      data[l][2] - data[i][2]]
+#                v21 = array([v2[0] - v1[0], v2[1] - v1[1], v2[2] - v1[2]])
+#    #            v32 = array( [v3[0]-v2[0], v3[1]-v2[1], v3[2]-v2[2]] )
+#    #            c11 = v21[0]*v21[0] + v21[1]*v21[1] + v21[2]*v21[2]
+#    #            c22 = v32[0]*v32[0] + v32[1]*v32[1] + v32[2]*v32[2]
+#    #            c21 = v32[0]*v21[0] + v32[1]*v21[1] + v32[2]*v21[2]
+#    #            co_theta = - c21 / math.sqrt(c11 * c22)
+#    #            theta = math.acos(co_theta)
+#                v23 = array([v2[0] - v3[0], v2[1] - v3[1], v2[2] - v3[2]])
+#                theta = arccos(dot(v21, v23) / norm(v21) / norm(v23))
+#                out_files[icmd].write('%12.5f %12.5f\n' % (theta, math.degrees(theta)))
+      
             elif cmd[0] == 'angle' :
-                i = cmd[1] - 1
-                j = cmd[2] - 1
-                k = cmd[3] - 1
-                l = cmd[4] - 1
-                v1 = [data[j][0] - data[i][0],
-                      data[j][1] - data[i][1],
-                      data[j][2] - data[i][2]]
-                v2 = [data[k][0] - data[i][0],
-                      data[k][1] - data[i][1],
-                      data[k][2] - data[i][2]]
-                v3 = [data[l][0] - data[i][0],
-                      data[l][1] - data[i][1],
-                      data[l][2] - data[i][2]]
-                v21 = array([v2[0] - v1[0], v2[1] - v1[1], v2[2] - v1[2]])
-    #            v32 = array( [v3[0]-v2[0], v3[1]-v2[1], v3[2]-v2[2]] )
-    #            c11 = v21[0]*v21[0] + v21[1]*v21[1] + v21[2]*v21[2]
-    #            c22 = v32[0]*v32[0] + v32[1]*v32[1] + v32[2]*v32[2]
-    #            c21 = v32[0]*v21[0] + v32[1]*v21[1] + v32[2]*v21[2]
-    #            co_theta = - c21 / math.sqrt(c11 * c22)
-    #            theta = math.acos(co_theta)
-                v23 = array([v2[0] - v3[0], v2[1] - v3[1], v2[2] - v3[2]])
-                theta = arccos(dot(v21, v23) / norm(v21) / norm(v23))
+                if cmd[1] in defs :
+                    if defs[cmd[1]][0] == 'com' :
+                        com = [0.0, 0.0, 0.0]
+                        n = 0
+                        for imp in defs[cmd[1]][1] :
+                            n += 1
+                            com[0] += data[imp - 1][0]
+                            com[1] += data[imp - 1][1]
+                            com[2] += data[imp - 1][2]
+                        xyz_i = [com[0] / float(n), com[1] / float(n), com[2] / float(n)]
+                    elif defs[cmd[1]][0] == 'mp' :
+                        xyz_i = data[defs[cmd[1]][1][0] - 1]
+                else:
+                    xyz_i = data[int(cmd[1]) - 1]
+                if cmd[2] in defs :
+                    if defs[cmd[2]][0] == 'com' :
+                        com = [0.0, 0.0, 0.0]
+                        n = 0
+                        for imp in defs[cmd[2]][1] :
+                            n += 1
+                            com[0] += data[imp - 1][0]
+                            com[1] += data[imp - 1][1]
+                            com[2] += data[imp - 1][2]
+                        xyz_j = [com[0] / float(n), com[1] / float(n), com[2] / float(n)]
+                    elif defs[cmd[2]][0] == 'mp' :
+                        xyz_j = data[defs[cmd[2]][1][0] - 1]
+                else:
+                    xyz_j = data[int(cmd[2]) - 1]
+                if cmd[3] in defs :
+                    if defs[cmd[3]][0] == 'com' :
+                        com = [0.0, 0.0, 0.0]
+                        n = 0
+                        for imp in defs[cmd[3]][1] :
+                            n += 1
+                            com[0] += data[imp - 1][0]
+                            com[1] += data[imp - 1][1]
+                            com[2] += data[imp - 1][2]
+                        xyz_k = [com[0] / float(n), com[1] / float(n), com[2] / float(n)]
+                    elif defs[cmd[3]][0] == 'mp' :
+                        xyz_k = data[defs[cmd[3]][1][0] - 1]
+                else:
+                    xyz_k = data[int(cmd[3]) - 1]
+                if cmd[4] in defs :
+                    if defs[cmd[4]][0] == 'com' :
+                        com = [0.0, 0.0, 0.0]
+                        n = 0
+                        for imp in defs[cmd[4]][1] :
+                            n += 1
+                            com[0] += data[imp - 1][0]
+                            com[1] += data[imp - 1][1]
+                            com[2] += data[imp - 1][2]
+                        xyz_l = [com[0] / float(n), com[1] / float(n), com[2] / float(n)]
+                    elif defs[cmd[4]][0] == 'mp' :
+                        xyz_l = data[defs[cmd[4]][1][0] - 1]
+                else:
+                    xyz_l = data[int(cmd[4]) - 1]
+                vij = array([xyz_j[0] - xyz_i[0],
+                             xyz_j[1] - xyz_i[1],
+                             xyz_j[2] - xyz_i[2]])
+                vkl = array([xyz_l[0] - xyz_k[0],
+                             xyz_l[1] - xyz_k[1],
+                             xyz_l[2] - xyz_k[2]])
+                theta = arccos(dot(vij, vkl) / norm(vij) / norm(vkl))
                 out_files[icmd].write('%12.5f %12.5f\n' % (theta, math.degrees(theta)))
-    
+
             elif cmd[0] == 'delta_angle' :
                 i = cmd[1] - 1
                 j = cmd[2] - 1
