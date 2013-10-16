@@ -61,9 +61,9 @@ dist_bins = [x*10.0 for x in xrange(0,31)]
 
 phi = []
 theta = [] 
-dist = []
-for i in xrange(11):
-    dist.append([])
+#dist = []
+#for i in xrange(11):
+#    dist.append([])
 
 
 ### 距離依存の角度に関する統計
@@ -106,32 +106,32 @@ for l in file_in:
     r = float(lsp[COL_DIST])
     t = float(lsp[COL_THETA])
     p = float(lsp[COL_PHI])
-    dist[0].append(r)
+    #dist[0].append(r)
     theta.append(t)
     phi.append(p)
         
-    if t < theta_bins[1]:
-        dist[1].append(r)
-    elif t < 90.0:
-        if p >= 135.0 or p < -135.0:
-            dist[2].append(r)
-        elif p > 45.0 and p <= 135.0:
-            dist[3].append(r)
-        elif p > -45.0 and p <= 45.0:
-            dist[4].append(r)
-        else:
-            dist[5].append(r)
-    elif t < theta_bins[-2]:
-        if p >= 135.0 or p < -135.0:
-            dist[6].append(r)
-        elif p > 45.0 and p <= 135.0:
-            dist[7].append(r)
-        elif p > -45.0 and p <= 45.0:
-            dist[8].append(r)
-        else:
-            dist[9].append(r)
-    else:
-        dist[10].append(r)
+    #if t < theta_bins[1]:
+    #    dist[1].append(r)
+    #elif t < 90.0:
+    #    if p >= 135.0 or p < -135.0:
+    #        dist[2].append(r)
+    #    elif p > 45.0 and p <= 135.0:
+    #        dist[3].append(r)
+    #    elif p > -45.0 and p <= 45.0:
+    #        dist[4].append(r)
+    #    else:
+    #        dist[5].append(r)
+    #elif t < theta_bins[-2]:
+    #    if p >= 135.0 or p < -135.0:
+    #        dist[6].append(r)
+    #    elif p > 45.0 and p <= 135.0:
+    #        dist[7].append(r)
+    #    elif p > -45.0 and p <= 45.0:
+    #        dist[8].append(r)
+    #    else:
+    #        dist[9].append(r)
+    #else:
+    #    dist[10].append(r)
         
 ################# calc histogram and write to file
 
@@ -157,15 +157,15 @@ file_gnu.close()
 
 
 ############### distance
-file_out = open(file_pfx+"_hist_dist.out",'w')
-for d in dist:
-    
-    H, dist_edge = histogram(d,bins=dist_bins)
-    Hd, dist_edge = histogram(d,bins=dist_bins,normed=True)
-    
-    for i,x in enumerate(H):
-        file_out.write('%8.3f %8.6f %10i %8.3f %8.3f\n'
-                        % ((dist_edge[i]+dist_edge[i+1])*0.5, Hd[i], x, dist_edge[i], dist_edge[i+1]))
-    file_out.write("\n\n")
-    
-file_out.close()
+#file_out = open(file_pfx+"_hist_dist.out",'w')
+#for d in dist:
+#    
+#    H, dist_edge = histogram(d,bins=dist_bins)
+#    Hd, dist_edge = histogram(d,bins=dist_bins,normed=True)
+#    
+#    for i,x in enumerate(H):
+#        file_out.write('%8.3f %8.6f %10i %8.3f %8.3f\n'
+#                        % ((dist_edge[i]+dist_edge[i+1])*0.5, Hd[i], x, dist_edge[i], dist_edge[i+1]))
+#    file_out.write("\n\n")
+#    
+#file_out.close()

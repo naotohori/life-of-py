@@ -89,6 +89,7 @@ class TsFile(object):
         self._filename = filename
         self.head_str = None
         self.head_col = None
+        self.flg_u_u = False
         self.num_unit = 0
         
     def open_to_read(self):
@@ -135,6 +136,10 @@ class TsFile(object):
         for l in self._file:
             if l[0] == ' ':
                 break
+            if l.split()[1][0:1] == '-':
+                ''' unit-unit lines exist'''
+                self.flg_u_u = True
+                break
             self.num_unit = int(l.split()[0][1:])
         if self.num_unit <= 0:
             raise MyError('TsFile','read_header','Bad format: num_unit <= 0')
@@ -151,6 +156,10 @@ class TsFile(object):
         ts_list = []
         for i in xrange(self.num_unit+1):
             ts_list.append(self._file.readline().split()[1:])
+
+        if self.flg_u_u:
+            for i in xrange(self.num_unit*(self.num_unit-1)/2):
+                ts_list.append(self._file.readline().split()[1:])
             
         return ts_list
     
