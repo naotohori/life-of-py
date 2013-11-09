@@ -59,7 +59,8 @@ def error_no_data() :
     sys.exit(2)
 
 # skip
-dcd.skip(frame_begin - 1)
+dcd.skip(frame_begin)
+#dcd.skip(frame_begin - 1)  ## 2013/10/26
 i_org = frame_begin
 
 # read and write

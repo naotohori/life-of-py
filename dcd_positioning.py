@@ -21,21 +21,18 @@ import sys
 from math import hypot, atan2
 
 if len(sys.argv) != 7:
-    #print 'Usage: SCRIPT [input DCD] [output DCD]'
     print 'Usage: SCRIPT [input DCD] [ID domain begin] [ID domain end] [ID for North] [ID for Greenwich] [output DCD]'
     sys.exit(2)
 
-ID_STE7_DOM_INI = int(sys.argv[2]) - 1  # 重心を求める際に必要
-ID_STE7_DOM_END = int(sys.argv[3]) - 1
-ID_Q = int(sys.argv[4]) - 1
-ID_N = int(sys.argv[5]) - 1
-#RESIDUE_TOTAL = 868
+ID_DOM_INI = int(sys.argv[2]) - 1  # 重心を求める際に必要
+ID_DOM_END = int(sys.argv[3]) - 1
+ID_N = int(sys.argv[4]) - 1  # North
+ID_G = int(sys.argv[5]) - 1  # Greenwich
 
-#ID_Q = 542 - 1
-#ID_N = 554 - 1
-#ID_STE7_DOM_INI = 542 - 1  # 重心を求める際に必要
-#ID_STE7_DOM_END = 824 - 1
-#RESIDUE_TOTAL = 868
+#ID_N = 542 - 1
+#ID_G = 554 - 1
+#ID_DOM_INI = 542 - 1  # 重心を求める際に必要
+#ID_DOM_END = 824 - 1
 
 dcd = DcdFile(sys.argv[1])
 dcd.open_to_read()
@@ -49,37 +46,28 @@ dcd_out.set_header(header)
 dcd_out.write_header()
 
 nmp = header.nmp_real
-#if nmp != RESIDUE_TOTAL:
-#    print 'ERROR: nmp != RESIDUE_TOTAL'
-#    sys.exit(2)
 
 while dcd.has_more_data() :
     data = dcd.read_onestep()
     
     ##########################################################
     #print "動かす前"
-    #Q = Coord()
-    #Q.put_as_list(data[ID_Q])
     #N = Coord()
     #N.put_as_list(data[ID_N])
-    #print "Q:",data[ID_Q]
+    #G = Coord()
+    #G.put_as_list(data[ID_G])
     #print "N:",data[ID_N]
+    #print "G:",data[ID_G]
     
     
     ##########################################################
-    #Ste7(189-471)の重心(CAのみで計算）が原点に重なるように並進
+    #重心(CAのみで計算）が原点に重なるように並進
     com = [0.0] * 3
-    n_com = ID_STE7_DOM_END - ID_STE7_DOM_INI + 1
-    #n_com = 0
-    for i in xrange(ID_STE7_DOM_INI, ID_STE7_DOM_END+1):
+    n_com = ID_DOM_END - ID_DOM_INI + 1
+    for i in xrange(ID_DOM_INI, ID_DOM_END+1):
         com[0] += data[i][0]
         com[1] += data[i][1]
         com[2] += data[i][2]
-    #    n_com += 1
-    
-    #if n_com != 283:
-    #    print "ERROR: n_com = ",n_com
-    #    sys.exit(2)
     
     com = [-x/float(n_com) for x in com]
     trans_com = mtx_crd_transform()
@@ -90,57 +78,57 @@ while dcd.has_more_data() :
     trans_com.do_to_data(data)
         
     #print "重心を原点へ"
-    #Q = Coord()
-    #Q.put_as_list(data[ID_Q])
     #N = Coord()
     #N.put_as_list(data[ID_N])
-    #print "Q:",data[ID_Q]
+    #G = Coord()
+    #G.put_as_list(data[ID_G])
     #print "N:",data[ID_N]
+    #print "G:",data[ID_G]
     
     
     ##########################################################
-    #重心を固定したまま、QをZ軸上へ持っていく。
-    #Qと原点を結ぶ線Lと垂直な、xy平面上の軸を表す単位ベクトルR
+    #重心を固定したまま、NをZ軸上へ持っていく。
+    #Nと原点を結ぶ線Lと垂直な、xy平面上の軸を表す単位ベクトルR
     
-    Q = data[ID_Q][0:3]
-    Qxy = hypot(Q[0],Q[1])
+    N = data[ID_N][0:3]
+    Nxy = hypot(N[0],N[1])
     
     R = [0.0] * 3
-    R[0] =  Q[1] / Qxy
-    R[1] = -Q[0] / Qxy
+    R[0] =  N[1] / Nxy
+    R[1] = -N[0] / Nxy
     
-    phi = atan2(Qxy,Q[2])
+    phi = atan2(Nxy,N[2])
     
-    rotateQ = mtx_crd_transform()
-    rotateQ.rotate(R[0], R[1], R[2], phi) 
+    rotateN = mtx_crd_transform()
+    rotateN.rotate(R[0], R[1], R[2], phi) 
      
-    rotateQ.do_to_data(data)
+    rotateN.do_to_data(data)
         
-    #print "QをZ軸上へ"
-    #Q = Coord()
-    #Q.put_as_list(data[ID_Q])
+    #print "NをZ軸上へ"
     #N = Coord()
     #N.put_as_list(data[ID_N])
-    #print "Q:",data[ID_Q]
+    #G = Coord()
+    #G.put_as_list(data[ID_G])
     #print "N:",data[ID_N]
+    #print "G:",data[ID_G]
     
     
     ##########################################################
-    #NをZ軸まわりに回転させ、Nx>0でNy=0な位置へもっていく。
-    N = data[ID_N][0:3]
-    theta = -atan2(N[1],N[0])
-    rotateN = mtx_crd_transform()
-    rotateN.rotate_z(theta)
+    #GをZ軸まわりに回転させ、x>0でy=0な位置へもっていく。
+    G = data[ID_G][0:3]
+    theta = -atan2(G[1],G[0])
+    rotateG = mtx_crd_transform()
+    rotateG.rotate_z(theta)
     
-    rotateN.do_to_data(data)
+    rotateG.do_to_data(data)
         
-    #print "NをX軸上へ"
-    #Q = Coord()
-    #Q.put_as_list(data[ID_Q])
+    #print "GをX軸上へ"
     #N = Coord()
     #N.put_as_list(data[ID_N])
-    #print "Q:",data[ID_Q]
+    #G = Coord()
+    #G.put_as_list(data[ID_G])
     #print "N:",data[ID_N]
+    #print "G:",data[ID_G]
     
     dcd_out.write_onestep(data) 
     
