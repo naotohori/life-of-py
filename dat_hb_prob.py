@@ -10,11 +10,20 @@ CLM_HB_CG2 = 5 - 1
 CLM_HB_NT2 = 6 - 1
 CLM_HB_DST = 7 - 1
 CLM_HB_REF = 8 - 1
+CLM_HB_2ND = 9 - 1
 
 CUTOFF_CONTACT = 1.2
 
 import sys
-if len(sys.argv) in (4,5):
+import os
+import glob
+
+if lif len(sys.argv) == 5:
+    step_final  = int(sys.argv[-1])
+    flg_final = True
+elif len(sys.argv) == 4:
+    flg_final = False
+else:
     print 'Usage: SCRIPT [HB file (bwyv.hb)] [output file] [step_ignore]'
     print ' or  : SCRIPT [HB file (bwyv.hb)] [output file] [step_ignore] [step_final]'
     sys.exit(2)
@@ -22,11 +31,6 @@ if len(sys.argv) in (4,5):
 filepath_hb = sys.argv[1]
 filepath_out = sys.argv[2]
 step_ignore = int(sys.argv[3])
-if len(sys.argv) == 5:
-    step_final  = int(sys.argv[-1])
-    flg_final = True
-else:
-    flg_final = False
 
 
 f_hb = open(filepath_hb, 'r')
@@ -35,7 +39,6 @@ for l in f_hb:
     hbs.append(l.split())
         
 ''' Collect dirnames and detect Ion conc. and Forces. '''
-import os, glob
 dirs = glob.glob('*/???_??_??')
 simulations = []
 for d in dirs:
@@ -61,6 +64,7 @@ for sim in simulations:
         nt1 = hb[CLM_HB_NT1]
         nt2 = hb[CLM_HB_NT2]
         ref = float(hb[CLM_HB_REF])
+        2nd = hb[CLM_HB_2ND]  # name of the 2ndary structure
         contact = CUTOFF_CONTACT * ref
 
         datafile = 'dist_%s_%s.out' % (nt1,nt2)
