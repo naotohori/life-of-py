@@ -12,25 +12,25 @@ CLM_HB_DST = 7 - 1
 CLM_HB_REF = 8 - 1
 CLM_HB_2ND = 9 - 1
 
-CUTOFF_CONTACT = 1.2
+CUTOFF_CONTACT_LOW = 0.8
+CUTOFF_CONTACT_HIG = 1.2
 
 import sys
 import os
 import glob
 
-if len(sys.argv) == 5:
+if len(sys.argv) == 4:
     step_final  = int(sys.argv[-1])
     flg_final = True
-elif len(sys.argv) == 4:
+elif len(sys.argv) == 3:
     flg_final = False
 else:
-    print 'Usage: SCRIPT [HB file (bwyv.hb)] [output file] [step_ignore]'
-    print ' or  : SCRIPT [HB file (bwyv.hb)] [output file] [step_ignore] [step_final]'
+    print 'Usage: SCRIPT [HB file (bwyv.hb)] [step_ignore]'
+    print ' or  : SCRIPT [HB file (bwyv.hb)] [step_ignore] [step_final]'
     sys.exit(2)
 
 filepath_hb = sys.argv[1]
-filepath_out = sys.argv[2]
-step_ignore = int(sys.argv[3])
+step_ignore = int(sys.argv[2])
 
 
 f_hb = open(filepath_hb, 'r')
@@ -48,13 +48,14 @@ for d in dirs:
     rnd = d_sp[-1]
     simulations.append((cM,frc,rnd))
 
-f_out = open(filepath_out, 'w')
 
 ''' Loop for each simulation set. '''
 orig_dir = os.getcwd()
 for sim in simulations:
     cM, frc, rnd = sim
     os.chdir('cM%s/%s_%s_%s' % (cM, cM, frc, rnd))
+
+    f_out = open('hbprob.out', 'w')
 
     ''' Loop for HB pairs.'''
     for hb in hbs:
@@ -65,7 +66,6 @@ for sim in simulations:
         nt2 = hb[CLM_HB_NT2]
         ref = float(hb[CLM_HB_REF])
         #2nd = hb[CLM_HB_2ND]  # name of the 2ndary structure
-        contact = CUTOFF_CONTACT * ref
 
         datafile = 'dist_%s_%s.out' % (nt1,nt2)
         try:
@@ -87,7 +87,7 @@ for sim in simulations:
 
             num = num + 1
             d = float(line.strip())
-            if d < contact:
+            if CUTOFF_CONTACT_LOW * ref <= d <= CUTOFF_CONTACT_HIG * ref:
                 n_con = n_con + 1
 
             if flg_final and step == step_final:
@@ -99,5 +99,6 @@ for sim in simulations:
             ratio = 100.0 * float(n_con) / float(num)
             f_out.write('%s %s %s %5i %6.3f\n' % (cM,frc,rnd,idx,ratio))
 
+    f_out.close()
     os.chdir(orig_dir)
 
