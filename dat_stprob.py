@@ -25,8 +25,8 @@ if len(sys.argv) == 4:
 elif len(sys.argv) == 3:
     flg_final = False
 else:
-    print 'Usage: SCRIPT [HB file (bwyv.hb)] [step_ignore]'
-    print ' or  : SCRIPT [HB file (bwyv.hb)] [step_ignore] [step_final]'
+    print 'Usage: SCRIPT [HB file (bwyv.st)] [step_ignore]'
+    print ' or  : SCRIPT [HB file (bwyv.st)] [step_ignore] [step_final]'
     sys.exit(2)
 
 filepath_hb = sys.argv[1]
@@ -55,12 +55,12 @@ for sim in simulations:
     cM, frc, rnd = sim
     os.chdir('cM%s/%s_%s_%s' % (cM, cM, frc, rnd))
 
-    if os.path.exists('dist_C03B_G18B.out') and os.path.exists('hbprob.out'):
-        if os.stat('dist_C03B_G18B.out').st_mtime > os.stat('hbprob.out').st_mtime:
+    if os.path.exists('dist_G00B_G01B.out') and os.path.exists('stprob.out'):
+        if os.stat('dist_G00B_G01B.out').st_mtime > os.stat('stprob.out').st_mtime:
             os.chdir(orig_dir)
             continue
 
-    f_out = open('hbprob.out', 'w')
+    f_out = open('stprob.out', 'w')
 
     ''' Loop for HB pairs.'''
     for hb in hbs:
