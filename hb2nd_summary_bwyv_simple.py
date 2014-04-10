@@ -38,8 +38,8 @@ for l in open(filepath_inp,'r'):
         n_ratio[sim] = n_ratio[sim] + 1
         for i in range(5):  
             x = float(l[i+3])
-            sum_ratio[sim][i] = sum_ratio[sim][i] + x
-            sum2_ratio[sim][i] = sum2_ratio[sim][i] + x*x
+            sum_ratio[sim][i] += x
+            sum2_ratio[sim][i] += x*x
     else:
         n_ratio[sim] = 1
         sum_ratio[sim] = []
@@ -67,7 +67,9 @@ for cM in cM_values:
         f_out.write('#%i\n' % (n_ratio[sim],))
         for i in range(5):
             ave = sum_ratio[sim][i] / n_ratio[sim]
-            sd = math.sqrt( sum2_ratio[sim][i] / n_ratio[sim]  - ave * ave )
-            f_out.write('%6s %7.3f %7.3f\n' % (states[i], ave, sd))
+            #sd = math.sqrt( sum2_ratio[sim][i] / n_ratio[sim]  - ave * ave )
+            se = math.sqrt( (sum2_ratio[sim][i] / float(n_ratio[sim]) - ave * ave )
+                           / float(n_ratio[sim]) )
+            f_out.write('%6s %7.3f %7.3f\n' % (states[i], ave, se ))
 
         f_out.close()
