@@ -466,13 +466,13 @@ for cmd in cmds :
         filename = 'dthb_%s' % cmd[1]
         out_files.append(open(filename + '.out', 'w'))
         out_files[-1].write('# dt_hb')
-        out_files[-1].write('# name: %s' % cmd[2])
-        out_files[-1].write('# r: %s' % cmd[3])
-        out_files[-1].write('# theta1: %s' % cmd[4])
-        out_files[-1].write('# theta2: %s' % cmd[5])
-        out_files[-1].write('# psi: %s' % cmd[6])
-        out_files[-1].write('# psi1: %s' % cmd[7])
-        out_files[-1].write('# psi2: %s' % cmd[8])
+        out_files[-1].write('# name: %s' % cmd[1])
+        out_files[-1].write('# r: %s' % cmd[2])
+        out_files[-1].write('# theta1: %s' % cmd[3])
+        out_files[-1].write('# theta2: %s' % cmd[4])
+        out_files[-1].write('# psi: %s' % cmd[5])
+        out_files[-1].write('# psi1: %s' % cmd[6])
+        out_files[-1].write('# psi2: %s' % cmd[7])
         
 iframe = 0
 flg_initial_data = True
@@ -876,14 +876,14 @@ try:
                 out_files[icmd].write('%12.5f\n' % s)
 
             elif cmd[0] == 'dt_hb':
-                mp1, mp2 = cmd[3].split('-')
+                mp1, mp2 = cmd[2].split('-')
                 mp1 = int(mp1)
                 mp2 = int(mp2)
                 r = math.sqrt((data[mp1-1][0] - data[mp2-1][0]) ** 2
                              +(data[mp1-1][1] - data[mp2-1][1]) ** 2
                              +(data[mp1-1][2] - data[mp2-1][2]) ** 2)
 
-                mp1, mp2, mp3 = cmd[4].split('-')
+                mp1, mp2, mp3 = cmd[3].split('-')
                 xyz_i = data[int(mp1)-1]
                 xyz_j = data[int(mp2)-1]
                 xyz_k = data[int(mp3)-1]
@@ -895,7 +895,7 @@ try:
                              xyz_k[2] - xyz_j[2]])
                 theta1 = arccos(dot(vij, vjk) / norm(vij) / norm(vjk))
 
-                mp1, mp2, mp3 = cmd[5].split('-')
+                mp1, mp2, mp3 = cmd[4].split('-')
                 xyz_i = data[int(mp1)-1]
                 xyz_j = data[int(mp2)-1]
                 xyz_k = data[int(mp3)-1]
