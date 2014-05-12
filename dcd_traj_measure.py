@@ -74,6 +74,7 @@ if len(sys.argv) != 3:
     print '      #rg    mol                               #'
     print '      #     :    :   :                         #'
     print '      #                                        #'
+    print '      #dt_hb name r theta1 theta2 phi phi1 phi2#'
     print '      ##########################################'
     sys.exit(2)
 
@@ -218,6 +219,8 @@ for line in f_cmd :
     elif linesp[0] == 'rg':
         cmds.append(tuple(linesp))
 
+    elif linesp[0] == 'dt_hb':
+        cmds.append(tuple(linesp))
 #    elif linesp[0] == 'distance_com_com' :
 #        linesp[1] = int(linesp[1])
 #        linesp[2] = int(linesp[2])
@@ -459,8 +462,18 @@ for cmd in cmds :
         name = cmd[1] + '_RgCom'
         mps = defs[cmd[1]][1]
         defs[name] = ('RgCom', mps)
+    elif cmd[0] == 'dt_hb':
+        filename = 'dthb_%s' % cmd[1]
+        out_files.append(open(filename + '.out', 'w'))
+        out_files[-1].write('# dt_hb')
+        out_files[-1].write('# name: %s' % cmd[2])
+        out_files[-1].write('# r: %s' % cmd[3])
+        out_files[-1].write('# theta1: %s' % cmd[4])
+        out_files[-1].write('# theta2: %s' % cmd[5])
+        out_files[-1].write('# psi: %s' % cmd[6])
+        out_files[-1].write('# psi1: %s' % cmd[7])
+        out_files[-1].write('# psi2: %s' % cmd[8])
         
-
 iframe = 0
 flg_initial_data = True
 try:
@@ -861,7 +874,42 @@ try:
                         + (data[mp1-1][2] - xyz_com[2]) ** 2)
                 s = math.sqrt( s / float(len(mps1)) )
                 out_files[icmd].write('%12.5f\n' % s)
-            
+
+            elif cmd[0] == 'dt_hb':
+                mp1, mp2 = cmd[3].split('-')
+                mp1 = int(mp1)
+                mp2 = int(mp2)
+                r = math.sqrt((data[mp1-1][0] - data[mp2-1][0]) ** 2
+                             +(data[mp1-1][1] - data[mp2-1][1]) ** 2
+                             +(data[mp1-1][2] - data[mp2-1][2]) ** 2)
+
+                mp1, mp2, mp3 = cmd[4].split('-')
+                xyz_i = data[int(mp1)-1]
+                xyz_j = data[int(mp2)-1]
+                xyz_k = data[int(mp3)-1]
+                vij = array([xyz_j[0] - xyz_i[0],
+                             xyz_j[1] - xyz_i[1],
+                             xyz_j[2] - xyz_i[2]])
+                vjk = array([xyz_k[0] - xyz_j[0],
+                             xyz_k[1] - xyz_j[1],
+                             xyz_k[2] - xyz_j[2]])
+                theta1 = arccos(dot(vij, vjk) / norm(vij) / norm(vjk))
+
+                mp1, mp2, mp3 = cmd[5].split('-')
+                xyz_i = data[int(mp1)-1]
+                xyz_j = data[int(mp2)-1]
+                xyz_k = data[int(mp3)-1]
+                vij = array([xyz_j[0] - xyz_i[0],
+                             xyz_j[1] - xyz_i[1],
+                             xyz_j[2] - xyz_i[2]])
+                vjk = array([xyz_k[0] - xyz_j[0],
+                             xyz_k[1] - xyz_j[1],
+                             xyz_k[2] - xyz_j[2]])
+                theta2 = arccos(dot(vij, vjk) / norm(vij) / norm(vjk))
+
+                out_files[icmd].write('%7.2f %6.3f %6.3f\n' % (r, theta1, theta2))
+                # math.degrees(theta)
+                 
 except DCD_END:
     pass
 
