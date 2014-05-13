@@ -15,19 +15,19 @@ from cafysis.elements.ninfo import NinfoSet
 from numpy import array, dot, arccos
 from numpy.linalg import norm
 
-def angle_two_lines(xyz_i, xyz_j, xyz_k, xyz_l)
+def angle_two_lines(xyz_i, xyz_j, xyz_k, xyz_l):
     vij = array([xyz_j[0] - xyz_i[0],
                  xyz_j[1] - xyz_i[1],
                  xyz_j[2] - xyz_i[2]])
     vkl = array([xyz_l[0] - xyz_k[0],
                  xyz_l[1] - xyz_k[1],
                  xyz_l[2] - xyz_k[2]])
-    angle_two_lines = arccos(dot(vij, vkl) / norm(vij) / norm(vkl))
+    return arccos(dot(vij, vkl) / norm(vij) / norm(vkl))
 
-def angle_three_points(xyz_i, xyz_j, xyz_k)
-    angle_three_points = angle_two_lines(xyz_i, xyz_j, xyz_j, xyz_k)
+def angle_three_points(xyz_i, xyz_j, xyz_k):
+    return angle_two_lines(xyz_i, xyz_j, xyz_j, xyz_k)
 
-def dih_four_points(xyz_i, xyz_j, xyz_k, xyz_l)
+def dih_four_points(xyz_i, xyz_j, xyz_k, xyz_l):
     vij = array([xyz_j[0] - xyz_i[0],
                  xyz_j[1] - xyz_i[1],
                  xyz_j[2] - xyz_i[2]])
@@ -37,15 +37,17 @@ def dih_four_points(xyz_i, xyz_j, xyz_k, xyz_l)
     vkl = array([xyz_l[0] - xyz_k[0],
                  xyz_l[1] - xyz_k[1],
                  xyz_l[2] - xyz_k[2]])
-    m = array([vij[2]*vkj[3] - vij[3]*vkj[2],
-               vij[3]*vkj[1] - vij[1]*vkj[3],
-               vij[1]*vkj[2] - vij[2]*vkj[1]])
-    n = arrya([vkj[2]*vkl[3] - vkj[3]*vkl[2],
-               vkj[3]*vkl[1] - vkj[1]*vkl[3],
-               vkj[1]*vkl[2] - vkj[2]*vkl[1]])
-    dih_four_points = arccos(dot(m,n) / norm(m) / norm(n))
+    m = array([vij[1]*vkj[2] - vij[2]*vkj[1],
+               vij[2]*vkj[0] - vij[0]*vkj[2],
+               vij[0]*vkj[1] - vij[1]*vkj[0]])
+    n = array([vkj[1]*vkl[2] - vkj[2]*vkl[1],
+               vkj[2]*vkl[0] - vkj[0]*vkl[2],
+               vkj[0]*vkl[1] - vkj[1]*vkl[0]])
+    dih = arccos(dot(m,n) / norm(m) / norm(n))
     if dot(vij,n) < 0.0:
-        dih_four_points = - dih_four_points
+        return -dih
+    else:
+        return  dih
 
 class DCD_END(Exception):
     pass
@@ -928,6 +930,7 @@ try:
                 psi2 = dih_four_points(data[int(mp1)-1], data[int(mp2)-1], 
                                        data[int(mp3)-1], data[int(mp4)-1])
 
+                print r,theta1,theta2,psi,psi1,psi2
                 out_files[icmd].write('%7.2f %6.3f %6.3f %6.3f %6.3f %6.3f\n' 
                                     % (r, theta1, theta2, psi, psi1, psi2))
                  
