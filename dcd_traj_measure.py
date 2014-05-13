@@ -15,6 +15,38 @@ from cafysis.elements.ninfo import NinfoSet
 from numpy import array, dot, arccos
 from numpy.linalg import norm
 
+def angle_two_lines(xyz_i, xyz_j, xyz_k, xyz_l)
+    vij = array([xyz_j[0] - xyz_i[0],
+                 xyz_j[1] - xyz_i[1],
+                 xyz_j[2] - xyz_i[2]])
+    vkl = array([xyz_l[0] - xyz_k[0],
+                 xyz_l[1] - xyz_k[1],
+                 xyz_l[2] - xyz_k[2]])
+    angle_two_lines = arccos(dot(vij, vkl) / norm(vij) / norm(vkl))
+
+def angle_three_points(xyz_i, xyz_j, xyz_k)
+    angle_three_points = angle_two_lines(xyz_i, xyz_j, xyz_j, xyz_k)
+
+def dih_four_points(xyz_i, xyz_j, xyz_k, xyz_l)
+    vij = array([xyz_j[0] - xyz_i[0],
+                 xyz_j[1] - xyz_i[1],
+                 xyz_j[2] - xyz_i[2]])
+    vkj = array([xyz_j[0] - xyz_k[0],
+                 xyz_j[1] - xyz_k[1],
+                 xyz_j[2] - xyz_k[2]])
+    vkl = array([xyz_l[0] - xyz_k[0],
+                 xyz_l[1] - xyz_k[1],
+                 xyz_l[2] - xyz_k[2]])
+    m = array([vij[2]*vkj[3] - vij[3]*vkj[2],
+               vij[3]*vkj[1] - vij[1]*vkj[3],
+               vij[1]*vkj[2] - vij[2]*vkj[1]])
+    n = arrya([vkj[2]*vkl[3] - vkj[3]*vkl[2],
+               vkj[3]*vkl[1] - vkj[1]*vkl[3],
+               vkj[1]*vkl[2] - vkj[2]*vkl[1]])
+    dih_four_points = arccos(dot(m,n) / norm(m) / norm(n))
+    if dot(vij,n) < 0.0:
+        dih_four_points = - dih_four_points
+
 class DCD_END(Exception):
     pass
 
@@ -609,13 +641,7 @@ try:
                         xyz_l = data[defs[cmd[4]][1][0] - 1]
                 else:
                     xyz_l = data[int(cmd[4]) - 1]
-                vij = array([xyz_j[0] - xyz_i[0],
-                             xyz_j[1] - xyz_i[1],
-                             xyz_j[2] - xyz_i[2]])
-                vkl = array([xyz_l[0] - xyz_k[0],
-                             xyz_l[1] - xyz_k[1],
-                             xyz_l[2] - xyz_k[2]])
-                theta = arccos(dot(vij, vkl) / norm(vij) / norm(vkl))
+                theta = angle_two_lines(xyz_i, xyz_j, xyz_k, xyz_l)
                 out_files[icmd].write('%12.5f %12.5f\n' % (theta, math.degrees(theta)))
 
             elif cmd[0] == 'delta_angle' :
@@ -884,31 +910,26 @@ try:
                              +(data[mp1-1][2] - data[mp2-1][2]) ** 2)
 
                 mp1, mp2, mp3 = cmd[3].split('-')
-                xyz_i = data[int(mp1)-1]
-                xyz_j = data[int(mp2)-1]
-                xyz_k = data[int(mp3)-1]
-                vij = array([xyz_j[0] - xyz_i[0],
-                             xyz_j[1] - xyz_i[1],
-                             xyz_j[2] - xyz_i[2]])
-                vjk = array([xyz_k[0] - xyz_j[0],
-                             xyz_k[1] - xyz_j[1],
-                             xyz_k[2] - xyz_j[2]])
-                theta1 = arccos(dot(vij, vjk) / norm(vij) / norm(vjk))
+                theta1 = angle_three_points(data[int(mp1)-1], data[int(mp2)-1], data[int(mp3)-1])
+                # math.degrees(theta)
 
                 mp1, mp2, mp3 = cmd[4].split('-')
-                xyz_i = data[int(mp1)-1]
-                xyz_j = data[int(mp2)-1]
-                xyz_k = data[int(mp3)-1]
-                vij = array([xyz_j[0] - xyz_i[0],
-                             xyz_j[1] - xyz_i[1],
-                             xyz_j[2] - xyz_i[2]])
-                vjk = array([xyz_k[0] - xyz_j[0],
-                             xyz_k[1] - xyz_j[1],
-                             xyz_k[2] - xyz_j[2]])
-                theta2 = arccos(dot(vij, vjk) / norm(vij) / norm(vjk))
+                theta2 = angle_three_points(data[int(mp1)-1], data[int(mp2)-1], data[int(mp3)-1])
 
-                out_files[icmd].write('%7.3f %6.3f %6.3f\n' % (r, theta1, theta2))
-                # math.degrees(theta)
+                mp1, mp2, mp3, mp4 = cmd[5].split('-')
+                psi = dih_four_points(data[int(mp1)-1], data[int(mp2)-1], 
+                                      data[int(mp3)-1], data[int(mp4)-1])
+
+                mp1, mp2, mp3, mp4 = cmd[6].split('-')
+                psi1 = dih_four_points(data[int(mp1)-1], data[int(mp2)-1], 
+                                       data[int(mp3)-1], data[int(mp4)-1])
+
+                mp1, mp2, mp3, mp4 = cmd[7].split('-')
+                psi2 = dih_four_points(data[int(mp1)-1], data[int(mp2)-1], 
+                                       data[int(mp3)-1], data[int(mp4)-1])
+
+                out_files[icmd].write('%7.2f %6.3f %6.3f %6.3f %6.3f %6.3f\n' 
+                                    % (r, theta1, theta2, psi, psi1, psi2))
                  
 except DCD_END:
     pass
