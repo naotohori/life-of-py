@@ -25,7 +25,7 @@ def angle_two_lines(xyz_i, xyz_j, xyz_k, xyz_l):
     return arccos(dot(vij, vkl) / norm(vij) / norm(vkl))
 
 def angle_three_points(xyz_i, xyz_j, xyz_k):
-    return angle_two_lines(xyz_i, xyz_j, xyz_j, xyz_k)
+    return angle_two_lines(xyz_j, xyz_i, xyz_j, xyz_k)
 
 def dih_four_points(xyz_i, xyz_j, xyz_k, xyz_l):
     vij = array([xyz_j[0] - xyz_i[0],
@@ -930,7 +930,6 @@ try:
                 psi2 = dih_four_points(data[int(mp1)-1], data[int(mp2)-1], 
                                        data[int(mp3)-1], data[int(mp4)-1])
 
-                print r,theta1,theta2,psi,psi1,psi2
                 out_files[icmd].write('%7.2f %6.3f %6.3f %6.3f %6.3f %6.3f\n' 
                                     % (r, theta1, theta2, psi, psi1, psi2))
                  
