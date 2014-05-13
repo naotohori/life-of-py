@@ -465,14 +465,14 @@ for cmd in cmds :
     elif cmd[0] == 'dt_hb':
         filename = 'dthb_%s' % cmd[1]
         out_files.append(open(filename + '.out', 'w'))
-        out_files[-1].write('# dt_hb')
-        out_files[-1].write('# name: %s' % cmd[1])
-        out_files[-1].write('# r: %s' % cmd[2])
-        out_files[-1].write('# theta1: %s' % cmd[3])
-        out_files[-1].write('# theta2: %s' % cmd[4])
-        out_files[-1].write('# psi: %s' % cmd[5])
-        out_files[-1].write('# psi1: %s' % cmd[6])
-        out_files[-1].write('# psi2: %s' % cmd[7])
+        out_files[-1].write('# dt_hb\n')
+        out_files[-1].write('# name: %s\n' % cmd[1])
+        out_files[-1].write('# r: %s\n' % cmd[2])
+        out_files[-1].write('# theta1: %s\n' % cmd[3])
+        out_files[-1].write('# theta2: %s\n' % cmd[4])
+        out_files[-1].write('# psi: %s\n' % cmd[5])
+        out_files[-1].write('# psi1: %s\n' % cmd[6])
+        out_files[-1].write('# psi2: %s\n' % cmd[7])
         
 iframe = 0
 flg_initial_data = True
@@ -907,7 +907,7 @@ try:
                              xyz_k[2] - xyz_j[2]])
                 theta2 = arccos(dot(vij, vjk) / norm(vij) / norm(vjk))
 
-                out_files[icmd].write('%7.2f %6.3f %6.3f\n' % (r, theta1, theta2))
+                out_files[icmd].write('%7.3f %6.3f %6.3f\n' % (r, theta1, theta2))
                 # math.degrees(theta)
                  
 except DCD_END:
