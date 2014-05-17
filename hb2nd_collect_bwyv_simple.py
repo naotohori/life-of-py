@@ -9,19 +9,20 @@ S1_FORMED = 4
 S2_FORMED = 4
 L1L2_FORMED = 10
 
-if len(sys.argv) == 4:
-    step_ignore = int(sys.argv[2])
+if len(sys.argv) == 5:
+    step_ignore = int(sys.argv[3])
     step_final  = int(sys.argv[-1])
     flg_final = True
-elif len(sys.argv) == 3:
-    step_ignore = int(sys.argv[2])
+elif len(sys.argv) == 4:
+    step_ignore = int(sys.argv[3])
     flg_final = False
 else:
-    print 'Usage: SCRIPT [output file] [step_ignore]'
-    print ' or  : SCRIPT [output file] [step_ignore] [step_final]'
+    print 'Usage: SCRIPT [filename hb2nd] [output file] [step_ignore]'
+    print ' or  : SCRIPT [filename hb2nd] [output file] [step_ignore] [step_final]'
     sys.exit(2)
 
-f_out = open(sys.argv[1], 'w')
+filename_hb2nd = sys.argv[1]
+f_out = open(sys.argv[2], 'w')
 f_out.write('#1  2  3     4       5       6       7      8\n')
 f_out.write('#cM fr rn  Folded    S1S2    S1   Unfold   other\n')
 
@@ -42,7 +43,7 @@ for sim in simulations:
     os.chdir('%s/cM%s/%s_%s_%s' % (orig_dir, cM, cM, frc, rnd))
 
     try:
-        f = open('hb2nd.out','r')
+        f = open(filename_hb2nd,'r')
     except:
         continue
 

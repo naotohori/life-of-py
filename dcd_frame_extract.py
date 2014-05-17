@@ -71,12 +71,12 @@ dcd_out.open_to_write()
 # header
 dcd.read_header()
 header = dcd.get_header()
-#header.istart = header.nstep_save * (frame_begin - 1)
-header.istart = header.istart + header.nstep_save * frame_begin
-#header.nset = int(frame_num / frame_stride)
-header.nset = int((frame_end-frame_begin)/frame_stride) + 1
-header.nstep = header.nstep_save * (frame_num - 1)
-header.nstep_save = header.nstep_save * frame_stride
+##header.istart = header.nstep_save * (frame_begin - 1)
+#header.istart = header.istart + header.nstep_save * frame_begin
+##header.nset = int(frame_num / frame_stride)
+#header.nset = int((frame_end-frame_begin)/frame_stride) + 1
+#header.nstep = header.nstep_save * (frame_num - 1)
+#header.nstep_save = header.nstep_save * frame_stride
 dcd_out.set_header(header)
 dcd_out.write_header()
 
