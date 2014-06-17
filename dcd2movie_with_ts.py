@@ -43,14 +43,14 @@ while dcd.has_more_data():
         print 'Not enough data in .ts file (1)'
         sys.exit(2)
         
-    tsdata = ts.read_onestep()
+    tsdata, lines = ts.read_onestep()
     
     # skip step=1
     if tsdata[0][ts.head_col.step] == 1:
         if not ts.has_more_data():
             print 'Not enough data in .ts file (2)'
             sys.exit(2)
-        tsdata = ts.read_onestep()
+        tsdata, lines = ts.read_onestep()
     
     if tsdata[0][ts.head_col.e_bridge] == '0.0000000':
         struct = dcd.read_onestep()

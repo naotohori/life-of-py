@@ -29,7 +29,6 @@ class TsHeader(object):
         self.e_morse = None
         self.e_repul = None
         self.e_dna_solv = None
-        self.e_dna_stack = None
         self.e_dna_base = None
         self.e_ele = None
         self.e_ion_hyd = None
@@ -45,6 +44,8 @@ class TsHeader(object):
         self.e_rest1d = None
         self.e_implig = None
         self.e_window = None
+        self.e_stack = None
+        self.e_hbond = None
         
     def show(self):
         print 'step', self.step
@@ -67,7 +68,6 @@ class TsHeader(object):
         print 'e_morse', self.e_morse
         print 'e_repul', self.e_repul
         print 'e_dna_solv', self.e_dna_solv
-        print 'e_dna_stack', self.e_dna_stack
         print 'e_dna_base', self.e_dna_base
         print 'e_ele', self.e_ele
         print 'e_ion_hyd', self.e_ion_hyd
@@ -83,10 +83,13 @@ class TsHeader(object):
         print 'e_rest1d', self.e_rest1d
         print 'e_implig', self.e_implig
         print 'e_window', self.e_window
+        print 'e_stack', self.e_stack
+        print 'e_hbond', self.e_hbond
                 
 class TsFile(object):
     def __init__(self, filename) :
         self._filename = filename
+        self.header_lines = []
         self.head_str = None
         self.head_col = None
         self.flg_u_u = False
@@ -105,6 +108,9 @@ class TsFile(object):
         self._file.flush()
         
     def read_header(self):
+        ''' store lines to self.header_lines
+            store information to self.head_str and self.head_col
+        '''
         if not self._file :
             raise MyError('TsFile', 'read_header', 'Logical: _file is None')
         
@@ -112,18 +118,19 @@ class TsFile(object):
         
         # skip 5 lines
         for i in xrange(5):
-            self._file.readline()
+            self.header_lines.append( self._file.readline() )
             
         # read header
-        self._file.readline()
-        self.head_str = self._file.readline().split()[1:]
-        
-        #self.ts = self._header2col(self.col)
+        self.header_lines.append( self._file.readline() )
+        line = self._file.readline()
+        self.header_lines.append( line )
+
+        self.head_str = line.split()[1:]
         self.head_col = self._head_str2col(self.head_str)
         
         # skip 2 lines
-        self._file.readline()
-        self._file.readline()
+        self.header_lines.append( self._file.readline() )
+        self.header_lines.append( self._file.readline() )
         
         #### Count the number of units ####
         # skip the first line of step 0
@@ -141,7 +148,7 @@ class TsFile(object):
                 self.flg_u_u = True
                 break
             self.num_unit = int(l.split()[0][1:])
-        if self.num_unit <= 0:
+        if self.num_unit < 0:
             raise MyError('TsFile','read_header','Bad format: num_unit <= 0')
         ###########################################
             
@@ -150,18 +157,31 @@ class TsFile(object):
         for i in xrange(9):
             self._file.readline()
         
+    def write_header(self, header_lines):
+        for l in self.header_lines:
+            self._file.write(l)
+
     def read_onestep(self):
-        self._file.readline()
+        lines = []
+        lines.append( self._file.readline() )
         
         ts_list = []
         for i in xrange(self.num_unit+1):
-            ts_list.append(self._file.readline().split()[1:])
+            l = self._file.readline()
+            lines.append(l)
+            ts_list.append(l.split()[1:])
 
         if self.flg_u_u:
             for i in xrange(self.num_unit*(self.num_unit-1)/2):
-                ts_list.append(self._file.readline().split()[1:])
+                l = self._file.readline()
+                lines.append(l)
+                ts_list.append(l.split()[1:])
             
-        return ts_list
+        return (ts_list, lines)
+
+    def write_onestep(self, lines):
+        for l in lines:
+            self._file.write(l)
     
     def skip_onestep(self):
         for i in xrange(self.num_unit +2):
@@ -241,8 +261,6 @@ class TsFile(object):
                 th.e_repul = i
             elif str == 'solv_dna':
                 th.e_dna_solv = i
-            elif str == 'stack':
-                th.e_dna_stack = i
             elif str == 'base':
                 th.e_dna_base = i
             elif str == 'elect':
@@ -273,6 +291,10 @@ class TsFile(object):
                 th.e_implig = i
             elif str == 'window':
                 th.e_window = i
+            elif str == 'stack':
+                th.e_stack = i
+            elif str == 'hbond':
+                th.e_hbond = i
             else:
                 raise MyError('','','')
         return th
