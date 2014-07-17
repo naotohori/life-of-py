@@ -10,7 +10,7 @@ class TsHeader(object):
     def __init__(self) :
         self.step = None
         self.temp = None
-        self.replica = None
+        self.label = None
         
         self.rg = None
         self.rmsd = None
@@ -50,7 +50,7 @@ class TsHeader(object):
     def show(self):
         print 'step', self.step
         print 'temp', self.temp
-        print 'replica', self.replica
+        print 'label', self.label
         
         print 'rg', self.rg
         print 'rmsd', self.rmsd
@@ -157,9 +157,17 @@ class TsFile(object):
         for i in xrange(9):
             self._file.readline()
         
-    def write_header(self, header_lines):
+    def write_header(self):
         for l in self.header_lines:
             self._file.write(l)
+
+    def copy_header(self, ts):
+        import copy
+        self.header_lines = copy.deepcopy(ts.header_lines)
+        self.head_str = copy.deepcopy(ts.head_str)
+        self.head_col = copy.deepcopy(ts.head_col)
+        self.flg_u_u = copy.deepcopy(ts.flg_u_u)
+        self.num_unit = copy.deepcopy(ts.num_unit)
 
     def read_onestep(self):
         lines = []
@@ -231,7 +239,7 @@ class TsFile(object):
             elif str == 'tempk':
                 th.temp = i
             elif str == 'label':
-                th.replica = i
+                th.label = i
             elif str == 'radg':
                 th.rg = i
             elif str == 'rmsd':
