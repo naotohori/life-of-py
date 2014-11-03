@@ -17,7 +17,7 @@ pfx = sys.argv[2]
 flg_open = False
 for l in f_in:
     if l[0:5] == 'MODEL':
-        filename = pfx + ('%08i' % int(l[5:])) + '.pdb'
+        filename = pfx + ('%0.8i' % int(l[5:])) + '.pdb'
         f_out = open(filename,'w')
         flg_open = True
     elif (l[0:6] == 'REMARK' or l[0:4] == 'ATOM'   or

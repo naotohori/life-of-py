@@ -204,12 +204,16 @@ class TsFile(object):
     def has_more_data(self):
         """return True or False"""
         s = self._file.tell()
-        if self._file.readline() == '':
+        try:
+            if self._file.readline() == '':
+                self._file.seek(s)
+                return False
+            else:
+                self._file.seek(s)
+                return True
+        except:
             self._file.seek(s)
             return False
-        else:
-            self._file.seek(s)
-            return True
 
     #def _pick_data(self):
     #    """return binary data between 'integer' and 'integer'. 'integer' indicates the number of bytes"""

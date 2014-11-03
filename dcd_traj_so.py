@@ -8,11 +8,12 @@ import sys
 import math
 from cafysis.file_io.dcd import DcdFile
 
-if len(sys.argv) != 4:
-    print ('\n Usage: SCRIPT [input DCD file] [input SO list] [output SO file]\n')
+if len(sys.argv) != 5:
+    print ('\n Usage: SCRIPT [input DCD file] [input SO list] [tolerance distance] [output SO file]\n')
     sys.exit(2)
     
-TOLERANCE = 2.0
+#TOLERANCE = 2.0
+TOLERANCE = float(sys.argv[3])
 
 solist = []
 for l in  open(sys.argv[2],'r'):
@@ -31,10 +32,11 @@ dcd.read_header()
 nmp = dcd.get_header().nmp_real
 
 if (nmp-1)*(nmp-2)/2 != ncon:
-    print '(nmp-1)*(nmp-2)/2 != ncon'
-    sys.exit(2)
+    print 'Warning: (nmp-1)*(nmp-2)/2 != ncon,  ncon=%i, nmp=%i' % (ncon,nmp)
+    #sys.exit(2)
 
-f_out = open(sys.argv[3],'w')
+f_out = open(sys.argv[-1],'w')
+f_out.write('# tolerance distance = %f\n' % (TOLERANCE,))
 
 while dcd.has_more_data():
     data = dcd.read_onestep()
