@@ -10,8 +10,8 @@ from cafysis.file_io.dcd import DcdFile
 from cafysis.file_io.ts import TsFile
 
 if __name__ == '__main__':
-    if len(sys.argv) < 5:
-        print 'Usage: % SCRIPT [name] [Dir 1] [Dir 2] ([Dir 3] ...) [output dir]'
+    if len(sys.argv) < 4:
+        print 'Usage: % SCRIPT [name] [Dir 1] ([Dir 2] [Dir 3] ...) [output dir]'
         sys.exit(2)
     
     name = sys.argv[1]
