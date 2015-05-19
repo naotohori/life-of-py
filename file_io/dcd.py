@@ -39,6 +39,7 @@ class DcdFile :
     def __init__(self, filename) :
         self._filename = filename
         self._header = DcdHeader()
+        self._seek_data = None
         
     def open_to_read(self):
         self._file = open(self._filename, 'rb')
@@ -85,6 +86,8 @@ class DcdFile :
         # nmp_real
         b = self._pick_data()
         self._header.nmp_real = struct.unpack('i', b)[0]
+
+        self._seek_data = self._file.tell()
         
     def write_header(self):
         if not self._header :
@@ -155,6 +158,19 @@ class DcdFile :
             coord_matrix.append(xyz)
         
         return coord_matrix
+
+    def read_onestep_np(self):
+        """return ndarray"""
+        import numpy as np
+        data = np.empty((self._header.nmp_real, 3))
+        b = self._pick_data()
+        data[:,0] = struct.unpack('f' * self._header.nmp_real, b)
+        b = self._pick_data()
+        data[:,1] = struct.unpack('f' * self._header.nmp_real, b)
+        b = self._pick_data()
+        data[:,2] = struct.unpack('f' * self._header.nmp_real, b)
+        
+        return data
     
     def skip_onestep(self):
         num = struct.unpack('i', self._file.read(4))[0]
@@ -193,6 +209,9 @@ class DcdFile :
         else :
             self._file.seek(-4, os.SEEK_CUR)
             return True
+    
+    def rewind(self):
+        self._file.seek( self._seek_data, os.SEEK_SET)
 
     def _pick_data(self):
         """return binary data between 'integer' and 'integer'. 'integer' indicates the number of bytes"""
