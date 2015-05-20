@@ -10,6 +10,7 @@ import sys
 import math
 from cafysis.file_io.dcd import DcdFile
 from cafysis.file_io.drid import DridFile, DridHeader
+import cafysis.lib_f2py.py_drid
 import numpy as np
 
 if len(sys.argv) != 5:
@@ -41,13 +42,22 @@ h.bonds = bonds
 drid.set_header(h)
 drid.write_header()
 
-nc = len(centroids)
-na = len(atoms)
-mu = []
+#nc = len(centroids)
+#na = len(atoms)
+#mu = []
 #iframe = 0
 while dcd.has_more_data() :
     data = dcd.read_onestep_np()
     
+    '''
+    F2PY
+    munuxi = drid(x,centroids,atoms,nx=shape(x,1),nc=len(centroids),na=len(atoms))
+    '''
+    munuxi = py_drid.drid( data.T, centroids, atoms) 
+    drid.write_onestep( munuxi )
+
+    '''
+    # PYTHON version (time consuming)
     d_inv = np.ma.empty((nc, na)) # [1:nc, 1:na]
     d_inv.mask = False
 
@@ -79,5 +89,6 @@ while dcd.has_more_data() :
     xi = np.power( np.power(dd,3).sum(axis=1) / nsum, float(1)/3)
 
     drid.write_onestep( np.concatenate((mu,nu,xi)) )
+    '''
     #print iframe
     #iframe += 1
