@@ -10,42 +10,20 @@ from cafysis.elements.psf import Psf, Atom
 def line2atom(line):
     line.rstrip()
     atom = Atom()
-    ## Old
-    #atom.atom_id = int(line[0:8])
-    #atom.seg_name = line[8:11]
-    #atom.res_id = int(line[11:15])
-    #atom.res_name = line[15:23]
-    #atom.atom_name = line[23:28]
-    #atom.atom_type = line[28:31]
-    #atom.charge = float(line[31:50])
-    #atom.mass = float(line[50:64])
-    #atom.unused = int(line[64:76])
+    
     atom.atom_id = int(line[0:8])
-    atom.seg_name = line[8:10]
-    atom.res_id = int(line[10:15])
-    atom.res_name = line[15:23]
-    atom.atom_name = line[23:29]
-    atom.atom_type = line[29:33]
-    atom.charge = float(line[33:51])
-    atom.mass = float(line[51:64])
-    atom.unused = int(line[64:76])
-    ## New
-    #atom.atom_id = int(line[0:8])
-    #atom.seg_name = line[8:12]
-    #atom.res_id = int(line[12:18])
-    #atom.res_name = line[18:22]
-    #atom.atom_name = line[22:27]
-    #atom.atom_type = line[27:31]
-    #atom.charge = float(line[31:44])
-    #atom.mass = float(line[44:58])
-    #atom.unused = int(line[58:70])
+    atom.seg_name = line[8:12]
+    atom.res_id = int(line[12:18])
+    atom.res_name = line[18:22]
+    atom.atom_name = line[22:27]
+    atom.atom_type = line[27:31]
+    atom.charge = float(line[31:44])
+    atom.mass = float(line[44:58])
+    atom.unused = int(line[58:70])
     return atom
 
 def atom2line(atom):
-    ## Old
-    return ('%8i%3s%4i%8s%5s%3s%19.6f%14.4f%12i' %
-    ## New
-    #return ('%8i  %3s %4i  %3s %4s %4s  %9.6f      %8.4f%12i' %
+    return ('%8i  %3s %4i  %3s %4s %4s  %9.6f      %8.4f%12i' %
              (atom.atom_id, atom.seg_name,
               atom.res_id, atom.res_name,
               atom.atom_name, atom.atom_type,

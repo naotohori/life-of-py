@@ -171,6 +171,19 @@ class DcdFile :
         data[:,2] = struct.unpack('f' * self._header.nmp_real, b)
         
         return data
+
+    def read_onestep_npF(self):
+        """return ndarray"""
+        import numpy as np
+        data = np.empty((3,self._header.nmp_real), order='F')
+        b = self._pick_data()
+        data[0,:] = struct.unpack('f' * self._header.nmp_real, b)
+        b = self._pick_data()
+        data[1,:] = struct.unpack('f' * self._header.nmp_real, b)
+        b = self._pick_data()
+        data[2,:] = struct.unpack('f' * self._header.nmp_real, b)
+        
+        return data
     
     def skip_onestep(self):
         num = struct.unpack('i', self._file.read(4))[0]

@@ -1,29 +1,28 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 '''
-Created on 2015/06/03
+Created on 2015/06/05
 @author: Naoto Hori
 '''
 import sys
 import math
 import numpy as np
-from cafysis.lib_f2py import py_distance2_hist
+from cafysis.lib_f2py import py_count_bound
 from cafysis.file_io.dcd import DcdFile
 from cafysis.file_io.psf import PsfFile
 
 if len(sys.argv) != 4:
-    print ('\n Usage: SCRIPT [input DCD] [input PSF] [output]\n')
+    print ('\n Usage: SCRIPT [input DCD] [input PSF] [output prefix]\n')
     sys.exit(2)
     
 psffile = PsfFile(sys.argv[2])
 psffile.open_to_read()
 psf = psffile.read_all()
 
-dcd = DcdFile(sys.argv[1])
 
 id0_Mg = []
-id0_P = []
-id0_K = []
+id0_P  = []
+id0_K  = []
 for i,a in enumerate(psf.atoms):
     if a.atom_name.strip() == 'P':
         id0_P.append(i)
@@ -32,81 +31,40 @@ for i,a in enumerate(psf.atoms):
     elif a.atom_name.strip() == 'K':
         id0_K.append(i)
 
-#print id0_Mg
-#print id0_P
 
-f_out = open(sys.argv[-1],'w')
+f_out_Mg  = open(sys.argv[-1]+'.boundsalt.Mg','w')
+f_out_K   = open(sys.argv[-1]+'.boundsalt.K','w')
+f_out_total = open(sys.argv[-1]+'.boundsalt.total','w')
 
-r_hist = 20.0
-r2_hist = r_hist * r_hist
-bins = [(x*0.1)**2 for x in range(200+1)]
-nbin = len(bins) - 1
-hist_Mg = np.zeros( (nbin,))
-hist_K  = np.zeros( (nbin,))
+r_count_Mg = 0.5*(2.1+1.5852) + 1.5
+r_count_K  = 0.5*(2.1+5.3160) + 1.5
 
+dcd = DcdFile(sys.argv[1])
 dcd.open_to_read()
 dcd.read_header()
 
-nstep = 0
 while dcd.has_more_data() :
-    nstep += 1
+
+    data = dcd.read_onestep_npF()
 
     if len(id0_Mg) > 0:
-        dist2_Mg, idx_Mg, = py_distance2_hist.distance2_hist( dcd.read_onestep_npF(),
-                                             id0_P, id0_Mg, r2_hist)
+        count_Mg = py_count_bound.count_bound( data, id0_P, id0_Mg, r_count_Mg)
 
-        H, B = np.histogram(dist2_Mg[:idx_Mg], bins=bins)
-        hist_Mg = hist_Mg + H
+    for c in count_Mg:
+        f_out_Mg.write('%i ' % (c,))
+    f_out_Mg.write('\n')
 
     if len(id0_K) > 0:
-        dist2_K, idx_K = py_distance2_hist.distance2_hist( dcd.read_onestep_npF(),
-                                             id0_P, id0_K, r2_hist)
+        count_K = py_count_bound.count_bound( data, id0_P, id0_K, r_count_K)
 
-        H, B = np.histogram(dist2_K[:idx_K], bins=bins)
-        hist_K = hist_K + H
+    for c in count_K:
+        f_out_K.write('%i ' % (c,))
+    f_out_K.write('\n')
+
+    f_out_total.write('%i %i\n' % (sum(count_Mg), sum(count_K),))
+
 dcd.close()
 
-n_hist_Mg = hist_Mg.sum()
-n_hist_K  = hist_K.sum()
-
-if len(id0_Mg) > 0 and len(id0_K) > 0:
-    for i in range(nbin):
-        f_out.write('%f %f %i %f %i %f\n' % (math.sqrt(bins[i]),math.sqrt(bins[i+1]), 
-                                         hist_Mg[i], hist_Mg[i] / float(n_hist_Mg),
-                                         hist_K[i],  hist_K[i] / float(n_hist_K),) )
-elif len(id0_K) > 0:
-    for i in range(nbin):
-        f_out.write('%f %f %i %f %i %f\n' % (math.sqrt(bins[i]),math.sqrt(bins[i+1]), 
-                                         0, 0.0,
-                                         hist_K[i],  hist_K[i] / float(n_hist_K),) )
-
-f_out.close()
-
-
-'''
-dist2_m,idx_m = distance2_hist(xyz,id0_p,id0_m,r2_hist,[nmp,np,nm])
-
-Wrapper for ``distance2_hist``.
-
-Parameters
-----------
-xyz : input rank-2 array('d') with bounds (3,nmp)
-id0_p : input rank-1 array('i') with bounds (np)
-id0_m : input rank-1 array('i') with bounds (nm)
-r2_hist : input float
-
-Other Parameters
-----------------
-nmp : input int, optional
-Default: shape(xyz,1)
-np : input int, optional
-Default: len(id0_p)
-nm : input int, optional
-Default: len(id0_m)
-
-Returns
--------
-dist2_m : rank-1 array('d') with bounds (np*nm)
-idx_m : int
-'''
-
+f_out_Mg.close()
+f_out_K.close()
+f_out_total.close()
