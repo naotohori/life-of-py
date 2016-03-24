@@ -8,27 +8,27 @@ Created on 2014/06/17
 import sys
 from cafysis.file_io.dcd import DcdFile
 
-if len(sys.argv) != 2:
-    print ('Usage: SCRIPT [dcd file]')
-    sys.exit(2)
+def count(path):
 
-dcd = DcdFile(sys.argv[1])
-dcd.open_to_read()
+    dcd = DcdFile(path)
+    dcd.open_to_read()
 
-dcd.read_header()
+    dcd.read_header()
 
-def error_no_data() :
-    print 'The number of frames is invalid.'
-    print 'Header information:'
-    dcd.show_header()
-    sys.exit(2)
+    icount = 0
+    while dcd.has_more_data():
+        dcd.skip(1)
+        icount += 1
+
+    dcd.close()
+
+    return icount
 
 
-icount = 0
-while dcd.has_more_data():
-    dcd.skip(1)
-    icount += 1
+if __name__ == "__main__":
 
-dcd.close()
+    if len(sys.argv) != 2:
+        print ('Usage: SCRIPT [dcd file]')
+        sys.exit(2)
 
-print ('# frames = ', icount)
+    print ('# frames = ', count(sys.argv[1]))
