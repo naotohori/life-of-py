@@ -173,7 +173,7 @@ class DcdFile :
         return data
 
     def read_onestep_npF(self):
-        """return ndarray"""
+        """return ndarray in Fortran format"""
         import numpy as np
         data = np.empty((3,self._header.nmp_real), order='F')
         b = self._pick_data()
