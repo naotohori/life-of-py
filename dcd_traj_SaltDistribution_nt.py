@@ -84,6 +84,7 @@ while dcd.has_more_data() :
 
 dcd.close()
 
+f_out.write('#nstep: %i\n#\n' % (nstep,))
 for iP in range(nP):
 
     f_out.write('#%5i\n' % (iP+1))
@@ -93,19 +94,21 @@ for iP in range(nP):
             r1 = math.sqrt(bins[i])
             r2 = math.sqrt(bins[i+1])
             div_factor = float(nstep) * 4.0 / 3.0 * math.pi * (r2**3 - r1**3)
-            f_out.write('%4.1f %4.1f %7.5f %7.5f %7.5f\n' % (r1,r2, 
+            f_out.write('%4.1f %4.1f %7.5f %7.5f %7.5f %i %i %i\n' % (r1,r2, 
                                          hist_Mg[iP,i] / div_factor, 
                                          hist_K[iP,i]  / div_factor,
-                                         hist_Cl[iP,i] / div_factor) )
+                                         hist_Cl[iP,i] / div_factor,
+                                         hist_Mg[iP,i], hist_K[iP,i], hist_Cl[iP,i]) )
     elif len(id0_K) > 0:
         for i in range(nbin):
             r1 = math.sqrt(bins[i])
             r2 = math.sqrt(bins[i+1])
             div_factor = float(nstep) * 4.0 / 3.0 * math.pi * (r2**3 - r1**3)
-            f_out.write('%4.1f %4.1f %7.5f %7.5f %7.5f\n' % (r1,r2,
+            f_out.write('%4.1f %4.1f %7.5f %7.5f %7.5f %i %i %i\n' % (r1,r2,
                                          0.0, 
                                          hist_K[iP,i] / div_factor, 
-                                         hist_Cl[iP,i]/ div_factor ) )
+                                         hist_Cl[iP,i]/ div_factor,
+                                         0, hist_K[iP,i], hist_Cl[iP,i]) )
     f_out.write('\n\n')
 
 f_out.close()
