@@ -30,16 +30,16 @@ class NinfoFile(object):
         for line in self._file :
             if line[0:4] == 'bond' :
                 ni.bondlengths.append(line2bondlength(line))
+            elif line[0:4] == 'fene' :
+                ni.fenes.append(line2fene(line))
             elif line[0:4] == 'angl' :
                 ni.bondangles.append(line2bondangle(line))
-            elif line[0:6] == 'aicg13' :
-                ni.aicg13s.append(line2aicg13(line))
             elif line[0:4] == 'dihd' :
                 ni.dihedrals.append(line2dihedral(line))
-            elif line[0:7] == 'aicgdih' :
-                ni.aicgdihs.append(line2aicgdih(line))
             elif line[0:7] == 'contact' :
                 ni.contacts.append(line2contact(line))
+            elif line[0:2] == 'LJ' :
+                ni.contacts.append(line2LJ(line))
             elif line[0:9] == 'basestack' :
                 ni.basestacks.append(line2basestack(line))
             elif line[0:8] == 'basepair' :
@@ -56,20 +56,20 @@ class NinfoFile(object):
                 self._file.write(bondlength2line(bl))
             self._file.write('>>>>\n')
             self._file.write('\n')
+
+        if len(ni.fenes) > 0:
+            self._file.write('<<<< FENE\n')
+            self._file.write('**      ibd iunit1-iunit2   imp1 - imp2 imp1un-imp2un        dist        dist2        coef\n')
+            for fene in ni.fenes :
+                self._file.write(fene2line(fene))
+            self._file.write('>>>>\n')
+            self._file.write('\n')
         
         if len(ni.bondangles) > 0:
             self._file.write('<<<< native bond angles\n')
             self._file.write('**      iba iunit1-iunit2   imp1 - imp2 - imp3 imp1un-imp2un-imp3un      ba_nat    factor_ba  correct_mgo      coef_ba\n')
             for ba in ni.bondangles :
                 self._file.write(bondangle2line(ba))
-            self._file.write('>>>>\n')
-            self._file.write('\n')
-        
-        if len(ni.aicg13s) > 0:
-            self._file.write('<<<< 1-3 contacts with L_AICG2 or L_AICG2_PLUS\n')
-            self._file.write('**      iba iunit1-iunit2   imp1 - imp2 - imp3 imp1un-imp2un-imp3un  aicg13_nat  factor_aicg13  correct_mgo  coef_aicg13_gauss wid_aicg13_gauss\n')
-            for a13 in ni.aicg13s :
-                self._file.write(aicg132line(a13))
             self._file.write('>>>>\n')
             self._file.write('\n')
         
@@ -81,14 +81,6 @@ class NinfoFile(object):
             self._file.write('>>>>\n')
             self._file.write('\n')
             
-        if len(ni.aicgdihs) > 0:
-            self._file.write('<<<< <<<< 1-4 contacts with L_AICG2_PLUS\n')
-            self._file.write('**     idih iunit1-iunit2   imp1 - imp2 - imp3 - imp4 imp1un-imp2un-imp3un-imp4un   dih_nat factor_aicg14  correct_mgo  coef_dih_gauss  wid_dih_gauss\n')
-            for adih in ni.aicgdihs :
-                self._file.write(aicgdih2line(adih))
-            self._file.write('>>>>\n')
-            self._file.write('\n')
-        
         if len(ni.contacts) > 0:
             self._file.write('<<<< native contact\n')
             self._file.write('** total_contact = %i\n'%(len(ni.contacts),))
@@ -103,6 +95,23 @@ class NinfoFile(object):
                     self._file.write('**        icon iunit1-iunit2   imp1 - imp2 imp1un-imp2un      go_nat   factor_go  dummy     coef_go\n')
                     for con in subset:
                         self._file.write(contact2line(con))
+            self._file.write('>>>>\n')
+            self._file.write('\n')
+
+        if len(ni.LJs) > 0:
+            self._file.write('<<<< LJ\n')
+            self._file.write('** total_LJ = %i\n'%(len(ni.LJs),))
+            for i in xrange(1, num_unit+1) :
+                for j in xrange(i, num_unit+1) :
+                    subset = ni.get_LJs_by_unit(i,j)
+                    if len(subset) == 0:
+                        continue
+                    self._file.write('\n')
+                    self._file.write('** LJ between unit %6i and %6i\n'%(i,j))
+                    self._file.write('** total_LJ_unit = %i\n'%(len(subset),))
+                    self._file.write('**     iLJ  iunit1-iunit2   imp1 - imp2 imp1un-imp2un  distance        coef\n')
+                    for con in subset:
+                        self._file.write(LJ2line(con))
             self._file.write('>>>>\n')
             self._file.write('\n')
         
@@ -139,20 +148,20 @@ class NinfoFile(object):
                 self._file.write(bondlength2line(bl))
         self._file.write('>>>>\n')
         self._file.write('\n')
+
+        self._file.write('<<<< FENE\n')
+        self._file.write('**      ibd iunit1-iunit2   imp1 - imp2 imp1un-imp2un      bd_nat    factor_bd  correct_mgo      coef_bd\n')
+        for fene in ni.fenes :
+            if fene.iunit1 == un1 and fene.iunit2 == un2:
+                self._file.write(fene2line(fene))
+        self._file.write('>>>>\n')
+        self._file.write('\n')
         
         self._file.write('<<<< native bond angles\n')
         self._file.write('**      iba iunit1-iunit2   imp1 - imp2 - imp3 imp1un-imp2un-imp3un      ba_nat    factor_ba  correct_mgo      coef_ba\n')
         for ba in ni.bondangles :
             if ba.iunit1 == un1 and ba.iunit2 == un2:
                 self._file.write(bondangle2line(ba))
-        self._file.write('>>>>\n')
-        self._file.write('\n')
-        
-        self._file.write('<<<< 1-3 contacts with L_AICG2 or L_AICG2_PLUS\n')
-        self._file.write('**      iba iunit1-iunit2   imp1 - imp2 - imp3 imp1un-imp2un-imp3un  aicg13_nat  factor_aicg13  correct_mgo  coef_aicg13_gauss wid_aicg13_gauss\n')
-        for a13 in ni.aicg13s :
-            if a13.iunit1 == un1 and a13.iunit2 == un2:
-                self._file.write(aicg132line(a13))
         self._file.write('>>>>\n')
         self._file.write('\n')
         
@@ -164,25 +173,26 @@ class NinfoFile(object):
         self._file.write('>>>>\n')
         self._file.write('\n')
             
-        self._file.write('<<<< <<<< 1-4 contacts with L_AICG2_PLUS\n')
-        self._file.write('**     idih iunit1-iunit2   imp1 - imp2 - imp3 - imp4 imp1un-imp2un-imp3un-imp4un   dih_nat factor_aicg14  correct_mgo  coef_dih_gauss  wid_dih_gauss\n')
-        for adih in ni.aicgdihs :
-            if adih.iunit1 == un1 and adih.iunit2 == un2:
-                self._file.write(aicgdih2line(adih))
-        self._file.write('>>>>\n')
-        self._file.write('\n')
-        
         ni.update_info()
         
-        self._file.write('<<<< native contact\n')
-        self._file.write('** total_contact = %i\n'%(len(ni.contacts),))
         subset = ni.get_contacts_by_unit(un1,un2)
-        self._file.write('\n')
+        self._file.write('<<<< native contact\n')
         self._file.write('** contact between unit %6i and %6i\n'%(un1,un2))
         self._file.write('** total_contact_unit = %i\n'%(len(subset),))
         self._file.write('**        icon iunit1-iunit2   imp1 - imp2 imp1un-imp2un      go_nat   factor_go  dummy     coef_go\n')
         for con in subset:
             self._file.write(contact2line(con))
+        self._file.write('>>>>\n')
+        self._file.write('\n')
+
+
+        subset = ni.get_LJs_by_unit(un1,un2)
+        self._file.write('<<<< LJ\n')
+        self._file.write('** LJ between unit %6i and %6i\n'%(un1,un2))
+        self._file.write('** total_LJ_unit = %i\n'%(len(subset),))
+        self._file.write('**     iLJ  iunit1-iunit2   imp1 - imp2 imp1un-imp2un    distance        coef\n')
+        for con in subset:
+            self._file.write(LJ2line(con))
         self._file.write('>>>>\n')
         self._file.write('\n')
         

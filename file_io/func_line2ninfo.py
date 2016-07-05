@@ -5,7 +5,7 @@
 '''
 
 from cafysis.elements.error import MyError
-from cafysis.elements.ninfo import BondLength, BondAngle, Aicg13, Dihedral, AicgDih, Contact, BaseStack, BasePair
+from cafysis.elements.ninfo import BondLength, Fene, BondAngle, Dihedral, Contact, LJ, BaseStack, BasePair
 
 def line2bondlength(line) :
     it = iter(line.split())
@@ -55,31 +55,6 @@ def line2bondangle(line) :
         info.type = it.next()
     return info
 
-def line2aicg13(line) :
-    it = iter(line.split())
-    num = len(line.split())
-    if num != 15 and num != 16:
-        raise MyError("func_line2ninfo", "line2aicg13", "")
-    if it.next() != 'aicg13' :
-        raise MyError("func_line2ninfo", "line2aicg13", "This line is not aicg13.")
-    info = Aicg13()
-    info.id = int(it.next())
-    info.iunit1 = int(it.next())
-    info.iunit2 = int(it.next())
-    info.imp1 = int(it.next())
-    info.imp2 = int(it.next())
-    info.imp3 = int(it.next())
-    info.imp1un = int(it.next())
-    info.imp2un = int(it.next())
-    info.imp3un = int(it.next())
-    info.native = float(it.next())
-    info.factor = float(it.next())
-    info.correct_mgo = float(it.next())
-    info.coef = float(it.next())
-    info.wid = float(it.next())
-    if num == 16:
-        info.type = it.next()
-    return info
  
 def line2dihedral(line) :
     it = iter(line.split())
@@ -109,33 +84,6 @@ def line2dihedral(line) :
         info.type = it.next()
     return info
 
-def line2aicgdih(line) :
-    it = iter(line.split())
-    num = len(line.split())
-    if num != 17 and num != 18:
-        raise MyError("func_line2ninfo", "line2aicgdih", "")
-    if it.next() != 'aicgdih' :
-        raise MyError("func_line2ninfo", "line2aicgdih", "This line is not aicgdih.")
-    info = AicgDih()
-    info.id = int(it.next())
-    info.iunit1 = int(it.next())
-    info.iunit2 = int(it.next())
-    info.imp1 = int(it.next())
-    info.imp2 = int(it.next())
-    info.imp3 = int(it.next())
-    info.imp4 = int(it.next())
-    info.imp1un = int(it.next())
-    info.imp2un = int(it.next())
-    info.imp3un = int(it.next())
-    info.imp4un = int(it.next())
-    info.native = float(it.next())
-    info.factor = float(it.next())
-    info.correct_mgo = float(it.next())
-    info.coef = float(it.next())
-    info.wid = float(it.next())
-    if num == 18:
-        info.type = it.next()
-    return info
 
 def line2contact(line) :
     it = iter(line.split())

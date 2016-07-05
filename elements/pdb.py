@@ -40,12 +40,19 @@ class Residue :
     
     def push_atom(self, a):
         self.atoms.append(a)
+
+    def find_Calpha_atom(self):
+        for a in self.atoms:
+            if a.name == ' CA ':
+                return a
+        return False
         
 class Chain :
     def __init__(self):
         self.residues = []
         self._where_is_atomX = []
         self.num_atom = lambda : len(self._where_is_atomX)
+        self.num_res = lambda : len(self.residues)
         
     def push_residue(self, r):
         residue_id = len(self.residues)

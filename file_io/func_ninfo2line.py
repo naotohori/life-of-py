@@ -21,6 +21,22 @@ def bondlength2line(bl):
     s += '\n'
     return s 
 
+#0         1         2         3         4         5         6         7         8         9        10      
+#012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567
+#fene      1      1      1      1      2      1      2       4.8010       2.0000       1.0000 SU
+def fene2line(fene):
+    s =  'fene'
+    s += ' %6i' % (fene.id,)
+    s += ' %6i %6i' % (fene.iunit1, fene.iunit2)
+    s += ' %6i %6i' % (fene.imp1, fene.imp2)
+    s += ' %6i %6i' % (fene.imp1un, fene.imp2un)
+    s += ' %12.4f' % (fene.native,)
+    s += ' %12.4f' % (fene.dist2,)
+    s += ' %12.4f' % (fene.coef,)
+    #s += ' ' + fene.type
+    s += '\n'
+    return s 
+
 def bondangle2line(ba):
     s =  'angl'
     s += ' %6i' % (ba.id,)
@@ -94,6 +110,19 @@ def contact2line(con):
     s += ' %6i' % (con.dummy,)
     s += ' %11.4f' % (con.coef,)
     s += ' ' + con.type
+    s += '\n'
+    return s 
+
+#**     LJ iunit1-iunit2   imp1 - imp2 imp1un-imp2un    distance        coef
+#LJ      5      1      1      2      5      2      5      6.1894      1.0000
+def LJ2line(con):
+    s =  'LJ'
+    s += ' %6i' % (con.id,)
+    s += ' %6i %6i' % (con.iunit1, con.iunit2)
+    s += ' %6i %6i' % (con.imp1, con.imp2)
+    s += ' %6i %6i' % (con.imp1un, con.imp2un)
+    s += ' %11.4f' % (con.native,)
+    s += ' %11.4f' % (con.coef,)
     s += '\n'
     return s 
 
