@@ -154,3 +154,39 @@ def basestack2line(bs):
     s += ' ' + bs.type
     s += '\n'
     return s 
+
+def basestackDT13dist2line(bs):
+    s =  'bs-dist'
+    s += ' %6i' % (bs.id,)
+    s += ' %6i %6i' % (bs.iunit1, bs.iunit2)
+    s += ' %6i %6i' % (bs.imp1, bs.imp2)
+    s += ' %6i %6i' % (bs.imp1un, bs.imp2un)
+    s += ' %11.4f' % (bs.factor,)
+    s += ' %11.4f' % (bs.native,)
+    s += ' %11.4f' % (bs.coef,)
+    s += ' ' + bs.type
+    s += '\n'
+    return s 
+
+def basestackDT13dih2line(bs):
+    s =  'bs-dihd'
+    s += ' %6i' % (bs.id,)
+    s += ' %6i' % (bs.dih1_id,)
+    s += ' %6i %6i' % (bs.dih1_iunit1, bs.dih1_iunit2)
+    s += ' %6i %6i %6i %6i' % (bs.dih1_imp1, bs.dih1_imp2, bs.dih1_imp3, bs.dih1_imp4)
+    s += ' %6i %6i %6i %6i' % (bs.dih1_imp1un, bs.dih1_imp2un, bs.dih1_imp3un, bs.dih1_imp4un)
+    s += ' %11.4f' % (bs.dih1_native,)
+    s += ' %11.4f' % (bs.dih1_coef,)
+    s += ' ' + bs.dih1_type
+    s += '\n'
+    s += 'bs-dihd'
+    s += ' %6i' % (bs.id,)
+    s += ' %6i' % (bs.dih2_id,)
+    s += ' %6i %6i' % (bs.dih2_iunit1, bs.dih2_iunit2)
+    s += ' %6i %6i %6i %6i' % (bs.dih2_imp1, bs.dih2_imp2, bs.dih2_imp3, bs.dih2_imp4)
+    s += ' %6i %6i %6i %6i' % (bs.dih2_imp1un, bs.dih2_imp2un, bs.dih2_imp3un, bs.dih2_imp4un)
+    s += ' %11.4f' % (bs.dih2_native,)
+    s += ' %11.4f' % (bs.dih2_coef,)
+    s += ' ' + bs.dih2_type
+    s += '\n'
+    return s 

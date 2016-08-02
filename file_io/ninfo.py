@@ -140,6 +140,12 @@ class NinfoFile(object):
                 self._file.write(basestack2line(bs))
             self._file.write('>>>>\n')
         
+        if len(ni.basestackDT13s) > 0:
+            for bs in ni.basestackDT13s :
+                self._file.write(basestackDT13dist2line(bs))
+            for bs in ni.basestackDT13s :
+                self._file.write(basestackDT13dih2line(bs))
+        
     def write_unit(self, ni, un1, un2):
         self._file.write('<<<< native bond length\n')
         self._file.write('**      ibd iunit1-iunit2   imp1 - imp2 imp1un-imp2un      bd_nat    factor_bd  correct_mgo      coef_bd\n')
@@ -215,3 +221,10 @@ class NinfoFile(object):
             if bs.iunit1==un1 and bs.iunit2 == un2:
                 self._file.write(basestack2line(bs))
         self._file.write('>>>>\n')
+
+        for bs in ni.basestackDT13s :
+            if bs.iunit1==un1 and bs.iunit2 == un2:
+                self._file.write(basestackDT13dist2line(bs))
+        for bs in ni.basestackDT13s :
+            if bs.iunit1==un1 and bs.iunit2 == un2:
+                self._file.write(basestackDT13dih2line(bs))
