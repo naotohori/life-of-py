@@ -27,8 +27,8 @@ class mtx_crd_transform():
         return dot(self.mtx, d+[1.0,])[0:3]
     
     def do_to_data(self,d):
-        for v in d:
-            v[0:3] = dot(self.mtx, v+[1.0,])[0:3]
+        for i,v in enumerate(d):
+            d[i][0:3] = dot(self.mtx, v+[1.0,])[0:3]
         
     def translation(self,x,y,z):
         '''並進移動'''
