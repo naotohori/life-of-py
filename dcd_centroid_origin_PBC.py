@@ -40,14 +40,6 @@ dcd_out.write_header()
 
 nmp = header.nmp_real
 
-mtx_half_shift= []
-for x in range(-1,2):  # -1, 0, 1
-    for y in range(-1,2):
-        for z in range(-1,2):
-            mtx = mtx_crd_transform()
-            mtx.translation(0.5*x*BOXSIZE,0.5*y*BOXSIZE,0.5*z*BOXSIZE)
-            mtx_half_shift.append(mtx)
-
 def calc_com_PBC(d):
     '''
     See https://en.wikipedia.org/wiki/Center_of_mass#Systems_with_periodic_boundary_conditions
