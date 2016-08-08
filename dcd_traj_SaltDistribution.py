@@ -47,6 +47,7 @@ nbin = len(bins) - 1
 hist_Mg = np.zeros( (nbin,))
 hist_K  = np.zeros( (nbin,))
 hist_Cl = np.zeros( (nbin,))
+hist_P  = np.zeros( (nbin,))
 
 dcd.open_to_read()
 dcd.read_header()
@@ -74,24 +75,35 @@ while dcd.has_more_data() :
 
         H, B = np.histogram(dist2_Cl[:idx_Cl], bins=bins)
         hist_Cl = hist_Cl + H
+
+    if len(id0_P) > 0:
+        dist2_P, idx_P = py_distance2_hist.distance2_hist( data, id0_P, id0_P, r2_hist)
+
+        H, B = np.histogram(dist2_P[:idx_P], bins=bins)
+        hist_P = hist_P + H
 dcd.close()
 
+f_out.write('#nstep: %i\n#\n' % (nstep,))
+f_out.write('#r1 r2 hist_Mg rho(r)_Mg hist_K rho(r)_K hist_Cl rho(r)_Cl hist_P rho(r)_P\n')
+f_out.write('## rho(r1<r<r2) = hist / float(nstep) * 4.0 / 3.0 * math.pi * (r2**3 - r1**3)\n')
 if len(id0_Mg) > 0 and len(id0_K) > 0:
     for i in range(nbin):
         r1 = math.sqrt(bins[i])
         r2 = math.sqrt(bins[i+1])
         div_factor = float(nstep) * 4.0 / 3.0 * math.pi * (r2**3 - r1**3)
-        f_out.write('%f %f %i %f %i %f %i %f\n' % (r1,r2, 
+        f_out.write('%f %f  %i %f  %i %f  %i %f  %i %f\n' % (r1,r2, 
                                          hist_Mg[i], hist_Mg[i] / div_factor,
                                          hist_K[i],  hist_K[i]  / div_factor,
-                                         hist_Cl[i], hist_Cl[i] / div_factor,) )
+                                         hist_Cl[i], hist_Cl[i] / div_factor,
+                                         hist_P[i],  hist_P[i] / div_factor,) )
 elif len(id0_K) > 0:
     for i in range(nbin):
         div_factor = float(nstep) * 4.0 / 3.0 * math.pi * (r2**3 - r1**3)
-        f_out.write('%f %f %i %f %i %f %i %f\n' % (r1,r2,
+        f_out.write('%f %f  %i %f  %i %f  %i %f  %i %f\n' % (r1,r2,
                                          0, 0.0,
                                          hist_K[i],  hist_K[i]  / div_factor,
-                                         hist_Cl[i], hist_Cl[i] / div_factor,) )
+                                         hist_Cl[i], hist_Cl[i] / div_factor,
+                                         hist_P[i],  hist_P[i] / div_factor,) )
 
 f_out.close()
 
