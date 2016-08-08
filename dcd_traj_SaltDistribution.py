@@ -98,6 +98,8 @@ if len(id0_Mg) > 0 and len(id0_K) > 0:
                                          hist_P[i],  hist_P[i] / div_factor,) )
 elif len(id0_K) > 0:
     for i in range(nbin):
+        r1 = math.sqrt(bins[i])
+        r2 = math.sqrt(bins[i+1])
         div_factor = float(nstep) * 4.0 / 3.0 * math.pi * (r2**3 - r1**3)
         f_out.write('%f %f  %i %f  %i %f  %i %f  %i %f\n' % (r1,r2,
                                          0, 0.0,
