@@ -76,22 +76,22 @@ while dcd.has_more_data() :
         hist_Cl = hist_Cl + H
 dcd.close()
 
-n_hist_Mg = hist_Mg.sum()
-n_hist_K  = hist_K.sum()
-n_hist_Cl = hist_Cl.sum()
-
 if len(id0_Mg) > 0 and len(id0_K) > 0:
     for i in range(nbin):
-        f_out.write('%f %f %i %f %i %f %i %f\n' % (math.sqrt(bins[i]),math.sqrt(bins[i+1]), 
-                                         hist_Mg[i], hist_Mg[i] / float(n_hist_Mg),
-                                         hist_K[i],  hist_K[i]  / float(n_hist_K),
-                                         hist_Cl[i], hist_Cl[i] / float(n_hist_Cl),) )
+        r1 = math.sqrt(bins[i])
+        r2 = math.sqrt(bins[i+1])
+        div_factor = float(nstep) * 4.0 / 3.0 * math.pi * (r2**3 - r1**3)
+        f_out.write('%f %f %i %f %i %f %i %f\n' % (r1,r2, 
+                                         hist_Mg[i], hist_Mg[i] / div_factor,
+                                         hist_K[i],  hist_K[i]  / div_factor,
+                                         hist_Cl[i], hist_Cl[i] / div_factor,) )
 elif len(id0_K) > 0:
     for i in range(nbin):
-        f_out.write('%f %f %i %f %i %f %i %f\n' % (math.sqrt(bins[i]),math.sqrt(bins[i+1]), 
+        div_factor = float(nstep) * 4.0 / 3.0 * math.pi * (r2**3 - r1**3)
+        f_out.write('%f %f %i %f %i %f %i %f\n' % (r1,r2,
                                          0, 0.0,
-                                         hist_K[i],  hist_K[i]  / float(n_hist_K),
-                                         hist_Cl[i], hist_Cl[i] / float(n_hist_Cl),) )
+                                         hist_K[i],  hist_K[i]  / div_factor,
+                                         hist_Cl[i], hist_Cl[i] / div_factor,) )
 
 f_out.close()
 
