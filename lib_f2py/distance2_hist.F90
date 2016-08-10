@@ -22,6 +22,9 @@ subroutine distance2_hist( xyz, nmp, id0_P, nP, id0_M, nM, r2_hist, &
       xyz_P = xyz(:, id0_P(iP)+1)
 
       do iM = 1, nM
+         if (id0_M(iM) == id0_P(iP)) then
+            cycle
+         endif
          xyz_M = xyz(:, id0_M(iM)+1)
 
          d = xyz_M - xyz_P
