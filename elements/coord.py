@@ -53,3 +53,10 @@ class Coord(object) :
         self.y /= n
         self.z /= n
         return self
+
+    def __mul__(self, n):
+        '''重心を求める際などに使う'''
+        self.x *= n
+        self.y *= n
+        self.z *= n
+        return self
