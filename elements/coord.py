@@ -29,6 +29,16 @@ class Coord(object) :
                        + (another_coord.y - self.y) ** 2
                        + (another_coord.z - self.z) ** 2)
 
+    def dot(self, another_coord):
+        return self.x * another_coord.x + self.y * another_coord.y + self.z * another_coord.z
+
+    def cross(self, another_coord):
+        ret = Coord()
+        ret.x = self.y * another_coord.z - self.z * another_coord.y
+        ret.y = self.z * another_coord.x - self.x * another_coord.z
+        ret.z = self.x * another_coord.y - self.y * another_coord.x
+        return ret
+
     def move(self, delta_coord):
         self.x += delta_coord.x
         self.y += delta_coord.y
@@ -46,6 +56,13 @@ class Coord(object) :
         self.y += other.y
         self.z += other.z
         return self
+    
+    def __sub__(self, other):
+        rt = Coord()
+        rt.x = self.x - other.x
+        rt.y = self.y - other.y
+        rt.z = self.z - other.z
+        return rt
         
     def __div__(self, n):
         '''重心を求める際などに使う'''
@@ -60,3 +77,9 @@ class Coord(object) :
         self.y *= n
         self.z *= n
         return self
+
+def Angle(c1,c2,c3):
+    v13 = c1 - c3
+    v12 = c1 - c2
+    cos_theta = v13.dot(v12) / sqrt(v13.dot(v13) * v12.dot(v12))
+    return cos_theta

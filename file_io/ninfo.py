@@ -140,11 +140,29 @@ class NinfoFile(object):
                 self._file.write(basestack2line(bs))
             self._file.write('>>>>\n')
         
-        if len(ni.basestackDT13s) > 0:
-            for bs in ni.basestackDT13s :
-                self._file.write(basestackDT13dist2line(bs))
-            for bs in ni.basestackDT13s :
-                self._file.write(basestackDT13dih2line(bs))
+        if len(ni.basestackDTs) > 0:
+            self._file.write('<<<< native basestack\n')
+            self._file.write('** total_contact = %i\n'%(len(ni.basestackDTs),))
+            self._file.write('**        icon iunit1-iunit2   imp1 - imp2 imp1un-imp2un      go_nat   factor_go     coef_go\n')
+            for bs in ni.basestackDTs :
+                self._file.write(basestackDTdist2line(bs))
+            for bs in ni.basestackDTs :
+                self._file.write(basestackDTdih2line(bs))
+            self._file.write('>>>>\n')
+            self._file.write('\n')
+        
+        if len(ni.hbondDTs) > 0:
+            self._file.write('<<<< native hbond\n')
+            self._file.write('** total_contact = %i\n'%(len(ni.hbondDTs),))
+            self._file.write('**        icon iunit1-iunit2   imp1 - imp2 imp1un-imp2un      go_nat   factor_go     coef_go\n')
+            for bs in ni.hbondDTs :
+                self._file.write(hbondDTdist2line(bs))
+            for bs in ni.hbondDTs :
+                self._file.write(hbondDTangl2line(bs))
+            for bs in ni.hbondDTs :
+                self._file.write(hbondDTdih2line(bs))
+            self._file.write('>>>>\n')
+            self._file.write('\n')
         
     def write_unit(self, ni, un1, un2):
         self._file.write('<<<< native bond length\n')
@@ -222,9 +240,19 @@ class NinfoFile(object):
                 self._file.write(basestack2line(bs))
         self._file.write('>>>>\n')
 
-        for bs in ni.basestackDT13s :
+        for bs in ni.basestackDTs :
             if bs.iunit1==un1 and bs.iunit2 == un2:
-                self._file.write(basestackDT13dist2line(bs))
-        for bs in ni.basestackDT13s :
+                self._file.write(basestackDTdist2line(bs))
+        for bs in ni.basestackDTs :
             if bs.iunit1==un1 and bs.iunit2 == un2:
-                self._file.write(basestackDT13dih2line(bs))
+                self._file.write(basestackDTdih2line(bs))
+
+        for hb in ni.hbondDTs :
+            if hb.iunit1==un1 and hb.iunit2 == un2:
+                self._file.write(hbondDTdist2line(hb))
+        for hb in ni.hbondDTs :
+            if hb.iunit1==un1 and hb.iunit2 == un2:
+                self._file.write(hbondDTangl2line(hb))
+        for hb in ni.hbondDTs :
+            if hb.iunit1==un1 and hb.iunit2 == un2:
+                self._file.write(hbondDTdih2line(hb))

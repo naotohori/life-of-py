@@ -1,5 +1,6 @@
 
 class DT13(object):
+    # U_BL
     BL_PS = 23.0
     BL_SB = 10.0
     BL_SP = 64.0
@@ -27,7 +28,7 @@ class DT13(object):
     HB_ANGL = 1.5
     HB_DIH_HBOND = 0.15
     HB_DIH_CHAIN = 0.15
-    HB_U0 = 2.43
+    HB_U0 = -2.434
 
 
 
