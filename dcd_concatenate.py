@@ -11,6 +11,8 @@ from copy import copy
         
 
 def dcd_concatenate(filepaths):
+    n_frames = []  # To return the number of frames
+
     # Number of input DCD files
     num_dcd = len(filepaths) - 1
     
@@ -43,7 +45,8 @@ def dcd_concatenate(filepaths):
     header.nstep = num_step
     f_out.set_header(header)
     f_out.write_header()
-    print filepaths[0], f_in.get_header().nset
+    #print filepaths[0], f_in.get_header().nset
+    n_frames.append(f_in.get_header().nset)
     while f_in.has_more_data() :
         f_out.write_onestep(f_in.read_onestep())
     f_in.close()
@@ -53,16 +56,21 @@ def dcd_concatenate(filepaths):
         f_in.open_to_read()
         f_in.read_header()
         f_in.skip_onestep()  # skip the first step
-        print filepaths[i], f_in.get_header().nset - 1
+        #print filepaths[i], f_in.get_header().nset - 1
+        n_frames.append(f_in.get_header().nset - 1)
         while f_in.has_more_data() :
             f_out.write_onestep(f_in.read_onestep())
         f_in.close()
 
     f_out.close()
 
+    return n_frames
+
 
 if __name__ == '__main__':
     if len(sys.argv) < 4:
         print 'Usage: % SCRIPT [DCD1] [DCD2] ([DCD3] ...) [output DCD]'
         sys.exit(2)
-    dcd_concatenate(sys.argv[1:])
+    n_frames = dcd_concatenate(sys.argv[1:])
+    for i,n in enumerate(n_frames):
+        print 'file ',i+1,': ', n
