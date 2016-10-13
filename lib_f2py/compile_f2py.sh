@@ -12,3 +12,4 @@ f2py -c -m py_distance2_hist --fcompiler=gnu95 distance2_hist.F90
 f2py -c -m py_count_bound --fcompiler=gnu95 count_bound.F90
 f2py -c -m py_dcd_r2_histogram --fcompiler=gnu95 dcd_r2_histogram.F90
 f2py -c -m py_distance2_hist_nt --fcompiler=gnu95 distance2_hist_nt.F90
+f2py -c -m py_distance_count_within --fcompiler=gnu95 distance_count_within.F90
