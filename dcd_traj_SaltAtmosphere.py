@@ -143,8 +143,8 @@ while dcd.has_more_data() :
         hist, B = np.histogram(darray, bins=bins, density=False)
         hist_Cl[:] += hist[:]
 
-    if nstep == 10000:
-        break
+    #if nstep == 10000:
+    #    break
 
 dcd.close()
 
