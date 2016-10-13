@@ -78,6 +78,10 @@ class Coord(object) :
         self.z *= n
         return self
 
+    def norm(self,):
+        import math
+        return math.sqrt(self.dot(self))
+
 def Angle(c1,c2,c3):
     v13 = c1 - c3
     v12 = c1 - c2
