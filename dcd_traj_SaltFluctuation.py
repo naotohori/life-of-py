@@ -60,9 +60,6 @@ nstep = 0
 while dcd.has_more_data() :
     nstep += 1
 
-    if nstep % 10000 == 0:
-        print nstep
-
     data = dcd.read_onestep_npF()
 
     if len(id0_Mg) > 0:
