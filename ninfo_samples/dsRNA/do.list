@@ -1,0 +1,16 @@
+
+pdb_aa2cg.py fiber-RNA_B.pdb fiber-RNA_B.cg.pdb
+## Edit fiber-RNA_B.cg.pdb to add 0 and 15
+##     take 1st P from fiber-RNA_B.pdb (pdb_aa2cg omits first phosphate)
+
+ninfo_RNA13_pdb.py fiber-RNA_B.cg.pdb empty.list fiber-RNA_B.ninfo
+
+for (( i=1 ; i<=47 ; ++i )) do let j="$i+47" ; echo $i $j ; done >> B_change_mp.list
+
+ninfo_change_gmp_by_list.py fiber-RNA_B.ninfo 1 B_change_mp.list 1 fiber-RNA_B.change_mp.ninfo
+
+cat fiber-RNA_A.cg.pdb fiber-RNA_B.cg.pdb > fiber-RNA.cg.pdb
+## Edit mp of chain B
+## Edit TER
+
+ninfo_RNA13_pdb_multichain.py fiber-RNA.cg.pdb hb.list fiber-RNA.ninfo
