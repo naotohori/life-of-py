@@ -28,6 +28,16 @@ import numpy as np
 
 if len(sys.argv) != 2:
     print 'Usage: SCRIPT [PDB]'
+    print ''
+    print 'Returns: %5i %6.3f %6.3f %6.3f % (N, Rg, D, S)'
+    print '    N  = number of particles (atoms)'
+    print '    Rg = radius of gyration'
+    print '    D  = Sphericity (0 <= D <= 1)'
+    print '          D = 0 --> perfect sphere'
+    print '          D > 0 --> anisotropic'
+    print '    S  = Spheroidal shape (-1/4 <= S <= 2)'
+    print '          S < 0 --> oblate'
+    print '          S > 0 --> prolate'
     sys.exit(2)
 
 
