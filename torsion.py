@@ -29,6 +29,26 @@ def torsion(p1, p2, p3, p4, flg_degree=False, flg_360=False):
     else:
         return phi
 
+def torsion_xy(p1, p2, p3, p4):
+    '''
+    p1, p2, p3, p4 are numpy arrays for four coordinates by which the torsion angle phi is defined.
+    '''
+    
+    v12 = p1 - p2
+    v32 = p3 - p2
+    v34 = p3 - p4
+
+    m = np.cross(v12, v32)
+    n = np.cross(v32, v34)
+
+    if np.dot(v12,n) >= 0.0: # 0 < phi < 180
+        phi =   math.acos( np.dot(m,n) / math.sqrt(np.dot(m,m)*np.dot(n,n)) )
+
+    else: # -180 < phi < 0
+        phi = - math.acos( np.dot(m,n) / math.sqrt(np.dot(m,m)*np.dot(n,n)) )
+
+    return math.cos(phi), math.sin(phi)
+
 
 if __name__ == "__main__":
     print 'Test of torsion.py'
@@ -47,10 +67,12 @@ if __name__ == "__main__":
     e = np.array([ 19.175 , 99.605 , 87.735])
 
     print "Torsion of C4'-P-C4'-P"
-    print '  flg_360=False(default):', torsion(a,b,c,d), torsion(a,b,c,d,True)
-    print '  flg_360=True          :', torsion(a,b,c,d,flg_360=True), torsion(a,b,c,d,True,flg_360=True)
+    print '  flg_360=False(default): %f rad, %f deg' % (torsion(a,b,c,d), torsion(a,b,c,d,True))
+    print '  flg_360=True          : %f rad, %f deg' % (torsion(a,b,c,d,flg_360=True), torsion(a,b,c,d,True,flg_360=True))
+    print '  cos(phi), sin(phi)    : x = %f, y = %f' % torsion_xy(a,b,c,d)
 
     print "Torsion of P-C4'-P-C4'"
-    print '  flg_360=False(default):', torsion(b,c,d,e), torsion(b,c,d,e,True)
-    print '  flg_360=True          :', torsion(b,c,d,e,flg_360=True), torsion(b,c,d,e,True,flg_360=True)
+    print '  flg_360=False(default): %f rad, %f deg' % (torsion(b,c,d,e), torsion(b,c,d,e,True))
+    print '  flg_360=True          : %f rad, %f deg' % (torsion(b,c,d,e,flg_360=True), torsion(b,c,d,e,True,flg_360=True))
+    print '  cos(phi), sin(phi)    : x = %f, y = %f' % torsion_xy(b,c,d,e)
 
