@@ -59,11 +59,11 @@ if __name__ == '__main__':
     add2 = False
     for ni in ns.bondlengths:
         if ni.iunit1 == target:
-            if ni.imp1un in aln:
-                ni.imp1un = aln[ni.imp1un]
+            if ni.imp1 in aln:
+                ni.imp1 = aln[ni.imp1]
                 add1 = True
-            if ni.imp2un in aln:
-                ni.imp2un = aln[ni.imp2un]
+            if ni.imp2 in aln:
+                ni.imp2 = aln[ni.imp2]
                 add2 = True
         if ni.iunit1 == target:
             if add1 and add2:
@@ -79,14 +79,14 @@ if __name__ == '__main__':
     add3 = False
     for ni in ns.bondangles:
         if ni.iunit1 == target:
-            if ni.imp1un in aln:
-                ni.imp1un = aln[ni.imp1un]
+            if ni.imp1 in aln:
+                ni.imp1 = aln[ni.imp1]
                 add1 = True
-            if ni.imp2un in aln:
-                ni.imp2un = aln[ni.imp2un]
+            if ni.imp2 in aln:
+                ni.imp2 = aln[ni.imp2]
                 add2 = True
-            if ni.imp3un in aln:
-                ni.imp3un = aln[ni.imp3un]
+            if ni.imp3 in aln:
+                ni.imp3 = aln[ni.imp3]
                 add3 = True
         if ni.iunit1 == target:
             if add1 and add2 and add3:
@@ -105,17 +105,17 @@ if __name__ == '__main__':
     add4 = False
     for ni in ns.dihedrals:
         if ni.iunit1 == target:
-            if ni.imp1un in aln:
-                ni.imp1un = aln[ni.imp1un]
+            if ni.imp1 in aln:
+                ni.imp1 = aln[ni.imp1]
                 add1 = True
-            if ni.imp2un in aln:
-                ni.imp2un = aln[ni.imp2un]
+            if ni.imp2 in aln:
+                ni.imp2 = aln[ni.imp2]
                 add2 = True
-            if ni.imp3un in aln:
-                ni.imp3un = aln[ni.imp3un]
+            if ni.imp3 in aln:
+                ni.imp3 = aln[ni.imp3]
                 add3 = True
-            if ni.imp4un in aln:
-                ni.imp4un = aln[ni.imp4un]
+            if ni.imp4 in aln:
+                ni.imp4 = aln[ni.imp4]
                 add4 = True
         if ni.iunit1 == target:
             if add1 and add2 and add3 and add4:
@@ -133,12 +133,12 @@ if __name__ == '__main__':
     add2 = False
     for ni in ns.contacts:
         if ni.iunit1 == target:
-            if ni.imp1un in aln:
-                ni.imp1un = aln[ni.imp1un]
+            if ni.imp1 in aln:
+                ni.imp1 = aln[ni.imp1]
                 add1 = True
         if ni.iunit2 == target:
-            if ni.imp2un in aln:
-                ni.imp2un = aln[ni.imp2un]
+            if ni.imp2 in aln:
+                ni.imp2 = aln[ni.imp2]
                 add2 = True
         if ((ni.iunit1 == target and not add1) or
             (ni.iunit2 == target and not add2)):
@@ -153,12 +153,12 @@ if __name__ == '__main__':
     add2 = False
     for ni in ns.basepairs:
         if ni.iunit1 == target:
-            if ni.imp1un in aln:
-                ni.imp1un = aln[ni.imp1un]
+            if ni.imp1 in aln:
+                ni.imp1 = aln[ni.imp1]
                 add1 = True
         if ni.iunit2 == target:
-            if ni.imp2un in aln:
-                ni.imp2un = aln[ni.imp2un]
+            if ni.imp2 in aln:
+                ni.imp2 = aln[ni.imp2]
                 add2 = True
         if ((ni.iunit1 == target and not add1) or
             (ni.iunit2 == target and not add2)):
@@ -173,12 +173,12 @@ if __name__ == '__main__':
     add2 = False
     for ni in ns.basestacks:
         if ni.iunit1 == target:
-            if ni.imp1un in aln:
-                ni.imp1un = aln[ni.imp1un]
+            if ni.imp1 in aln:
+                ni.imp1 = aln[ni.imp1]
                 add1 = True
         if ni.iunit2 == target:
-            if ni.imp2un in aln:
-                ni.imp2un = aln[ni.imp2un]
+            if ni.imp2 in aln:
+                ni.imp2 = aln[ni.imp2]
                 add2 = True
         if ((ni.iunit1 == target and not add1) or
             (ni.iunit2 == target and not add2)):
