@@ -16,6 +16,10 @@ import math
 from cafysis.file_io.pdb import PdbFile
 from cafysis.elements.coord import Coord
 
+if len(sys.argv) != 2:
+    print 'Usage: SCRIPT [PDB]'
+    sys.exit(2)
+
 pf = PdbFile(sys.argv[1])
 pf.open_to_read()
 chains = pf.read_all()
@@ -108,9 +112,9 @@ for i in range(nres):
         # Distance
         d = comi.distance(comj)
         if d > 5.0:
-            #print 11+locations[i][1], 11+locations[j][1], 'd=',d
-            #continue
-            pass
+            print locations[i][1], locations[j][1], 'd=',d
+            continue
+            #pass
         elif d <= 3.5:
             score += 1.0
         else:
@@ -123,7 +127,7 @@ for i in range(nres):
             omega = 180.0 - omega
 
         if omega > 50.0:
-            print 11+locations[i][1], 11+locations[j][1], 'omega=',omega
+            print locations[i][1], locations[j][1], 'omega=',omega
             continue
         elif omega <= 25.0:
             score += 1.0
@@ -136,5 +140,5 @@ for i in range(nres):
         # Xi
         xi = math.asin( normali.cross(normalj).norm() / (normali.norm() * normalj.norm()) ) * 180.0 / math.pi
         #xi2 = math.asin( normali.cross(normalj*(-1)).norm() / (normali.norm() * normalj.norm()) ) * 180.0 / math.pi
-        print 11+locations[i][1], 11+locations[j][1], xi, score
+        print locations[i][1], locations[j][1], xi, score
 
