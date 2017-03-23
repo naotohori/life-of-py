@@ -30,7 +30,6 @@ for i,a in enumerate(psf.atoms):
 
 nbb = len(id0_bb)
 ndih = nbb - 3
-f_out.write( struct.pack('i',ndih) )
 
 dih_mps = []
 for idih in range(ndih):
@@ -45,9 +44,10 @@ while dcd.has_more_data() :
 
     data = dcd.read_onestep_np()
 
+    f_out.write( struct.pack('i',ndih) )  # to make sure the data boundaries
     for mps in dih_mps:
         xy = torsion_xy(data[mps[0]], data[mps[1]], data[mps[2]], data[mps[3]])
+        #f_out.write( struct.pack('dd',xy[0],xy[1]) )
         f_out.write( struct.pack('ff',xy[0],xy[1]) )
-    f_out.write( struct.pack('i',ndih) )  # to make sure the data boundaries
 
 dcd.close()
