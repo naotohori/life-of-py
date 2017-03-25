@@ -19,6 +19,10 @@ class Coord(object) :
     def get_as_list(self):
         return [self.x, self.y, self.z]
     
+    def get_as_ndarray(self):
+        import numpy
+        return numpy.array([self.x, self.y, self.z])
+    
     def put_as_list(self, xyz):
         self.x = xyz[0]
         self.y = xyz[1]
