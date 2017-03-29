@@ -46,6 +46,12 @@ class Residue :
             if a.name == ' CA ':
                 return a
         return False
+
+    def find_atom_by_name(self, name):
+        for a in self.atoms:
+            if a.name.strip() == name:
+                return a
+        return False
         
 class Chain :
     def __init__(self):
