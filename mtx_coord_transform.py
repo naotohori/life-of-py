@@ -35,6 +35,9 @@ class mtx_crd_transform():
         self.mtx[0,3] += x
         self.mtx[1,3] += y
         self.mtx[2,3] += z
+
+    def rotate_by_mtx(self, mtx_rot):
+        self.mtx = dot(mtx_rot, self.mtx)
     
     def rotate(self, nx, ny, nz, t):
         '''任意の単位ベクトル(nx,ny,nz)を軸として、角度tだけ回転'''

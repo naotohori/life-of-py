@@ -77,6 +77,12 @@ class Chain :
         #print (residue_id, atom_local_id)
         return (self.residues[residue_id].atoms[atom_local_id])
 
+    def reindex(self):
+        self._where_is_atomX = []
+        for ir, r in enumerate(self.residues):
+            for ia, a in enumerate(r.atoms):
+                self._where_is_atomX.append((ir,ia))
+
 #class Model :
 #    def __init__(self):
 #        self.chains = []

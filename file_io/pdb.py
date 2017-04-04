@@ -84,13 +84,12 @@ class PdbFile(object) :
             self._file.write(self.remark)
             self.remark = None
             
-        ichain = 0
-        for chain in chains :
-            ichain += 1
-            for i in xrange(chain.num_atom()) :
-                line = self._atom2line(chain.get_atom(i))
-                self._file.write(line+'\n')
-            if ichain < len(chains) :
+        for ic, c in enumerate(chains) :
+            for r in c.residues:
+                for a in r.atoms:
+                    line = self._atom2line(a)
+                    self._file.write(line+'\n')
+            if ic < len(chains)-1 :
                 self._file.write('TER\n')
                 
         if self.modelID != None:
