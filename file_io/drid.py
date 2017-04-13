@@ -2,28 +2,37 @@
 # -*- coding: utf-8 -*-
 '''
 Created on 2015/05/15
+Modified as ver2 on 2017/04/12 (mask is enabled)
 @author: Naoto Hori
 '''
 
 import os
 import struct
+import numpy as np
 from cafysis.elements.error import MyError
 
 class DridHeader(object):
     def __init__(self):
         self.title = None
-        self.centroids = []
-        self.atoms = []
-        self.bonds = []
+        self.version = 0
+        #self.centroids = []
+        #self.atoms = []
+        self.mask = None
+        self.n_centroids = lambda: self.mask.shape[0]
         
     def show(self):
         print self.title
-        print '#(centroid)', len(self.centroids)
-        print '#(atom)', len(self.atoms)
-        for i in xrange(len(self.centroids)) :
-            print 'centroid %i %i' % (i,self.centroids[i])
-        for i in xrange(len(self.atoms)) :
-            print 'atom %i %i' % (i,self.atoms[i])
+        #print '#(centroid)', len(self.centroids)
+        #print '#(atom)', len(self.atoms)
+        print '#(centroids)', len(self.mask.shape[0])
+        print '#(atoms)', len(self.mask.shape[1])
+        print '##### Mask #####'
+        print self.mask
+        print '##### Mask #####'
+        #for i in xrange(len(self.centroids)) :
+        #    print 'centroid %i %i' % (i,self.centroids[i])
+        #for i in xrange(len(self.atoms)) :
+        #    print 'atom %i %i' % (i,self.atoms[i])
 
 class DridFile:
     def __init__(self, filename):
@@ -55,20 +64,38 @@ class DridFile:
 
         b = self._pick_data()
         self._header.title = struct.unpack('%ds' % (len_title,), b)[0]
+
+        self._header.version = int( self._header.title[3:] )
             
-        # centroids 
-        b = self._pick_data()
-        n_centroids = struct.unpack('i',b)[0]
+        if self._header.version != 2:
+            print 'Caution: This is not DRID ver.2 format!!'
+            print self._header.title
 
-        b = self._pick_data()
-        self._header.centroids = struct.unpack('i'*n_centroids, b)
+        if self._header.version == 1:
+            # centroids 
+	        b = self._pick_data()
+	        n_centroids = struct.unpack('i',b)[0]
+	
+	        b = self._pick_data()
+	        self._header.centroids = struct.unpack('i'*n_centroids, b)
+	
+	        # atoms 
+	        b = self._pick_data()
+	        n_atoms = struct.unpack('i',b)[0]
+	
+	        b = self._pick_data()
+	        self._header.atoms = struct.unpack('i'*n_atoms, b)
 
-        # atoms 
-        b = self._pick_data()
-        n_atoms = struct.unpack('i',b)[0]
+        # Mask (ver >= 2)
+        if self._header.version >= 2:
 
-        b = self._pick_data()
-        self._header.atoms = struct.unpack('i'*n_atoms, b)
+            b = self._pick_data()
+            n_centroids, n_atoms = struct.unpack('ii',b)
+            
+            self._header.mask = np.empty((n_centroids, n_atoms))
+            for ic in range(n_centroids):
+                b = self._pick_data()
+                self._header.mask[ic,:] = struct.unpack('i'*n_atoms, b)
 
         self._seek_data = self._file.tell()
         
@@ -82,24 +109,36 @@ class DridFile:
         binary = struct.pack('i', len(self._header.title))
         self._put_data(binary, 4)
 
-        form = '%ds' % (len(self._header.title),)
+        form = '%is' % (len(self._header.title),)
         binary = struct.pack(form, self._header.title)
         self._put_data(binary, struct.calcsize(form))
         
-        # centroids 
-        binary = struct.pack('i', len(self._header.centroids))
-        self._put_data(binary, 4)
+        if self._header.version == 1:
+	        # centroids 
+	        binary = struct.pack('i', len(self._header.centroids))
+	        self._put_data(binary, 4)
+	
+	        binary = struct.pack('i' * len(self._header.centroids), *(self._header.centroids))
+	        self._put_data(binary, 4 * len(self._header.centroids))
+	
+	        # atoms
+	        binary = struct.pack('i', len(self._header.atoms))
+	        self._put_data(binary, 4)
+	
+	        binary = struct.pack('i' * len(self._header.atoms), *(self._header.atoms))
+	        self._put_data(binary, 4 * len(self._header.atoms))
 
-        binary = struct.pack('i' * len(self._header.centroids), *(self._header.centroids))
-        self._put_data(binary, 4 * len(self._header.centroids))
+        # Mask (ver >= 2)
+        if self._header.version >= 2:
+            # Dimensions (# of centroids, # of atoms)    
+            form = 'ii'
+            binary = struct.pack(form, self._header.mask.shape[0], self._header.mask.shape[1])
+            self._put_data(binary, struct.calcsize(form))
 
-        # atoms
-        binary = struct.pack('i', len(self._header.atoms))
-        self._put_data(binary, 4)
-
-        binary = struct.pack('i' * len(self._header.atoms), *(self._header.atoms))
-        self._put_data(binary, 4 * len(self._header.atoms))
-        
+            for ic in range(self._header.n_centroids()):
+                form = '%ii' % self._header.mask.shape[1]
+                binary = struct.pack(form, *(self._header.mask[ic, :]))
+                self._put_data(binary, struct.calcsize(form))
             
     def show_header(self):
         """print header information"""
@@ -115,7 +154,7 @@ class DridFile:
     def read_onestep(self):
         """return 2-dimensional lists"""
         b = self._pick_data()
-        return struct.unpack('f' * 3 * len(self._header.centroids), b)
+        return struct.unpack('f' * 3 * self._header.n_centroids(), b)
     
     def skip_onestep(self):
         num = struct.unpack('i', self._file.read(4))[0]
@@ -126,9 +165,9 @@ class DridFile:
             self.skip_onestep()
        
     def write_onestep(self, data):
-        n = len(self._header.centroids)
-        binary = struct.pack('%df' % (3*n,), *data)
-        self._put_data(binary, 4 * 3 * n)
+        n = self._header.n_centroids()
+        binary = struct.pack('%if' % (3*n,), *data)
+        self._put_data(binary, struct.calcsize('%if' % (3*n,)))
     
     def has_more_data(self):
         """return True or False"""

@@ -3,6 +3,7 @@
 from cafysis.file_io.drid import DridFile
 import numpy as np
 import sys
+import math
 
 if len(sys.argv) != 3:
     print 'Usage: % SCRIPT [input DRID] [output pairwise]'
@@ -14,7 +15,7 @@ drid = DridFile(sys.argv[1])
 drid.open_to_read()
 drid.read_header()
 
-ndim = 3*len(drid._header.centroids)
+ndim = 3*drid._header.n_centroids()
 nframe = 0
 while drid.has_more_data():
     drid.read_onestep()
@@ -32,7 +33,7 @@ drid.close()
 
 for i in range(nframe):
     for j in range(i+1, nframe):
-        f_out.write('%i %i %f\n' % (i,j, np.square(data[i,:] - data[j,:]).sum() ))
+        f_out.write('%i %i %f\n' % (i,j, math.sqrt( np.square(data[i,:] - data[j,:]).sum() / float(ndim)) ))
 
 f_out.close()
 

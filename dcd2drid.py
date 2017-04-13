@@ -13,82 +13,93 @@ from cafysis.file_io.drid import DridFile, DridHeader
 import cafysis.lib_f2py.py_drid as py_drid
 import numpy as np
 
-if len(sys.argv) != 5:
-    print 'Usage: % SCRIPT [input DCD] [centroid set file] [atom set file] [output DRID]'
+if len(sys.argv) != 4:
+    print 'Usage: % SCRIPT [input DCD] [mask file] [output DRID]'
     sys.exit(2)
 
 dcd = DcdFile(sys.argv[1])
 dcd.open_to_read()
 dcd.read_header()
 
-centroids = []
-for l in open(sys.argv[2],'r'):
-    centroids.append(int(l))
-
-atoms = []
-for l in open(sys.argv[3],'r'):
-    atoms.append(int(l))
-
-bonds = []
+mask = []
+for l in open(sys.argv[2]):
+    lsp = l.strip().split()
+    a = []
+    for x in lsp:
+        a.append( float(x) ) 
+    mask.append( a )
 
 drid = DridFile(sys.argv[-1])
 drid.open_to_write()
 
 h = DridHeader()
-h.title = 'ver1'
-h.centroids = centroids
-h.atoms = atoms
-h.bonds = bonds
+h.title = 'ver2'
+h.version = 2
+h.mask = np.array( mask )
 drid.set_header(h)
 drid.write_header()
 
-#nc = len(centroids)
-#na = len(atoms)
-#mu = []
 #iframe = 0
 while dcd.has_more_data() :
     data = dcd.read_onestep_np()
     
     '''
     F2PY
-    munuxi = drid(x,centroids,atoms,nx=shape(x,1),nc=len(centroids),na=len(atoms))
     '''
-    munuxi = py_drid.drid( data.T, centroids, atoms) 
+    munuxi = py_drid.drid( data.T, h.mask.T )
+
     drid.write_onestep( munuxi )
 
     '''
-    # PYTHON version (time consuming)
-    d_inv = np.ma.empty((nc, na)) # [1:nc, 1:na]
-    d_inv.mask = False
-
-    nsum = []
-    for ic,c in enumerate(centroids):
-        coord_c = data[c-1,:]
-
-        ## add here treatment for bonds
-        exclude = [c,]
-
-        n = 0
-        for ia, a in enumerate(atoms):
-            if a in exclude:
-                d_inv[ic,ia] = np.ma.masked
-            else:
-                d_inv[ic,ia] = float(1) / math.sqrt( np.square((data[a-1,:] - coord_c)).sum() )
-                n += 1
-        nsum.append(float(n))
-
-    mu = d_inv.sum(axis=1)  # [1:nc]
-    mu = mu / nsum
-
-    dd = np.ma.empty((nc,na))
-    dd.mask = d_inv.mask
-    for ic in range(nc):
-        dd[ic,:] = d_inv[ic,:] - mu[ic]
-
-    nu = np.sqrt( np.square(dd).sum(axis=1) / nsum )
-    xi = np.power( np.power(dd,3).sum(axis=1) / nsum, float(1)/3)
-
-    drid.write_onestep( np.concatenate((mu,nu,xi)) )
+    PYTHON version (time consuming; for debugging)
     '''
+    '''
+    nc = h.mask.shape[0]
+    mu = [0.0]*nc
+    nsum = [0]*nc
+    for ic in range(nc):
+        for ia in range(nc):
+            if h.mask[ic, ia] < 0:
+                pass
+            else:
+                d = math.sqrt( np.square( (data[ia,:] - data[ic,:])).sum() )
+                mu[ic] += 1.0 / d
+                nsum[ic] += 1
+
+    for ic in range(nc):
+        mu[ic] = mu[ic] / float(nsum[ic])
+
+    nu = [0.0]*nc
+    xi = [0.0]*nc
+    for ic in range(nc):
+        for ia in range(nc):
+            if h.mask[ic,ia] < 0:
+                pass
+            else:
+                d = math.sqrt( np.square( (data[ia,:] - data[ic,:])).sum() )
+                dd = 1.0/d - mu[ic]
+                nu[ic] += dd ** 2
+                xi[ic] += dd ** 3
+
+    for ic in range(nc):
+        nu[ic] = math.sqrt( nu[ic] / float(nsum[ic]) )
+        if xi[ic] < 0.0:
+            xi[ic] = - ( (abs(xi[ic]) / float(nsum[ic])) ** (1./3.) )
+        else:
+            xi[ic] = (xi[ic] / float(nsum[ic])) ** (1./3.) 
+        #xi[ic] = (xi[ic] / float(nsum[ic]) + 0j) ** (1./3.)     
+        ##!!!!! x ** (1./3.) causes unstability when x < 0
+
+    # Check Fortran vs Python
+    for ic in range(nc):
+        print munuxi[ic], mu[ic], munuxi[ic]-mu[ic]
+    for ic in range(nc):
+        print munuxi[nc+ic], nu[ic], munuxi[nc+ic]-nu[ic]
+    for ic in range(nc):
+        print munuxi[2*nc+ic], xi[ic], munuxi[2*nc+ic]-xi[ic]
+    '''
+
+    #drid.write_onestep( np.concatenate((mu,nu,xi)) )
+
     #print iframe
     #iframe += 1
