@@ -87,7 +87,7 @@ drid.open_to_read()
 drid.read_header()
 
 cls_centroids = []
-nc = 3*len(drid.get_header().centroids)
+nc = 3*drid.get_header().n_centroids()
 for icls in range(ncls):
     cls_centroids.append( np.zeros((nc,)) )
 
