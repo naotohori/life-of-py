@@ -19,7 +19,7 @@ drid = DridFile(sys.argv[1])
 drid.open_to_read()
 drid.read_header()
 
-nc = 3*len(drid.get_header().centroids)
+nc = 3*drid.get_header().n_centroids()
 nframe = 0
 while drid.has_more_data():
     drid.read_onestep()
@@ -40,26 +40,24 @@ while drid.has_more_data():
 drid.close()
 
 
+###! DRID has to be compared by RMSD(DRID)
+###! Becauase the linkage method computes only "euclidean" distance.
+###! division factor sqrt(nc)  (nc = 3 * n_centroids) should be included in the data here.
+data = data / math.sqrt(nc)
+
 #z = scipy.cluster.hierarchy.ward(dist)  # This does not work for some reason 
-#z = scipy.cluster.hierarchy.linkage(dist) 
-
-#data = data / math.sqrt(float(nc))
-
 z = scipy.cluster.hierarchy.linkage(data, method='ward', metric='euclidean')
+## Other methods
 #z = scipy.cluster.hierarchy.linkage(data, method='single', metric='euclidean')
 #z = scipy.cluster.hierarchy.linkage(data, method='average', metric='euclidean')
 
 f_out = open(prefix+'.drid.cls.z', 'w')
-#f_out = open(prefix+'.drid.cls.single.z', 'w')
-#f_out = open(prefix+'.drid.cls.average.z', 'w')
 for iz, zz in enumerate(z):
     f_out.write("%5i %5i %5i %f %i\n" % (iz+1, zz[0],zz[1],zz[2],zz[3]))
 f_out.close()
 
 
 f_out = open(prefix+'.drid.cls.ncls', 'w')
-#f_out = open(prefix+'.drid.cls.single.ncls', 'w')
-#f_out = open(prefix+'.drid.cls.average.ncls', 'w')
 dmin = z[0][2]
 dmax = z[-1][2]
 for i in range(100):
