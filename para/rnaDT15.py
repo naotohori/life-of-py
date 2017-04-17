@@ -36,7 +36,7 @@ class DT15(object):
     HB_ANGL = 1.5
     HB_DIH_HBOND = 0.15
     HB_DIH_CHAIN = 0.15
-    HB_U0 = -2.434
+    HB_U0 = -2.93168175
     #hb_cutoff_dist = 2.0
 
 #<<<< DT15_stack_param  
