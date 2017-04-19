@@ -1,0 +1,35 @@
+    1 OGUA(   1 )A       N1  ->    12 OURA(   1 )A       O2  Sym=   1 Val=  0.711  DA=  2.70  DHA= 22.29
+    1 OGUA(   1 )A       O2' ->     1 OGUA(   1 )A       O3' Sym=   1 Val=  0.226  DA=  2.65  DHA= 79.69
+    2 OGUA(   2 )A       N1  ->    11 OCYT(  11 )A       N3  Sym=   1 Val=  0.686  DA=  2.75  DHA= 13.59
+    2 OGUA(   2 )A       N2  ->    11 OCYT(  11 )A       O2  Sym=   1 Val=  0.945  DA=  2.71  DHA=  4.26
+    2 OGUA(   2 )A       N2  ->    11 OCYT(  11 )A       N3  Sym=   1 Val=  0.062  DA=  3.57  DHA= 50.36
+    2 OGUA(   2 )A       O2' ->     3 OGUA(   3 )A       O4' Sym=   1 Val=  0.321  DA=  3.32  DHA= 36.78
+    3 OGUA(   3 )A       N1  ->    10 OCYT(  10 )A       N3  Sym=   1 Val=  0.695  DA=  2.75  DHA= 15.79
+    3 OGUA(   3 )A       N2  ->    10 OCYT(  10 )A       O2  Sym=   1 Val=  0.823  DA=  2.88  DHA=  9.89
+    3 OGUA(   3 )A       O2' ->     3 OGUA(   3 )A       O3' Sym=   1 Val=  0.200  DA=  2.65  DHA= 78.26
+    4 OCYT(   4 )A       N4  ->     9 OGUA(   9 )A       O6  Sym=   1 Val=  0.788  DA=  2.72  DHA= 14.44
+    4 OCYT(   4 )A       O2' ->     4 OCYT(   4 )A       O3' Sym=   1 Val=  0.200  DA=  2.65  DHA= 78.44
+    5 OGUA(   5 )A       N1  ->     8 OADE(   8 )A       OP2 Sym=   1 Val=  0.540  DA=  3.19  DHA= 53.62
+    5 OGUA(   5 )A       N2  ->     8 OADE(   8 )A       OP2 Sym=   1 Val=  0.534  DA=  2.48  DHA= 31.13
+    5 OGUA(   5 )A       N2  ->     8 OADE(   8 )A       N7  Sym=   1 Val=  0.262  DA=  2.79  DHA= 17.97
+    5 OGUA(   5 )A       O2' ->     5 OGUA(   5 )A       O3' Sym=   1 Val=  0.180  DA=  2.62  DHA= 86.38
+    6 OCYT(   6 )A       O2' ->     6 OCYT(   6 )A       O3' Sym=   1 Val=  0.210  DA=  2.63  DHA= 78.77
+    7 OADE(   7 )A       N6  ->     5 OGUA(   5 )A       O2' Sym=   1 Val=  0.528  DA=  2.47  DHA=  3.80
+    7 OADE(   7 )A       O2' ->     8 OADE(   8 )A       O5' Sym=   1 Val=  0.308  DA=  2.97  DHA= 60.75
+    8 OADE(   8 )A       N6  ->     9 OGUA(   9 )A       N3  Sym=   1 Val=  0.054  DA=  3.16  DHA= 78.05
+    8 OADE(   8 )A       O2' ->     8 OADE(   8 )A       O3' Sym=   1 Val=  0.280  DA=  2.62  DHA= 79.77
+    9 OGUA(   9 )A       N1  ->     4 OCYT(   4 )A       N3  Sym=   1 Val=  0.613  DA=  2.74  DHA= 14.28
+    9 OGUA(   9 )A       N2  ->     4 OCYT(   4 )A       O2  Sym=   1 Val=  0.691  DA=  2.72  DHA= 16.77
+    9 OGUA(   9 )A       O2' ->    10 OCYT(  10 )A       O4' Sym=   1 Val=  0.325  DA=  3.18  DHA= 44.94
+   10 OCYT(  10 )A       N4  ->     3 OGUA(   3 )A       O6  Sym=   1 Val=  0.591  DA=  2.71  DHA= 25.16
+   10 OCYT(  10 )A       O2' ->    10 OCYT(  10 )A       O3' Sym=   1 Val=  0.200  DA=  2.66  DHA= 78.74
+   11 OCYT(  11 )A       N4  ->     2 OGUA(   2 )A       O6  Sym=   1 Val=  0.658  DA=  2.71  DHA= 20.60
+   11 OCYT(  11 )A       O2' ->    11 OCYT(  11 )A       O3' Sym=   1 Val=  0.200  DA=  2.64  DHA= 78.28
+   12 OURA(   1 )A       N3  ->     1 OGUA(   1 )A       O6  Sym=   1 Val=  0.691  DA=  2.71  DHA= 22.10
+   12 OURA(   1 )A       O2' ->    12 OURA(   1 )A       O3' Sym=   1 Val=  0.175  DA=  2.72  DHA= 78.29
+Number of H-bonds...................... 12.698
+Penalty for too many/few H-atoms....... 0.000
+Penalty for flipped residues........... 0.000
+Mislocated H penalty................... 0.000
+ 
+Total current value.................... 12.698
