@@ -7,6 +7,7 @@ Created on 2015/05/26
 '''
 
 import sys
+import numpy as np
 from cafysis.file_io.drid import DridFile, DridHeader
 from cafysis.lib_f2py import py_ddrid
 
@@ -22,8 +23,9 @@ drid1 = DridFile(sys.argv[2])
 drid1.open_to_read()
 drid1.read_header()
 
-if len(drid.get_header().centroids) != len(drid1.get_header().centroids):
-    print 'number of centroids are not identical'
+#if len(drid.get_header().centroids) != len(drid1.get_header().centroids):
+if not np.array_equal(drid.get_header().mask, drid1.get_header().mask):
+    print 'Two masks are not identical'
     sys.exit(2)
 
 x_ref = drid1.read_onestep()

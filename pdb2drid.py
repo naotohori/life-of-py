@@ -12,8 +12,8 @@ from cafysis.file_io.drid import DridFile, DridHeader
 from cafysis.lib_f2py import py_drid
 import numpy as np
 
-if len(sys.argv) != 5:
-    print 'Usage: % SCRIPT [input PDB] [centroid set file] [atom set file] [output DRID]'
+if len(sys.argv) != 4:
+    print 'Usage: % SCRIPT [input PDB] [mask file] [output DRID]'
     sys.exit(2)
 
 pdb = PdbFile(sys.argv[1])
@@ -21,24 +21,22 @@ pdb.open_to_read()
 chains = pdb.read_all()
 pdb.close()
 
-centroids = []
-for l in open(sys.argv[2],'r'):
-    centroids.append(int(l))
+mask = []
+for l in open(sys.argv[2]):
+    lsp = l.strip().split()
+    a = []
+    for x in lsp:
+        a.append( float(x) ) 
+    mask.append( a )
 
-atoms = []
-for l in open(sys.argv[3],'r'):
-    atoms.append(int(l))
-
-bonds = []
 
 drid = DridFile(sys.argv[-1])
 drid.open_to_write()
 
 h = DridHeader()
-h.title = 'ver1'
-h.centroids = centroids
-h.atoms = atoms
-h.bonds = bonds
+h.title = 'ver2'
+h.version = 2
+h.mask = np.array( mask )
 drid.set_header(h)
 drid.write_header()
 
@@ -60,7 +58,8 @@ for c in chains:
 F2PY
 munuxi = drid(x,centroids,atoms,nx=shape(x,1),nc=len(centroids),na=len(atoms))
 '''
-munuxi = py_drid.drid( data.T, centroids, atoms) 
+#munuxi = py_drid.drid( data.T, centroids, atoms) 
+munuxi = py_drid.drid( data.T, h.mask.T )
 
 drid.write_onestep( munuxi )
 

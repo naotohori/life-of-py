@@ -172,6 +172,19 @@ class DcdFile :
         
         return data
 
+    def read_onestep_np_solute(self, nsolute):
+        """return ndarray"""
+        import numpy as np
+        data = np.empty((self._header.nmp_real, 3))
+        b = self._pick_data()
+        data[:,0] = struct.unpack('f' * self._header.nmp_real, b)
+        b = self._pick_data()
+        data[:,1] = struct.unpack('f' * self._header.nmp_real, b)
+        b = self._pick_data()
+        data[:,2] = struct.unpack('f' * self._header.nmp_real, b)
+        
+        return data[:nsolute, 0:3]
+
     def read_onestep_npF(self):
         """return ndarray in Fortran format"""
         import numpy as np
