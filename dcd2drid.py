@@ -13,8 +13,9 @@ from cafysis.file_io.drid import DridFile, DridHeader
 import cafysis.lib_f2py.py_drid as py_drid
 import numpy as np
 
-if len(sys.argv) != 4:
+if len(sys.argv) not in (4,5):
     print 'Usage: % SCRIPT [input DCD] [mask file] [output DRID]'
+    print '  or : % SCRIPT [input DCD] [mask file] [# solute in DCD] [output DRID]'
     sys.exit(2)
 
 dcd = DcdFile(sys.argv[1])
@@ -29,6 +30,13 @@ for l in open(sys.argv[2]):
         a.append( float(x) ) 
     mask.append( a )
 
+if len(sys.argv) == 5:
+    flg_solute = True
+    nsolute = int(sys.argv[3])
+    if len(mask) != nsolute or len(mask[0]) != nsolute:
+        print 'Error: # solute and size of mask is not consistent'
+        sys.exit(2)
+
 drid = DridFile(sys.argv[-1])
 drid.open_to_write()
 
@@ -41,7 +49,11 @@ drid.write_header()
 
 #iframe = 0
 while dcd.has_more_data() :
-    data = dcd.read_onestep_np()
+
+    if flg_solute:
+        data = dcd.read_onestep_np_solute(nsolute)
+    else:
+        data = dcd.read_onestep_np()
     
     '''
     F2PY

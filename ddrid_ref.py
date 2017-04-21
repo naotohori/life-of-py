@@ -7,27 +7,28 @@ Created on 2015/05/26
 '''
 
 import sys
+import numpy as np
 from cafysis.file_io.drid import DridFile, DridHeader
 from cafysis.lib_f2py import py_ddrid
 
 if len(sys.argv) != 4:
-    print 'Usage: % SCRIPT [input drid] [input drid1] [output dDRID]'
+    print 'Usage: % SCRIPT [input drid] [reference drid] [output dDRID]'
     sys.exit(2)
 
 drid = DridFile(sys.argv[1])
 drid.open_to_read()
 drid.read_header()
 
-drid1 = DridFile(sys.argv[2])
-drid1.open_to_read()
-drid1.read_header()
+drid_ref = DridFile(sys.argv[2])
+drid_ref.open_to_read()
+drid_ref.read_header()
 
-if len(drid.get_header().centroids) != len(drid1.get_header().centroids):
-    print 'number of centroids are not identical'
+if not np.array_equal(drid.get_header().mask, drid_ref.get_header().mask):
+    print 'Two masks are not identical'
     sys.exit(2)
 
-x_ref = drid1.read_onestep()
-drid1.close()
+x_ref = drid_ref.read_onestep()
+drid_ref.close()
 
 f_out = open(sys.argv[-1], 'w')
 while drid.has_more_data():

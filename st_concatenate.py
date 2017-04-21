@@ -7,12 +7,12 @@ Created on 2017/01/04
 
 import sys
 
-def st_concatenate(dir_in, dir_out, nrun):
+def st_concatenate(dir_in, name, dir_out, nrun):
    
-    f_out = open('%s/azo.st' % dir_out,'w')
+    f_out = open('%s/%s.st' % (dir_out,name),'w')
    
     ### Run 1
-    f_in = open('%s/run001/azo.st' % dir_in,'r')
+    f_in = open('%s/run001/%s.st' % (dir_in,name),'r')
    
     # Write step=0
     f_out.write( f_in.readline() )
@@ -30,7 +30,7 @@ def st_concatenate(dir_in, dir_out, nrun):
    
     ### Run 2 - nrun 
     for irun in range(2, nrun+1):
-        f_in = open('%s/run%03i/azo.st' % (dir_in,irun,),'r')
+        f_in = open('%s/run%03i/%s.st' % (dir_in,irun,name),'r')
    
         # Skip the first step (same as the last step of previous run)
         f_in.readline()
@@ -47,13 +47,14 @@ def st_concatenate(dir_in, dir_out, nrun):
 
 if __name__ == '__main__':
         
-    if len(sys.argv) != 4:
-        print 'Usage: % SCRIPT [input root dir] [output dir] [last run number]'
+    if len(sys.argv) != 5:
+        print 'Usage: % SCRIPT [input root dir] [name (file prefix)] [output dir] [last run number]'
         sys.exit(2)
 
     dir_in = sys.argv[1]
-    dir_out = sys.argv[2]
-    nrun = int(sys.argv[3])
+    name    = sys.argv[2]
+    dir_out = sys.argv[3]
+    nrun = int(sys.argv[4])
 
     if nrun < 3:
         print 'Usage: Error nrun < 3'

@@ -34,7 +34,7 @@ for c in chains:
         nS = 0 
         xyz_B = Coord()
         nB = 0
-        nP = 0
+
         for a in r.atoms:
             name = a.name.strip()
             if name[0] == 'H':
