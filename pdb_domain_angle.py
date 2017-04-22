@@ -19,10 +19,13 @@ Domain B P7-P3-P8:    42 -  47
 import sys
 from cafysis.file_io.pdb import PdbFile
 import numpy as np
+import math
 
-if len(sys.argv) != 3:
-    print ('Usage: SCRIPT [pdb file] [angle file]')
-    sys.exit(2)
+#if len(sys.argv) != 3:
+#    print ('Usage: SCRIPT [pdb file] [angle file]')
+#    sys.exit(2)
+
+pdbfilepath = './azo.rna.pdb'
 
 mp_domA = []  # mp starts with 1
 for nt12 in range(52, 124+1):
@@ -40,7 +43,7 @@ for nt12 in range(42, 47+1)+range(174,178+1)+range(130,166+1):
 mp_domB_0 = 3 * (155 - 11)
 mp_domB_1 = 3 * (130 - 11)
 
-pdb = PdbFile(sys.argv[1])
+pdb = PdbFile(pdbfilepath)
 pdb.open_to_read()
 chains = pdb.read_all()
 c = chains[0]
@@ -62,19 +65,19 @@ cov = np.cov(xyzs, rowvar=False)
 #cov = np.cov(xyzs.T, rowvar=True)  # This gives same result
 #print cov
 
-u,s,v =  np.linalg.svd(cov)
+u,s,vA =  np.linalg.svd(cov)
 
 #print u
 #print s
 #print v
 
-r0 = np.dot(c.get_atom( mp_domA_0-1 ).xyz.get_as_ndarray(), v[0])
-r1 = np.dot(c.get_atom( mp_domA_1-1 ).xyz.get_as_ndarray(), v[0])
+r0 = np.dot(c.get_atom( mp_domA_0-1 ).xyz.get_as_ndarray(), vA[0])
+r1 = np.dot(c.get_atom( mp_domA_1-1 ).xyz.get_as_ndarray(), vA[0])
 
 if r1 < r0:
-    v[0] *= -1.0
+    vA[0] *= -1.0
 
-print 'Principal vector of domain A', v[0]
+print 'Principal vector of domain A', vA[0]
 
 
 '''
@@ -93,17 +96,23 @@ cov = np.cov(xyzs, rowvar=False)
 #cov = np.cov(xyzs.T, rowvar=True)  # This gives same result
 #print cov
 
-u,s,v =  np.linalg.svd(cov)
+u,s,vB =  np.linalg.svd(cov)
 
 #print u
 #print s
 #print v
 #
 
-r0 = np.dot(c.get_atom( mp_domB_0-1 ).xyz.get_as_ndarray(), v[0])
-r1 = np.dot(c.get_atom( mp_domB_1-1 ).xyz.get_as_ndarray(), v[0])
+r0 = np.dot(c.get_atom( mp_domB_0-1 ).xyz.get_as_ndarray(), vB[0])
+r1 = np.dot(c.get_atom( mp_domB_1-1 ).xyz.get_as_ndarray(), vB[0])
 
 if r1 < r0:
-    v[0] *= -1.0
+    vB[0] *= -1.0
 
-print 'Principal vector of domain B', v[0]
+print 'Principal vector of domain B', vB[0]
+
+
+''' Angle between domain A and B '''
+#cos_theta = np.dot(vA[0],vB[0]) / math.sqrt(np.dot(vA[0],vA[0]) * np.dot(vB[0],vB[0]))
+theta = math.acos( np.dot(vA[0],vB[0]) / math.sqrt(np.dot(vA[0],vA[0]) * np.dot(vB[0],vB[0])) )
+print 180.0 * theta / math.pi
