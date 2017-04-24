@@ -6,14 +6,15 @@ import numpy as np
 import scipy.cluster.hierarchy
 from cafysis.file_io.drid import DridFile
 
-if len(sys.argv) != 4:
-    print 'Usage: SCRIPT [prefix] [cutoff] [nskip (to calculate frame id)]'
+if len(sys.argv) != 5:
+    print 'Usage: SCRIPT [DRID file] [prefix] [cutoff] [nskip (to calculate frame id)]'
     sys.exit(2)
 
-prefix = sys.argv[1]
-cutoff_char = sys.argv[2]
-cutoff = float(sys.argv[2])
-nskip = int(sys.argv[3])
+drid_filepath = sys.argv[1]
+prefix = sys.argv[2]
+cutoff_char = sys.argv[3]
+cutoff = float(sys.argv[3])
+nskip = int(sys.argv[4])
 
 z = []
 for l in open(prefix+'.drid.cls.z'):
@@ -82,7 +83,7 @@ f_out.close()
 
 ############################# Center
 
-drid = DridFile('cluster.drid')
+drid = DridFile(drid_filepath)
 drid.open_to_read()
 drid.read_header()
 
@@ -136,7 +137,7 @@ for icls in range(ncls):
 for icls in range(ncls):
     cls_average_dDRID[icls] /= float(cls_num_node[icls])
 
-f_out = open('cls.drid.cls_%s.centroids' % cutoff_char,'w')
+f_out = open('%s.drid.cls_%s.centroids' % (prefix, cutoff_char),'w')
 f_out.write('#clsID node dDRID dDRID/sqrt(nc) <dDRID> <dDRID>/sqrt(nc)\n')
 for icls in range(ncls):
     f_out.write('%i %i %f %f %f %f\n' % (icls+1, cls_nearest_node[icls], 
