@@ -40,6 +40,7 @@ class DcdFile :
         self._filename = filename
         self._header = DcdHeader()
         self._seek_data = None
+        self._seek_mark = None
         
     def open_to_read(self):
         self._file = open(self._filename, 'rb')
@@ -238,6 +239,12 @@ class DcdFile :
     
     def rewind(self):
         self._file.seek( self._seek_data, os.SEEK_SET)
+
+    def set_mark(self):
+        self._seek_mark = self._file.tell()
+
+    def go_mark(self):
+        self._file.seek( self._seek_mark, os.SEEK_SET)
 
     def _pick_data(self):
         """return binary data between 'integer' and 'integer'. 'integer' indicates the number of bytes"""
