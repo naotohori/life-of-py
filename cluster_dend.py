@@ -22,7 +22,7 @@ prefix = sys.argv[1]
 p = int(sys.argv[2])
 
 z = []
-for l in open(prefix+'.drid.cls.z'):
+for l in open(prefix+'.cls.z'):
     lsp = l.split()
     z.append( [int(lsp[1]), int(lsp[2]), float(lsp[3]), int(lsp[4])] )
 
@@ -34,7 +34,7 @@ scipy.cluster.hierarchy.dendrogram(z, p=p, truncate_mode='lastp',
                                 orientation='left', color_threshold=0,
                                 no_labels=flg_no_label,
                                 show_leaf_counts=True)
-plt.savefig(prefix+'.drid.cls.dend_%i.ps' % p)
+plt.savefig(prefix+'.cls.dend_%i.ps' % p)
 plt.figure()
 plt.clf()
 
