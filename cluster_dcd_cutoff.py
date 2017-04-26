@@ -86,7 +86,7 @@ for icls in range(ncls):
 k = 0
 while dcd.has_more_data():
     data = dcd.read_onestep_np()
-    rmsd, rot = superimpose(data_ref.T, data.T)
+    rmsd = superimpose(data_ref.T, data.T)
 
     cls_centroids[fcls[k]-1] += data[:,:]
     k+=1
@@ -113,7 +113,7 @@ while dcd.has_more_data():
     data = dcd.read_onestep_np()
 
     icls = fcls[k] - 1
-    rmsd, rot = superimpose(cls_centroids[icls].T, data.T)
+    rmsd = superimpose(cls_centroids[icls].T, data.T)
 
     if rmsd < cls_nearest_RMSD[icls]:
         cls_nearest_RMSD[icls] = rmsd
