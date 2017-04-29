@@ -28,41 +28,27 @@ nmp = dcd.get_header().nmp_real
 
 unit_len_sq = 0.0
 n_unit_len_sq = 0
-sum_cos_theta = [0.0] * nmp
-num_n = [0] * nmp
+sum_cos_theta = [0.0] * (nmp-1)
+num_n = [0] * (nmp-1)
 
 dcd.skip(frame_skip)
 
 first = True
 while dcd.has_more_data() :
-    data = dcd.read_onestep()
+    data = dcd.read_onestep_np()
         
     for i in xrange(offset, nmp-1, gap) :
+
+        vi = data[i] - data[i-1]
+        unit_len_sq += np.dot(vi,vi)
+        n_unit_len_sq += 1
+
         for j in xrange(i+gap, nmp, gap) :
-            if j == (i+gap):
-                unit_len_sq += ( (data[offset-1][0] - data[offset-1+gap][0]) ** 2
-                            +   +(data[offset-1][1] - data[offset-1+gap][1]) ** 2
-                            +   +(data[offset-1][2] - data[offset-1+gap][2]) ** 2 )
-                n_unit_len_sq += 1
 
-            # i,j
-            ij = (  data[i][0] * data[j][0]
-                  + data[i][1] * data[j][1]
-                  + data[i][2] * data[j][2] ) 
-            # i-1,j
-            i_1_j = (  data[i-1][0] * data[j][0]
-                     + data[i-1][1] * data[j][1]
-                     + data[i-1][2] * data[j][2] ) 
-            # i,j-1
-            i_j_1 = (  data[i][0] * data[j-1][0]
-                     + data[i][1] * data[j-1][1]
-                     + data[i][2] * data[j-1][2] ) 
-            # i-1,j-1
-            i_1_j_1 = (  data[i-1][0] * data[j-1][0]
-                       + data[i-1][1] * data[j-1][1]
-                       + data[i-1][2] * data[j-1][2] ) 
+            vj = data[j] - data[j-1]
 
-            cos_theta = ( ij - i_1_j - i_j_1 + i_1_j_1 ) 
+            cos_theta = np.dot(vi, vj)
+
             n = (j-i) / gap 
             sum_cos_theta[n] += cos_theta
             num_n[n] += 1
@@ -74,7 +60,7 @@ unit_len = np.sqrt(unit_len_sq)
 ## Calculate average correlation
 ij = []
 cor = []
-for i in xrange(nmp/gap):
+for i in xrange(nmp/gap-1):
     ij.append(float(i))
     if num_n[i] == 0:
         cor.append(1.0)
