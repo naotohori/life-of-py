@@ -141,6 +141,16 @@ for icls in range(ncls):
             cls_average_RMSD[icls], cls_average_RMSD[icls]/math.sqrt(nmp)) )
 f_out.write('\n')
 
+
+dcd_out = DcdFile('%s.cls_%s.centroids.dcd' % (prefix, cutoff_char))
+dcd_out.open_to_write()
+dcd_out.set_header( dcd.get_header() )
+dcd_out.write_header()
+
+for icls in range(ncls):
+    dcd_out.write_onestep( cls_centroids[icls] )
+dcd_out.close()
+
 #f_out.write('#centroid DCD\n')
 #for icls in range(ncls):
 #    f_out.write('%i' % (icls+1,))
