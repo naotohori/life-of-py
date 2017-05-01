@@ -84,7 +84,7 @@ f_out.write('# pcov (fitting quality): %f\n' % dev[0])
 f_out.write('#\n')
 f_out.write('#  n   <cos>   exp(-n*L/Lp)\n')
 
-for i in range(nmp/gap):
+for i in range(nmp/gap-1):
     f_out.write('%f %f %f %i\n' % (i, cor[i], np.exp(-(i*unit_len)/para[0]), num_n[i]) )
 
 f_out.close()
