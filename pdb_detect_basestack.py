@@ -16,9 +16,14 @@ import math
 from cafysis.file_io.pdb import PdbFile
 from cafysis.elements.coord import Coord
 
-if len(sys.argv) != 2:
-    print 'Usage: SCRIPT [PDB]'
+if len(sys.argv) not in (2,3):
+    print 'Usage: SCRIPT [PDB]  (score cutoff = 0.5)'
+    print '  or : SCRIPT [PDB] [score cutoff]'
     sys.exit(2)
+
+SCORE_CUT = 0.5
+if len(sys.argv) > 2:
+    SCORE_CUT = float(sys.argv[2])
 
 pf = PdbFile(sys.argv[1])
 pf.open_to_read()
@@ -97,14 +102,9 @@ for ic, c in enumerate(chains):
 
 factor_r3 = 1.0 / ((5.0-3.5)/(3.5**3))   # To normalize the function for distance (~28.58333)
 
-for i in range(nres):
-    comi = coms[i]
-    normali = normals[i]
-    normali_abs = normali.norm()
+def stack_score(comi, comj, normali, normalj):
 
-    for j in range(i+2, nres):
-        comj = coms[j]
-        normalj = normals[j]
+        normali_abs = normali.norm()
         normalj_abs = normalj.norm()
 
         score = 0.0
@@ -112,9 +112,9 @@ for i in range(nres):
         # Distance
         d = comi.distance(comj)
         if d > 5.0:
-            print locations[i][1], locations[j][1], 'd=',d
-            continue
             #pass
+            #continue
+            return None, None, None
         elif d <= 3.5:
             score += 1.0
         else:
@@ -127,8 +127,8 @@ for i in range(nres):
             omega = 180.0 - omega
 
         if omega > 50.0:
-            print locations[i][1], locations[j][1], 'omega=',omega
-            continue
+            #continue
+            return None, None, None
         elif omega <= 25.0:
             score += 1.0
         else:
@@ -140,5 +140,49 @@ for i in range(nres):
         # Xi
         xi = math.asin( normali.cross(normalj).norm() / (normali.norm() * normalj.norm()) ) * 180.0 / math.pi
         #xi2 = math.asin( normali.cross(normalj*(-1)).norm() / (normali.norm() * normalj.norm()) ) * 180.0 / math.pi
-        print locations[i][1], locations[j][1], xi, score
 
+        if normali.dot( v_ij ) > 0.0:
+            sgni = -1
+        else:
+            sgni = +1
+        if normalj.dot( v_ij ) > 0.0:
+            sgnj = +1
+        else:
+            sgnj = -1
+        
+        if 45.0 < xi and xi < 135.0:
+            #continue
+            return None, None, None
+
+        return score, (sgni, sgnj), (d, omega, xi)
+
+''' Secondary stacking '''
+for i in range(nres-1):
+    comi = coms[i]
+    normali = normals[i]
+
+    comj = coms[i+1]
+    normalj = normals[i+1]
+
+    score, sgn, param = stack_score(comi, comj, normali, normalj)
+    if score is not None and score >= SCORE_CUT:
+        si, sj = sgn
+        d, omega, xi = param
+        print ('%s %4i %4i  %5.3f  %4.2f %6.2f %6.2f' % 
+               ('S', si*locations[i][1], sj*locations[i+1][1], score, d, omega, xi))
+
+''' Tertiary stacking '''
+for i in range(nres):
+    comi = coms[i]
+    normali = normals[i]
+
+    for j in range(i+2, nres):
+        comj = coms[j]
+        normalj = normals[j]
+
+        score, sgn, param = stack_score(comi, comj, normali, normalj)
+        if score is not None and score >= SCORE_CUT:
+            si, sj = sgn
+            d, omega, xi = param
+            print ('%s %4i %4i  %5.2f  %4.2f %6.2f %6.2f' % 
+                   ('T', si*locations[i][1], sj*locations[j][1], score, d, omega, xi))
