@@ -163,6 +163,19 @@ class NinfoFile(object):
                 self._file.write(hbondDTdih2line(bs))
             self._file.write('>>>>\n')
             self._file.write('\n')
+
+        if len(ni.tertiarystackDTs) > 0:
+            self._file.write('<<<< native tertiary stack\n')
+            self._file.write('** total_contact = %i\n'%(len(ni.tertiarystackDTs),))
+            self._file.write('**        icon iunit1-iunit2   imp1 - imp2 imp1un-imp2un      go_nat   factor_go     coef_go\n')
+            for bs in ni.tertiarystackDTs :
+                self._file.write(tertiarystackDTdist2line(bs))
+            for bs in ni.tertiarystackDTs :
+                self._file.write(tertiarystackDTangl2line(bs))
+            for bs in ni.tertiarystackDTs :
+                self._file.write(tertiarystackDTdih2line(bs))
+            self._file.write('>>>>\n')
+            self._file.write('\n')
         
     def write_unit(self, ni, un1, un2):
         self._file.write('<<<< native bond length\n')
@@ -256,3 +269,13 @@ class NinfoFile(object):
         for hb in ni.hbondDTs :
             if hb.iunit1==un1 and hb.iunit2 == un2:
                 self._file.write(hbondDTdih2line(hb))
+
+        for tst in ni.tertiarystackDTs :
+            if tst.iunit1==un1 and tst.iunit2 == un2:
+                self._file.write(tertiarystackDTdist2line(tst))
+        for tst in ni.tertiarystackDTs :
+            if tst.iunit1==un1 and tst.iunit2 == un2:
+                self._file.write(tertiarystackDTangl2line(tst))
+        for tst in ni.tertiarystackDTs :
+            if tst.iunit1==un1 and tst.iunit2 == un2:
+                self._file.write(tertiarystackDTdih2line(tst))

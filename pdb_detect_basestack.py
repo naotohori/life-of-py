@@ -168,7 +168,7 @@ for i in range(nres-1):
     if score is not None and score >= SCORE_CUT:
         si, sj = sgn
         d, omega, xi = param
-        print ('%s %4i %4i  %5.3f  %4.2f %6.2f %6.2f' % 
+        print ('%s %+4i %+4i  %5.3f  %4.2f %6.2f %6.2f' % 
                ('S', si*locations[i][1], sj*locations[i+1][1], score, d, omega, xi))
 
 ''' Tertiary stacking '''
@@ -184,5 +184,5 @@ for i in range(nres):
         if score is not None and score >= SCORE_CUT:
             si, sj = sgn
             d, omega, xi = param
-            print ('%s %4i %4i  %5.2f  %4.2f %6.2f %6.2f' % 
+            print ('%s %+4i %+4i  %5.2f  %4.2f %6.2f %6.2f' % 
                    ('T', si*locations[i][1], sj*locations[j][1], score, d, omega, xi))

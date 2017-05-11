@@ -26,10 +26,10 @@ class DT15(object):
     #*** st_u0 is defined in another place. See <<<< DT15_stack_param
 
     # U_ST (non-consecutive)
-    #st_nlocal_dist =  5.00
-    #st_nlocal_angl =  1.50
-    #st_nlocal_dih  =  0.15
-    #st_nlocal_u0   = -6.50
+    TST_DIST = 5.00
+    TST_ANGL = 1.50
+    TST_DIH = 0.15
+    TST_U0 = -6.50
 
     # U_HB
     HB_DIST = 5.0

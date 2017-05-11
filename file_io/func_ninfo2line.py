@@ -200,6 +200,13 @@ def hbondDTdist2line(hb):
     s += ' %11.4f' % (hb.factor,)
     s += ' %11.4f' % (hb.native,)
     s += ' %11.4f' % (hb.coef,)
+    if hb.sectert:
+        s += ' %s' % hb.sectert
+    if hb.nHB:
+        s += ' %i' % hb.nHB
+    if hb.atoms1 and hb.atoms1:
+        for a1, a2 in zip(hb.atoms1, hb.atoms2):
+            s += ' %s %s' % (a1,a2)
     s += '\n'
     return s 
 
@@ -251,5 +258,69 @@ def hbondDTdih2line(hb):
     s += ' %6i %6i %6i %6i' % (hb.dih2_imp1un, hb.dih2_imp2un, hb.dih2_imp3un, hb.dih2_imp4un)
     s += ' %11.4f' % (hb.dih2_native,)
     s += ' %11.4f' % (hb.dih2_coef,)
+    s += '\n'
+    return s 
+
+def tertiarystackDTdist2line(tst):
+    s =  'tbs-dist'
+    s += ' %6i' % (tst.id,)
+    s += ' %6i %6i' % (tst.iunit1, tst.iunit2)
+    s += ' %6i %6i' % (tst.imp1, tst.imp2)
+    s += ' %6i %6i' % (tst.imp1un, tst.imp2un)
+    s += ' %11.4f' % (tst.factor,)
+    s += ' %11.4f' % (tst.native,)
+    s += ' %11.4f' % (tst.coef,)
+    s += ' %+2i %+2i' % (tst.excess1, tst.excess2)
+    s += '\n'
+    return s 
+
+def tertiarystackDTangl2line(tst):
+    s =  'tbs-angl'
+    s += ' %6i' % (tst.id,)
+    s += ' %6i' % (tst.ang1_id,)
+    s += ' %6i %6i' % (tst.ang1_iunit1, tst.ang1_iunit2)
+    s += ' %6i %6i %6i' % (tst.ang1_imp1, tst.ang1_imp2, tst.ang1_imp3)
+    s += ' %6i %6i %6i' % (tst.ang1_imp1un, tst.ang1_imp2un, tst.ang1_imp3un)
+    s += ' %11.4f' % (tst.ang1_native,)
+    s += ' %11.4f' % (tst.ang1_coef,)
+    s += '\n'
+    s += 'tbs-angl'
+    s += ' %6i' % (tst.id,)
+    s += ' %6i' % (tst.ang2_id,)
+    s += ' %6i %6i' % (tst.ang2_iunit1, tst.ang2_iunit2)
+    s += ' %6i %6i %6i' % (tst.ang2_imp1, tst.ang2_imp2, tst.ang2_imp3)
+    s += ' %6i %6i %6i' % (tst.ang2_imp1un, tst.ang2_imp2un, tst.ang2_imp3un)
+    s += ' %11.4f' % (tst.ang2_native,)
+    s += ' %11.4f' % (tst.ang2_coef,)
+    s += '\n'
+    return s 
+
+def tertiarystackDTdih2line(tst):
+    s =  'tbs-dihd'
+    s += ' %6i' % (tst.id,)
+    s += ' %6i' % (tst.dih0_id,)
+    s += ' %6i %6i' % (tst.dih0_iunit1, tst.dih0_iunit2)
+    s += ' %6i %6i %6i %6i' % (tst.dih0_imp1, tst.dih0_imp2, tst.dih0_imp3, tst.dih0_imp4)
+    s += ' %6i %6i %6i %6i' % (tst.dih0_imp1un, tst.dih0_imp2un, tst.dih0_imp3un, tst.dih0_imp4un)
+    s += ' %11.4f' % (tst.dih0_native,)
+    s += ' %11.4f' % (tst.dih0_coef,)
+    s += '\n'
+    s += 'tbs-dihd'
+    s += ' %6i' % (tst.id,)
+    s += ' %6i' % (tst.dih1_id,)
+    s += ' %6i %6i' % (tst.dih1_iunit1, tst.dih1_iunit2)
+    s += ' %6i %6i %6i %6i' % (tst.dih1_imp1, tst.dih1_imp2, tst.dih1_imp3, tst.dih1_imp4)
+    s += ' %6i %6i %6i %6i' % (tst.dih1_imp1un, tst.dih1_imp2un, tst.dih1_imp3un, tst.dih1_imp4un)
+    s += ' %11.4f' % (tst.dih1_native,)
+    s += ' %11.4f' % (tst.dih1_coef,)
+    s += '\n'
+    s += 'tbs-dihd'
+    s += ' %6i' % (tst.id,)
+    s += ' %6i' % (tst.dih2_id,)
+    s += ' %6i %6i' % (tst.dih2_iunit1, tst.dih2_iunit2)
+    s += ' %6i %6i %6i %6i' % (tst.dih2_imp1, tst.dih2_imp2, tst.dih2_imp3, tst.dih2_imp4)
+    s += ' %6i %6i %6i %6i' % (tst.dih2_imp1un, tst.dih2_imp2un, tst.dih2_imp3un, tst.dih2_imp4un)
+    s += ' %11.4f' % (tst.dih2_native,)
+    s += ' %11.4f' % (tst.dih2_coef,)
     s += '\n'
     return s 
