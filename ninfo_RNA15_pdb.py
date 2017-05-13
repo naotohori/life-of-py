@@ -428,6 +428,7 @@ for c in hblist:
 ######################
 sstlist = []  # Secondary
 tstlist = []  # Tertiary
+tstlist_force = []  # Tertiary (force to be included)
 for l in open(path_st_file):
     if l.find('#') != -1:
         continue
@@ -445,6 +446,8 @@ for l in open(path_st_file):
         sstlist.append( (nt1, nt2) )
     elif lsp[0] == 'T':
         tstlist.append( (nt1, nt2) )
+    elif lsp[0] == 'F':
+        tstlist_force.append( (nt1, nt2) )
     else:
         print 'Error: unknown stack type'
         sys.exit(2)
@@ -541,11 +544,29 @@ for itst, tst in enumerate(tstlist):
     else:
         sgn2 = 1
         excess[nt2][1] += 1
+for itst, tst in enumerate(tstlist_force):
+    nt1 = tst[0]
+    nt2 = tst[1]
+
+    if nt1 < 0:
+        sgn1 = -1
+        nt1 = -nt1
+        excess[nt1][0] += 1
+    else:
+        sgn1 = 1
+        excess[nt1][1] += 1
+    if nt2 < 0:
+        sgn2 = -1
+        nt2 = -nt2
+        excess[nt2][0] += 1
+    else:
+        sgn2 = 1
+        excess[nt2][1] += 1
 
 # If excess >  1 ---> inclusive
 #    excess <= 1 ---> exclusive
 
-for itst, tst in enumerate(tstlist):
+for itst, tst in enumerate(tstlist + tstlist_force):
     nt1 = tst[0]
     nt2 = tst[1]
 
