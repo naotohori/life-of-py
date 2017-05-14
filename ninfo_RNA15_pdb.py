@@ -11,12 +11,19 @@ from cafysis.elements.ninfo import NinfoSet, BondLength, BondAngle, BaseStackDT,
 
 flg_nn = True# Non-native HB
 
-if len(sys.argv) != 5:
-    print 'Usage: SCRIPT [cg pdb] [hb list file] [st list file] [output ninfo]'
+if len(sys.argv) != 6:
+    print 'Usage: SCRIPT [cg pdb] [hb list file] [st list file] [GO/NN] [output ninfo]'
     sys.exit(2)
 
 path_hb_file = sys.argv[2]
 path_st_file = sys.argv[3]
+if sys.argv[4] == 'GO':
+    flg_nn = False
+elif sys.argv[4] == 'NN':
+    flg_nn = True
+else:
+    print ('specify GO or NN')
+    sys.exit(2)
 
 f_in = PdbFile(sys.argv[1])
 f_in.open_to_read()
@@ -256,7 +263,38 @@ for l in open(path_hb_file):
         atoms1.append(a1)
         atoms2.append(a2)
 
-    hblist.append((lsp[0], int(lsp[1]), lsp[2], int(lsp[3]), lsp[4], int(lsp[5]), atoms1, atoms2))
+    nt1 = int(lsp[1])
+    nt2 = int(lsp[3])
+    if nt1 <= nt2:
+        hblist.append((lsp[0], nt1, lsp[2], nt2, lsp[4], int(lsp[5]), atoms1, atoms2))
+    else:
+        hblist.append((lsp[0], nt2, lsp[4], nt1, lsp[2], int(lsp[5]), atoms2, atoms1))
+
+if flg_nn:
+    for nt1 in range(1, n_nt):
+        for nt2 in range(ihb, n_nt+1):
+            if (seq[nh1-1] == 'G' and seq[nt2-1] == 'C') or (seq[nh1-1] == 'C' and seq[nt2-1] == 'G'):
+                pass
+            elif (seq[nh1-1] == 'A' and seq[nt2-1] == 'U') or (seq[nh1-1] == 'U' and seq[nt2-1] == 'A'):
+                pass
+            else:
+                continue
+
+            flg_exist = False
+            for pair in hblist:
+                if pair[1] == nt1 and pair[3] == nt2 and pair[2] == 'B' and pair[4] == 'B':
+                    flg_exist = True
+                    break
+
+            if flg_exist:
+                break
+        
+
+
+
+
+
+
 
 def hb_ARNA_native(i,j):
     if seq[i-1] == 'A' and seq[j-1] == 'U':
