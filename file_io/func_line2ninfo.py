@@ -5,7 +5,7 @@
 '''
 
 from cafysis.elements.error import MyError
-from cafysis.elements.ninfo import BondLength, Fene, BondAngle, Dihedral, Contact, LJ, BaseStack, BasePair
+from cafysis.elements.ninfo import BondLength, Fene, BondAngle, Dihedral, Contact, LJ, BaseStack, BasePair, BaseStackDT, TertiaryStackDT, HBondDT
 
 def line2bondlength(line) :
     it = iter(line.split())
@@ -151,4 +151,96 @@ def line2basestack(line) :
     info.dummy = int(it.next())
     info.coef = float(it.next())
     info.type = it.next()
+    return info
+
+
+def line2basestackDT(line) :
+    it = iter(line.split())
+    num = len(line.split())
+    if num != 12 :
+        raise MyError("func_line2ninfo", "line2basestackDT", "")
+    if it.next() != 'bs-dist':
+        raise MyError("func_line2ninfo", "line2basestackDT", "This line is not bs-dist")
+    info = BaseStackDT()
+    info.id = int(it.next())
+    info.iunit1 = int(it.next())
+    info.iunit2 = int(it.next())
+    info.imp1 = int(it.next())
+    info.imp2 = int(it.next())
+    info.imp1un = int(it.next())
+    info.imp2un = int(it.next())
+    info.factor = float(it.next())
+    info.native = float(it.next())
+    info.coef = float(it.next())
+    info.type = it.next()
+    info.dih1_id = None
+    info.dih2_id = None
+    return info
+
+
+def line2tertiarystackDT(line) :
+    it = iter(line.split())
+    num = len(line.split())
+    if num != 13 :
+        raise MyError("func_line2ninfo", "line2tertiarystackDT", "")
+    if it.next() != 'tbs-dist':
+        raise MyError("func_line2ninfo", "line2tertiarystackDT", "This line is not tbs-dist")
+    info = TertiaryStackDT()
+    info.id = int(it.next())
+    info.iunit1 = int(it.next())
+    info.iunit2 = int(it.next())
+    info.imp1 = int(it.next())
+    info.imp2 = int(it.next())
+    info.imp1un = int(it.next())
+    info.imp2un = int(it.next())
+    info.factor = float(it.next())
+    info.native = float(it.next())
+    info.coef = float(it.next())
+    info.excess1 = int(it.next())
+    info.excess2 = int(it.next())
+
+    info.ang1_id = None
+    info.ang2_id = None
+    info.dih0_id = None
+    info.dih1_id = None
+    info.dih2_id = None
+    return info
+
+
+def line2hbondDT(line) :
+    it = iter(line.split())
+    num = len(line.split())
+    if num < 14 :
+        raise MyError("func_line2ninfo", "line2hbondDT", "")
+    if it.next() != 'hb-dist':
+        raise MyError("func_line2ninfo", "line2hbondDT", "This line is not hb-dist")
+    info = HBondDT()
+    info.id = int(it.next())
+    info.iunit1 = int(it.next())
+    info.iunit2 = int(it.next())
+    info.imp1 = int(it.next())
+    info.imp2 = int(it.next())
+    info.imp1un = int(it.next())
+    info.imp2un = int(it.next())
+    info.factor = float(it.next())
+    info.native = float(it.next())
+    info.coef = float(it.next())
+    info.sectert = it.next()
+    info.nHB = int(it.next())
+    info.atoms1 = []
+    info.atoms2 = []
+    try:
+        while (True):
+            a = it.next()
+            info.atoms1.append(a)
+            a = it.next()
+            info.atoms2.append(a)
+    except:
+        pass
+
+    info.ang1_id = None
+    info.ang2_id = None
+    info.dih0_id = None
+    info.dih1_id = None
+    info.dih2_id = None
     return info

@@ -162,6 +162,7 @@ class BaseStackDT(Ninfo):
                  dih2_imp1=None, dih2_imp2=None, dih2_imp3=None, dih2_imp4=None,dih2_iunit1=None,dih2_iunit2=None,
                  dih2_imp1un=None, dih2_imp2un=None, dih2_imp3un=None, dih2_imp4un=None,
                  dih2_native=None,dih2_coef=None,dih2_type_str=None):
+
         if id is None:
             BaseStackDT._counter += 1
             id = BaseStackDT._counter
@@ -171,6 +172,7 @@ class BaseStackDT(Ninfo):
         if id_dih2 is None:
             BaseStackDT._counter_dih += 1
             id_dih2 = BaseStackDT._counter_dih
+
         Ninfo.__init__(self,id=id,iunit1=iunit1,iunit2=iunit2, imp1=imp1,imp2=imp2,imp1un=imp1un,imp2un=imp2un,
                        native=native,factor=factor,correct_mgo=correct_mgo,coef=coef,type_str=type_str)
         self.dih1_id = id_dih1
@@ -336,7 +338,8 @@ class TertiaryStackDT(Ninfo):
                  dih1_native=None,dih1_coef=None,dih1_type_str=None,
                  dih2_imp1=None, dih2_imp2=None, dih2_imp3=None, dih2_imp4=None,dih2_iunit1=None,dih2_iunit2=None,
                  dih2_imp1un=None, dih2_imp2un=None, dih2_imp3un=None, dih2_imp4un=None,
-                 dih2_native=None,dih2_coef=None,dih2_type_str=None, excess1=None, excess2=None):
+                 dih2_native=None,dih2_coef=None,dih2_type_str=None, 
+                 excess1=None, excess2=None):
         if id is None:
             HBondDT._counter += 1
             id = HBondDT._counter
