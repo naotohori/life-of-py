@@ -67,7 +67,7 @@ while dcd.has_more_data() :
                                                                         ref_idx, pre_idx)
     
     if ier == 0 :
-        print rmsd
+        print '%5.2f' % rmsd
     else :
         print 'error in %i-th structure' % k
         
