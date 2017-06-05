@@ -9,7 +9,7 @@ from cafysis.para.rnaAform import ARNA
 from cafysis.para.rnaDT15 import DT15
 from cafysis.elements.ninfo import NinfoSet, BondLength, BondAngle, BaseStackDT, HBondDT, TertiaryStackDT
 
-flg_nn = True# Non-native HB
+NNHB_NT_SEP = 5
 
 if len(sys.argv) != 6:
     print 'Usage: SCRIPT [cg pdb] [hb list file] [st list file] [GO/NN] [output ninfo]'
@@ -17,6 +17,8 @@ if len(sys.argv) != 6:
 
 path_hb_file = sys.argv[2]
 path_st_file = sys.argv[3]
+
+# Non-native HB
 if sys.argv[4] == 'GO':
     flg_nn = False
 elif sys.argv[4] == 'NN':
@@ -270,30 +272,52 @@ for l in open(path_hb_file):
     else:
         hblist.append((lsp[0], nt2, lsp[4], nt1, lsp[2], int(lsp[5]), atoms2, atoms1))
 
+nnlist = []
+#### Add non-native HB
 if flg_nn:
-    for nt1 in range(1, n_nt):
-        for nt2 in range(ihb, n_nt+1):
-            if (seq[nh1-1] == 'G' and seq[nt2-1] == 'C') or (seq[nh1-1] == 'C' and seq[nt2-1] == 'G'):
-                pass
-            elif (seq[nh1-1] == 'A' and seq[nt2-1] == 'U') or (seq[nh1-1] == 'U' and seq[nt2-1] == 'A'):
-                pass
+    '''
+    The first (nt=1) and the last (nt=n_nt) can not have h-bond
+    '''
+    for nt1 in range(2, n_nt-NNHB_NT_SEP):
+        for nt2 in range(nt1+NNHB_NT_SEP, n_nt):
+
+            if   seq[nt1-1] == 'G' and seq[nt2-1] == 'C':
+                atoms1 = ("N1", "N2", "O6")
+                atoms2 = ("N3", "O2", "N4")
+                nHB = 3
+            elif seq[nt1-1] == 'C' and seq[nt2-1] == 'G':
+                atoms1 = ("N3", "O2", "N4")
+                atoms2 = ("N1", "N2", "O6")
+                nHB = 3
+            elif seq[nt1-1] == 'A' and seq[nt2-1] == 'U':
+                atoms1 = ("N1", "N6")
+                atoms2 = ("N3", "O4")
+                nHB = 2
+            elif seq[nt1-1] == 'U' and seq[nt2-1] == 'A':
+                atoms1 = ("N3", "O4")
+                atoms2 = ("N1", "N6")
+                nHB = 2
+            elif seq[nt1-1] == 'G' and seq[nt2-1] == 'U':
+                atoms1 = ("N1", "O6")
+                atoms2 = ("O2", "N3")
+                nHB = 2
+            elif seq[nt1-1] == 'U' and seq[nt2-1] == 'G':
+                atoms1 = ("O2", "N3")
+                atoms2 = ("N1", "O6")
+                nHB = 2
             else:
                 continue
 
             flg_exist = False
-            for pair in hblist:
-                if pair[1] == nt1 and pair[3] == nt2 and pair[2] == 'B' and pair[4] == 'B':
+            for c in hblist:
+                if c[0] == 'CAN' and c[1] == nt1 and c[3] == nt2 and c[2] == 'B' and c[4] == 'B':
                     flg_exist = True
                     break
 
             if flg_exist:
-                break
-        
+                continue
 
-
-
-
-
+            nnlist.append(('CAN', nt1, 'B', nt2, 'B', nHB, atoms1, atoms2))
 
 
 def hb_ARNA_native(i,j):
@@ -351,7 +375,7 @@ def hb_ARNA_native(i,j):
     return dist, ang1, ang2, dih0, dih1, dih2, nHB
 
 
-for c in hblist:
+for c in hblist + nnlist:
     nt_1 = c[1]
     mp_1 = c[2]
     nt_2 = c[3]
