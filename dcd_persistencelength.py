@@ -92,8 +92,6 @@ else:
 def func_exp(x,Lp):
     return np.exp(-(x*unit_len)/Lp)
 
-print 'ij', ij
-print 'cor', cor[:n_cor]
 para, dev = curve_fit(func_exp, ij, cor[:n_cor])
 
 print ('Persistent length: %f nm' % (para[0]*0.1,))
