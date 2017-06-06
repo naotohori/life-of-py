@@ -48,15 +48,19 @@ first = True
 while dcd.has_more_data() :
     data = dcd.read_onestep_np()
         
-    for i in xrange(args.offset, nmp-1, args.gap) :
+    #print 'Start i loop'
+    for i in xrange(args.offset+args.gap, nmp-args.gap, args.gap) :
 
-        vi = data[i] - data[i-1]
+        #print i, i-args.gap
+        vi = data[i] - data[i-args.gap]
         unit_len_sq += np.dot(vi,vi)
         n_unit_len_sq += 1
 
+        #print 'Start j loop'
         for j in xrange(i+args.gap, nmp, args.gap) :
 
-            vj = data[j] - data[j-1]
+            #print '    ',j, j-args.gap
+            vj = data[j] - data[j-args.gap]
 
             cos_theta = np.dot(vi, vj)
 
@@ -106,6 +110,6 @@ f_out.write('#\n')
 f_out.write('#  n   <cos>   exp(-n*L/Lp)\n')
 
 for i in range(nmp/args.gap-1):
-    f_out.write('%f %f %f %i\n' % (i, cor[i], np.exp(-(i*unit_len)/para[0]), num_n[i]) )
+    f_out.write('%5i %6.2f %7.4f %7.4f %12i\n' % (i, i*unit_len, cor[i], np.exp(-(i*unit_len)/para[0]), num_n[i]) )
 
 f_out.close()
