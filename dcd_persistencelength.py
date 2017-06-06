@@ -107,7 +107,7 @@ f_out.write('# L (unit length): %f\n' % unit_len)
 f_out.write('# Lp (persistence length): %f\n' % para[0])
 f_out.write('# pcov (fitting quality): %f\n' % dev[0])
 f_out.write('#\n')
-f_out.write('#  n   <cos>   exp(-n*L/Lp)\n')
+f_out.write('#  n     x(=n*L)   <cos>   exp(-n*L/Lp)\n')
 
 for i in range(nmp/args.gap-1):
     f_out.write('%5i %6.2f %7.4f %7.4f %12i\n' % (i, i*unit_len, cor[i], np.exp(-(i*unit_len)/para[0]), num_n[i]) )
