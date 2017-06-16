@@ -19,6 +19,8 @@ parser.add_argument('--last_mp', dest='last_mp', default=-1,
                     action='store', type=int, help='last particle ID')
 parser.add_argument('--logscale', dest='flg_log', default=False,
                     action='store_true', help='log scale time')
+parser.add_argument('--maxint', dest='max_interval',
+                    action='store', type=int, help='maximum frame interval')
 
 parser.add_argument('dcd', help='target DCD file')
 parser.add_argument('out', help='output file')
@@ -47,7 +49,11 @@ for iframe_ref in range(args.skip, iframe_max):  # iframe_ref = 5, 6, ...., 499
     data_ref = dcd.read_onestep_npF()
     iframe = iframe_ref
     
-    for interval in range(1, iframe_max-iframe_ref+1):   # interval = 1, 2, 3, ... , 495 (= 501-5-1)
+    max_interval = iframe_max - iframe_ref
+    if max_interval > args.max_interval:
+        max_interval = args.max_interval
+
+    for interval in range(1, max_interval+1):   # interval = 1, 2, 3, ... , 495 (= 501-5-1)
         '''
         inteval =   1:   iframe_ref = 5, 6, ... , 499
         inteval = 495:   iframe_ref = 5
@@ -56,14 +62,17 @@ for iframe_ref in range(args.skip, iframe_max):  # iframe_ref = 5, 6, ...., 499
         iframe += 1
 
         rmsd = calcrmsd(data, data_ref)
-        #print iframe_ref, iframe, interval, rmsd
+        print iframe_ref, iframe, interval, rmsd
 
         sum_rmsd[ interval ] += rmsd
         count_rmsd[ interval ] += 1
 
 dcd.close()
 
-for interval in range(1, n_frame-args.skip):
+max_interval = n_frame - args.skip - 1
+if max_interval > args.max_interval:
+    max_interval = args.max_interval
+for interval in range(1, max_interval+1):
     f_out.write('%i %f %i\n' % (interval, sum_rmsd[interval]/float(count_rmsd[interval]), count_rmsd[interval]))
 
 f_out.close()
