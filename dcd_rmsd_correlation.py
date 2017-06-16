@@ -62,7 +62,7 @@ for iframe_ref in range(args.skip, iframe_max):  # iframe_ref = 5, 6, ...., 499
         iframe += 1
 
         rmsd = calcrmsd(data, data_ref)
-        print iframe_ref, iframe, interval, rmsd
+        #print iframe_ref, iframe, interval, rmsd
 
         sum_rmsd[ interval ] += rmsd
         count_rmsd[ interval ] += 1
