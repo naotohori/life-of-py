@@ -52,12 +52,11 @@ for iframe_ref in range(args.skip, iframe_max):  # iframe_ref = 5, 6, ...., 499
         inteval =   1:   iframe_ref = 5, 6, ... , 499
         inteval = 495:   iframe_ref = 5
         '''
-        print iframe_ref, interval, iframe
         data = dcd.read_onestep_npF()
         iframe += 1
 
         rmsd = calcrmsd(data, data_ref)
-        print iframe_ref, iframe, interval, rmsd
+        #print iframe_ref, iframe, interval, rmsd
 
         sum_rmsd[ interval ] += rmsd
         count_rmsd[ interval ] += 1
