@@ -17,7 +17,7 @@ NUM_OUTFILE_OPEN = 100
 if __name__ == '__main__':
     if len(sys.argv) < 5:
         print 'Usage: %SCRIPT [input Dir] [name] [final ID] [output DIR]'
-        print '       ID shoule be from 0 to final ID.'
+        print '       ID shoule be from 1 to final ID.'
         sys.exit(2)
 
     dir_in = sys.argv[1]
