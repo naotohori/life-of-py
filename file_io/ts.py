@@ -46,6 +46,8 @@ class TsHeader(object):
         self.e_window = None
         self.e_stack = None
         self.e_hbond = None
+        self.e_tstack = None
+        self.e_thbond = None
         
     def show(self):
         print 'step', self.step
@@ -85,6 +87,8 @@ class TsHeader(object):
         print 'e_window', self.e_window
         print 'e_stack', self.e_stack
         print 'e_hbond', self.e_hbond
+        print 'e_tstack', self.e_tstack
+        print 'e_thbond', self.e_thbond
                 
 class TsFile(object):
     def __init__(self, filename) :
@@ -136,8 +140,8 @@ class TsFile(object):
         # skip the first line of step 0
         self._file.readline()
         
-        if self._file.readline().split()[0] != '#all':
-            raise MyError('TsFile','read_header','Bad format: #all')
+        #if self._file.readline().split()[0] != '#all':
+        #    raise MyError('TsFile','read_header','Bad format: #all')
         
         self.num_unit = 0
         for l in self._file:
@@ -174,7 +178,8 @@ class TsFile(object):
         lines.append( self._file.readline() )
         
         ts_list = []
-        for i in xrange(self.num_unit+1):
+        #for i in xrange(self.num_unit+1):
+        for i in xrange(self.num_unit):  # There is no "#all" line
             l = self._file.readline()
             lines.append(l)
             ts_list.append(l.split()[1:])
@@ -307,6 +312,10 @@ class TsFile(object):
                 th.e_stack = i
             elif str == 'hbond':
                 th.e_hbond = i
+            elif str == 'tstack':
+                th.e_tstack = i
+            elif str == 'thbond':
+                th.e_thbond = i
             else:
                 raise MyError('','','')
         return th
