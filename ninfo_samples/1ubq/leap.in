@@ -1,0 +1,4 @@
+source leaprc.protein.ff14SB
+x = loadpdb 1ubq_A.pdb
+saveamberparm x 1ubq.aa.prmtop 1ubq.aa.inpcrd
+quit
