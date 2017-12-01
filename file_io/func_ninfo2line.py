@@ -31,7 +31,8 @@ def fene2line(fene):
     s += ' %6i %6i' % (fene.imp1, fene.imp2)
     s += ' %6i %6i' % (fene.imp1un, fene.imp2un)
     s += ' %12.4f' % (fene.native,)
-    s += ' %12.4f' % (fene.dist2,)
+    #s += ' %12.4f' % (fene.dist2,)
+    s += ' %12.4f' % (fene.factor,)
     s += ' %12.4f' % (fene.coef,)
     #s += ' ' + fene.type
     s += '\n'
