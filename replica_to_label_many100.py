@@ -31,12 +31,12 @@ if __name__ == '__main__':
     for id_rep in range(1, id_end+1):
         ts = TsFile('%s/%s_%04i.ts' % (dir_in, name, id_rep))
         ts.open_to_read()
-        ts.read_header()
+        #ts.read_header()   ## Commented out since the header will be read later
         in_ts_files.append(ts)
 
         dcd = DcdFile('%s/%s_%04i.dcd' % (dir_in, name, id_rep))
         dcd.open_to_read()
-        dcd.read_header()
+        #dcd.read_header()  ## Commented out since the header will be read later
         in_dcd_files.append(dcd)
 
     id_finish = 0
@@ -48,7 +48,7 @@ if __name__ == '__main__':
             id_end_now = id_end
         id_finish = id_end_now
 
-        #Prepare output files
+        # Prepare output files
         list_id_out = range(id_begin_now, id_end_now+1)
         out_ts_files = {}
         out_dcd_files = {}
@@ -60,9 +60,12 @@ if __name__ == '__main__':
             dcdout.open_to_write()
             out_dcd_files[id_lab] = dcdout
 
-        #Rewind
+        # Rewind (by reading header again)
         for id_rep in range(1, id_end+1):
             idx = id_rep - 1
+
+            in_ts_files[idx].read_header()
+            in_dcd_files[idx].read_header()
  
             if (id_rep in list_id_out):
                 out_ts_files[id_rep].copy_header(in_ts_files[idx])
