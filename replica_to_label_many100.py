@@ -63,8 +63,6 @@ if __name__ == '__main__':
         #Rewind
         for id_rep in range(1, id_end+1):
             idx = id_rep - 1
-            #in_ts_files[idx].read_header()
-            #in_dcd_files[idx].read_header()
  
             if (id_rep in list_id_out):
                 out_ts_files[id_rep].copy_header(in_ts_files[idx])
