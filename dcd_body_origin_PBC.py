@@ -4,8 +4,8 @@
 Created on 2017/10/13
 @author: Naoto Hori
 
-Calculate the centroid for particular part of molecule (defined by ID1 and ID2)
-translate all coordinates so that the centroid comes to the origin (0,0,0).
+Translate all coordinates so that the entire molecule is inside the box.
+To do so, firstly find most lateral coordinates.
 
 Particles outside the box will be wrapped into the box in the origin.
 '''
@@ -16,7 +16,8 @@ import sys
 import math
 import copy
 
-MAXD = 20.0
+## Threshold of distance of neighboring beads
+MAXD = 15.0
 
 if len(sys.argv) != 6:
     print 'Usage: SCRIPT [input DCD] [ID domain begin] [ID domain end] [Box size] [output DCD]'
@@ -84,7 +85,7 @@ while dcd.has_more_data() :
     data = dcd.read_onestep()
     
     ##########################################################
-    #重心が原点に重なるように並進
+    # Find most lateral coordinates
     max_xyz, min_xyz, L = find_max_min_PBC(data[ID_DOM_INI:ID_DOM_END+1])
 
     if L[0] > BOXSIZE or L[1] > BOXSIZE or L[2] > BOXSIZE:
