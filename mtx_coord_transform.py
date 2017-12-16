@@ -5,6 +5,7 @@ Created on 2013/06/28 (based on matrix_transform_make.py)
 @author: Naoto Hori
 '''
 
+import numpy as np
 from numpy import identity, dot
 from math import cos, sin
 
@@ -29,6 +30,12 @@ class mtx_crd_transform():
     def do_to_data(self,d):
         for i,v in enumerate(d):
             d[i][0:3] = dot(self.mtx, v+[1.0,])[0:3]
+
+    def do_to_ndarray(self,d):
+        n, _ = d.shape
+        for i in range(n):
+            v = np.concatenate( (d[i,0:3], [1.0,]) )
+            d[i,0:3] = dot(self.mtx, v)[0:3]
         
     def translation(self,x,y,z):
         '''並進移動'''
