@@ -36,7 +36,13 @@ class mtx_crd_transform():
         for i in range(n):
             v = np.concatenate( (d[i,0:3], [1.0,]) )
             d[i,0:3] = dot(self.mtx, v)[0:3]
-        
+
+    def do_to_1darray(self,d):
+        r = np.empty((3,))
+        v = np.concatenate( (d[0:3], [1.0,]) )
+        r[0:3] = dot(self.mtx, v)[0:3]
+        return r
+
     def translation(self,x,y,z):
         '''並進移動'''
         self.mtx[0,3] += x
