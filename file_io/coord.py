@@ -12,7 +12,7 @@ from cafysis.elements.error import MyError
 class CoordFile :
     def __init__(self, filename, nmp) :
         self._filename = filename
-	self._nmp = nmp
+        self._nmp = nmp
         
     def open_to_read(self):
         self._file = open(self._filename, 'rb')
@@ -32,12 +32,12 @@ class CoordFile :
     def read_onestep(self):
         """return 2-dimensional lists"""
         coord_matrix = []
-	
-	self._file.read(8)  # 0.000
+    
+        self._file.read(8)  # 0.000
         x = struct.unpack('d' * self._nmp, self._file.read(8*self._nmp))
-	self._file.read(8)  # 0.000
+        self._file.read(8)  # 0.000
         y = struct.unpack('d' * self._nmp, self._file.read(8*self._nmp))
-	self._file.read(8)  # 0.000
+        self._file.read(8)  # 0.000
         z = struct.unpack('d' * self._nmp, self._file.read(8*self._nmp))
         
         for i in xrange(self._nmp) :
@@ -55,17 +55,17 @@ class CoordFile :
        
     def write_onestep(self, coord_matrix):
         # for X
-	binary = struct.pack('d', 0.0)
+        binary = struct.pack('d', 0.0)
         for xyz in coord_matrix :
             binary += struct.pack('d', xyz[0])
         self._file.write(binary)
         # for Y
-	binary = struct.pack('d', 0.0)
+        binary = struct.pack('d', 0.0)
         for xyz in coord_matrix :
             binary += struct.pack('d', xyz[1])
         self._file.write(binary)
         # for Z
-	binary = struct.pack('d', 0.0)
+        binary = struct.pack('d', 0.0)
         for xyz in coord_matrix :
             binary += struct.pack('d', xyz[2])
         self._file.write(binary)
