@@ -136,7 +136,7 @@ for icls in range(ncls):
 f_out = open('%s.cls_%s.centroids' % (prefix, cutoff_char),'w')
 f_out.write('#clsID node  RMSD  RMSD/sqrt(nmp) <RMSD> <RMSD>/sqrt(nmp)\n')
 for icls in range(ncls):
-    f_out.write('%i %i %f %f %f %f\n' % (icls+1, cls_nearest_node[icls], 
+    f_out.write('%i %i %5.2f %f %5.2f %f\n' % (icls+1, cls_nearest_node[icls], 
             cls_nearest_RMSD[icls], cls_nearest_RMSD[icls]/math.sqrt(nmp),
             cls_average_RMSD[icls], cls_average_RMSD[icls]/math.sqrt(nmp)) )
 f_out.write('\n')
