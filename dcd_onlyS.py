@@ -9,7 +9,7 @@ if len(sys.argv) != 4:
     print 'Usage: SCRIPT [input DCD] [last index of RNA (count from 0)] [output DCD]'
     sys.exit(2)
 
-last_mp = int(sys.argv[2]
+last_mp = int(sys.argv[2])
 
 dcd = DcdFile(sys.argv[1])
 dcd.open_to_read()
