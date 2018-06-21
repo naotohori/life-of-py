@@ -2,20 +2,22 @@
 
 import sys
 
-if len(sys.argv) < 3:
-    print 'Usage: SCRIPT [rep file1] [[rep file2] [rep file3] ...] [output]'
+if len(sys.argv) < 4:
+    print 'Usage: SCRIPT [#replica] [rep file1] [[rep file2] [rep file3] ...] [output]'
     sys.exit(2)
 
-filenames = sys.argv[1:len(sys.argv)-1]
-f_out = open(sys.argv[-1], 'w')
+filenames = sys.argv[2:len(sys.argv)-1]
+f_out = open(sys.argv[-1], 'x')
 
-Nrep = 64
+Nrep = int(sys.argv[1])
 
 flows = [0]*(Nrep+1)
-travels = [0]*(Nrep+1)
-travel_times = [0]*(Nrep+1)
-last_visit = [0]*(Nrep+1)
+up = [0]*(Nrep+1)
+up_steps = [0]*(Nrep+1)
+down = [0]*(Nrep+1)
+down_steps = [0]*(Nrep+1)
 
+last_visit = [0]*(Nrep+1)
 memory = [0]*(Nrep+1)
 exchange = [0]*Nrep
 steps = 0
@@ -72,16 +74,16 @@ for ifile, filename in enumerate(filenames):
                 
                 if lbl == 1:
                     if flows[irep] == -1:
-                        travels[irep] += 1
-                        travel_times[irep] += steps - last_visit[irep]
+                        down[irep] += 1
+                        down_steps[irep] += steps - last_visit[irep]
 
                     flows[irep] = 1
                     last_visit[irep] = steps
 
                 elif lbl == Nrep:
                     if flows[irep] == 1:
-                        travels[irep] += 1
-                        travel_times[irep] += steps - last_visit[irep]
+                        up[irep] += 1
+                        up_steps[irep] += steps - last_visit[irep]
 
                     flows[irep] = -1
                     last_visit[irep] = steps
@@ -89,12 +91,28 @@ for ifile, filename in enumerate(filenames):
 
 f_out.write('#Exchange probabilities\n')
 for lbl in range(1, Nrep):
-    f_out.write('%i %i %i %f\n' % (lbl, lbl+1, exchange[lbl], exchange[lbl] / (0.5 * float(steps))))
+    f_out.write('%5i %5i %20i %8.4f\n' % (lbl, lbl+1, exchange[lbl], exchange[lbl] / (0.5 * float(steps))))
 
 f_out.write('\n\n')
 f_out.write('# Flow\n')
 for irep in range(1, Nrep+1):
-    if travels[irep] > 0:
-        f_out.write('%i %i %f\n'  % (irep, travels[irep], travel_times[irep]/travels[irep]))
+    f_out.write('%4i'  % irep)
+
+    f_out.write(' %10i' % up[irep])
+    if up[irep] > 0:
+        f_out.write(' %10.1f'  % (up_steps[irep]/float(up[irep]),))
     else:
-        f_out.write('%i %i Inf\n'  % (irep, travels[irep]))
+        f_out.write(' Inf')
+
+    f_out.write(' %10i' % down[irep])
+    if down[irep] > 0:
+        f_out.write(' %10.1f'  % (down_steps[irep]/float(down[irep]),))
+    else:
+        f_out.write(' Inf')
+
+    f_out.write(' %10i' % (up[irep] + down[irep],))
+    if up[irep] + down[irep] > 0:
+        f_out.write(' %10.1f\n'  % ((up_steps[irep]+down_steps[irep])/float(up[irep]+down[irep]),))
+    else:
+        f_out.write(' Inf\n')
+
