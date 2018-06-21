@@ -1,13 +1,21 @@
 #!/usr/bin/env python
 
 import sys
+import os
 
 if len(sys.argv) < 4:
     print 'Usage: SCRIPT [#replica] [rep file1] [[rep file2] [rep file3] ...] [output]'
     sys.exit(2)
 
 filenames = sys.argv[2:len(sys.argv)-1]
-f_out = open(sys.argv[-1], 'x')
+
+path_out = sys.argv[-1]
+if not os.path.isfile(path_out):
+    f_out = open(path_out, 'w')
+else:
+    print 'Error: the output file exsits. Please delete it first.'
+    sys.exit(2)
+#f_out = open(sys.argv[-1], 'x')  # For python 3. The if statement won't be needed.
 
 Nrep = int(sys.argv[1])
 
