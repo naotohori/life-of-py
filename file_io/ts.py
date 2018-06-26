@@ -97,6 +97,7 @@ class TsFile(object):
         self.head_str = None
         self.head_col = None
         self.flg_u_u = False
+        self.flg_all = False
         self.num_unit = 0
         
     def open_to_read(self):
@@ -140,8 +141,9 @@ class TsFile(object):
         # skip the first line of step 0
         self._file.readline()
         
-        #if self._file.readline().split()[0] != '#all':
-        #    raise MyError('TsFile','read_header','Bad format: #all')
+        if self._file.readline().split()[0] == '#all':
+            self.flg_all = True
+            #raise MyError('TsFile','read_header','Bad format: #all')
         
         self.num_unit = 0
         for l in self._file:
@@ -160,7 +162,7 @@ class TsFile(object):
         self._file.seek(0)
         for i in xrange(9):
             self._file.readline()
-        
+
     def write_header(self):
         for l in self.header_lines:
             self._file.write(l)
@@ -178,14 +180,31 @@ class TsFile(object):
         lines.append( self._file.readline() )
         
         ts_list = []
-        #for i in xrange(self.num_unit+1):
-        for i in xrange(self.num_unit):  # There is no "#all" line
-            l = self._file.readline()
-            lines.append(l)
-            ts_list.append(l.split()[1:])
+
+        if self.flg_all:
+            nlines = self.num_unit + 1
+        else:
+            nlines = self.num_unit
 
         if self.flg_u_u:
+            #for i in xrange(self.num_unit+1):
+            #for i in xrange(self.num_unit):  # There is no "#all" line
+            for i in xrange(nlines):
+                l = self._file.readline()
+                lines.append(l)
+                ts_list.append(l.split()[1:])
+
             for i in xrange(self.num_unit*(self.num_unit-1)/2):
+                l = self._file.readline()
+                lines.append(l)
+                ts_list.append(l.split()[1:])
+        else:
+            ts_list.append( lines[-1].split() )
+            #for i in xrange(self.num_unit+1):
+            #    l = self._file.readline()
+            #    lines.append(l)
+            #    ts_list.append(l.split())
+            for i in xrange(nlines):
                 l = self._file.readline()
                 lines.append(l)
                 ts_list.append(l.split()[1:])
