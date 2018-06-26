@@ -25,13 +25,15 @@ import copy
 ## Threshold of distance of neighboring beads
 MAXD = 50.0
 
-if len(sys.argv) != 7:
-    print 'Usage: SCRIPT [input DCD] [input PDB] [ID domain begin] [ID domain end] [Box size] [output DCD]'
+if len(sys.argv) != 9:
+    print 'Usage: SCRIPT [input DCD] [input PDB] [ID domain begin] [ID domain end] [ID for fit begin] [ID for fit end] [Box size] [output DCD]'
     sys.exit(2)
 
 ID_DOM_INI = int(sys.argv[3]) - 1  # 重心を求める際に必要
 ID_DOM_END = int(sys.argv[4]) - 1
-BOXSIZE = float(sys.argv[5])
+ID_DOM_INI_FIT = int(sys.argv[5]) - 1  # 重心を求める際に必要
+ID_DOM_END_FIT = int(sys.argv[6]) - 1
+BOXSIZE = float(sys.argv[7])
 
 BOXMAX = 0.5 * BOXSIZE
 BOXMIN = -0.5 * BOXSIZE
@@ -64,8 +66,8 @@ for chain in ref_chains :
             i += 1
 pdb.close()
 
-ref_idx = [i for i in range(ID_DOM_INI, ID_DOM_END+1)]
-pre_idx = [i for i in range(ID_DOM_INI, ID_DOM_END+1)]
+ref_idx = [i for i in range(ID_DOM_INI_FIT, ID_DOM_END_FIT+1)]
+pre_idx = [i for i in range(ID_DOM_INI_FIT, ID_DOM_END_FIT+1)]
 
 
 # header
@@ -127,10 +129,10 @@ while dcd.has_more_data() :
     ### Wrapping the molecule to do bestfit
 
     # Find most lateral coordinates
-    max_xyz, min_xyz, L = find_max_min_PBC(data[ID_DOM_INI:ID_DOM_END+1])
+    max_xyz, min_xyz, L = find_max_min_PBC(data[ID_DOM_INI_FIT:ID_DOM_END_FIT+1])
 
     if L[0] > BOXSIZE or L[1] > BOXSIZE or L[2] > BOXSIZE:
-        print ('Warning: L exceeds BOXSIZE at frame %i' % iframe)
+        print ('Warning: (1) L exceeds BOXSIZE at frame %i' % iframe)
 
     mtx_move = mtx_crd_transform()
     #mtx_move.reset()
@@ -155,18 +157,33 @@ while dcd.has_more_data() :
     max_xyz, min_xyz, L = find_max_min_PBC(data[ID_DOM_INI:ID_DOM_END+1])
 
     if L[0] > BOXSIZE or L[1] > BOXSIZE or L[2] > BOXSIZE:
-        print ('Warning: L exceeds BOXSIZE at frame %i' % iframe)
+        print ('Warning: (2) L exceeds BOXSIZE at frame %i' % iframe)
+
+    move = [0.0, 0.0, 0.0]
+    if max_xyz[0] > 0.5*L[0]:
+        move[0] = 0.5*L[0] - max_xyz[0]
+    if max_xyz[1] > 0.5*L[1]:
+        move[1] = 0.5*L[1] - max_xyz[1]
+    if max_xyz[2] > 0.5*L[2]:
+        move[2] = 0.5*L[2] - max_xyz[2]
+    if min_xyz[0] < -0.5*L[0]:
+        move[0] = - 0.5*L[0] - min_xyz[0]
+    if min_xyz[1] < -0.5*L[1]:
+        move[1] = - 0.5*L[1] - min_xyz[1]
+    if min_xyz[2] < -0.5*L[2]:
+        move[2] = - 0.5*L[2] - min_xyz[2]
 
     mtx_move = mtx_crd_transform()
     #mtx_move.reset()
-    mtx_move.translation(0.5*L[0] - max_xyz[0],
-                         0.5*L[1] - max_xyz[1],
-                         0.5*L[2] - max_xyz[2])
+    #mtx_move.translation(0.5*L[0] - max_xyz[0],
+    #                     0.5*L[1] - max_xyz[1],
+    #                     0.5*L[2] - max_xyz[2])
+    mtx_move.translation( move[0], move[1], move[2] )
     
     mtx_move.do_to_ndarray(data)
 
     ##########################################################
-    # Wrap particles outside the box at the orgin
+    # Wrap particles outside the box at the origin
     wrap(data)
 
     dcd_out.write_onestep(data) 

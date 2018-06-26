@@ -1,9 +1,9 @@
 #!/bin/sh
 
-CF2PYC='gnu'
-
-#CF2PYF='gnu95'
-CF2PYF='gfortran'
+#CF2PYC='gnu'
+#
+##CF2PYF='gnu95'
+#CF2PYF='gfortran'
 
 #f2py -c -m py_bestfit --fcompiler=intel --compiler=intel bestfit.F90 dsvdc.f
 #f2py -c -m py_bestfit --f90exec=/opt/intel/bin/ifort bestfit.F90 dsvdc.f
@@ -19,13 +19,15 @@ CF2PYF='gfortran'
 #f2py -c -m py_distance2_hist_nt --fcompiler=intelem --compiler=intelem distance2_hist_nt.F90
 #f2py -c -m py_distance_count_within --fcompiler=intelem --compiler=intelem distance_count_within.F90
 #f2py -c -m py_contact --fcompiler=intelem --compiler=intelem contact.F90
+f2py -c -m py_find_max_min_pbc --fcompiler=intelem --compiler=intelem --f90flags="-fast" find_max_min_pbc.F90
+f2py -c -m py_wrap --fcompiler=intelem --compiler=intelem --f90flags="-fast" wrap.F90
 
 # Mac
-f2py -c -m py_bestfit --fcompiler=$CF2PYF bestfit.F90 dsvdc.f
-f2py -c -m py_drid --fcompiler=$CF2PYF drid.F90
-f2py -c -m py_ddrid --fcompiler=$CF2PYF ddrid.F90
-f2py -c -m py_distance2_hist --fcompiler=$CF2PYF distance2_hist.F90
-f2py -c -m py_count_bound --fcompiler=$CF2PYF count_bound.F90
-f2py -c -m py_dcd_r2_histogram --fcompiler=$CF2PYF dcd_r2_histogram.F90
-f2py -c -m py_distance2_hist_nt --fcompiler=$CF2PYF distance2_hist_nt.F90
-f2py -c -m py_distance_count_within --fcompiler=$CF2PYF distance_count_within.F90
+#f2py -c -m py_bestfit --fcompiler=$CF2PYF bestfit.F90 dsvdc.f
+#f2py -c -m py_drid --fcompiler=$CF2PYF drid.F90
+#f2py -c -m py_ddrid --fcompiler=$CF2PYF ddrid.F90
+#f2py -c -m py_distance2_hist --fcompiler=$CF2PYF distance2_hist.F90
+#f2py -c -m py_count_bound --fcompiler=$CF2PYF count_bound.F90
+#f2py -c -m py_dcd_r2_histogram --fcompiler=$CF2PYF dcd_r2_histogram.F90
+#f2py -c -m py_distance2_hist_nt --fcompiler=$CF2PYF distance2_hist_nt.F90
+#f2py -c -m py_distance_count_within --fcompiler=$CF2PYF distance_count_within.F90
