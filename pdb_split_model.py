@@ -7,17 +7,18 @@ Created on 2013/08/05
 
 import sys
 
-if len(sys.argv) != 3:
-    print 'Usage SCRIPT [input pdb] [output prefix]'
+if len(sys.argv) != 4:
+    print 'Usage SCRIPT [input pdb] [digit of IDs] [output prefix]'
     sys.exit(2)
     
 f_in = open(sys.argv[1])
-pfx = sys.argv[2]
+n_digit = int(sys.argv[2])
+pfx = sys.argv[3]
 
 flg_open = False
 for l in f_in:
     if l[0:5] == 'MODEL':
-        filename = pfx + ('%0.8i' % int(l[5:])) + '.pdb'
+        filename = pfx + ('%0*i' % (n_digit, int(l.split()[1]))) + '.pdb'
         f_out = open(filename,'w')
         flg_open = True
     elif (l[0:6] == 'REMARK' or l[0:4] == 'ATOM'   or
