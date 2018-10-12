@@ -17,8 +17,15 @@ def count(path):
 
     icount = 0
     while dcd.has_more_data():
-        dcd.skip(1)
-        icount += 1
+        try:
+            dcd.skip(1)
+            icount += 1
+        except EOFError:
+            icount += 1
+            print ('There is another frame at the end, that is not written completely.')
+            break
+        except:
+            break
 
     dcd.close()
 
@@ -31,4 +38,4 @@ if __name__ == "__main__":
         print ('Usage: SCRIPT [dcd file]')
         sys.exit(2)
 
-    print ('# frames = ', count(sys.argv[1]))
+    print ('# frames = %i' % (count(sys.argv[1])))
