@@ -21,9 +21,9 @@ class MyError(Exception) :
         self._title = title
         
     def show(self):
-        print 'class:', self._class
-        print 'function:', self._func
-        print 'matter:', self._title
+        print('class:', self._class)
+        print('function:', self._func)
+        print('matter:', self._title)
 
 ############################
 # cafysis.file_io.dcd
@@ -43,17 +43,17 @@ class DcdHeader(object):
         
     def show(self):
         for line in self.title :
-            print line
-        print 'nset', self.nset
-        print 'istart', self.istart
-        print 'nstep_save', self.nstep_save
-        print 'nstep', self.nstep
-        print 'nunit_real', self.nunit_real
-        print 'delta', self.delta
-        print 'tempk', self.tempk
-        for i in xrange(self.nunit_real) :
-            print 'lunit2mp[', i, ']', self.lunit2mp[i]
-        print 'nmp_real', self.nmp_real
+            print(line)
+        print('nset', self.nset)
+        print('istart', self.istart)
+        print('nstep_save', self.nstep_save)
+        print('nstep', self.nstep)
+        print('nunit_real', self.nunit_real)
+        print('delta', self.delta)
+        print('tempk', self.tempk)
+        for i in range(self.nunit_real) :
+            print('lunit2mp[', i, ']', self.lunit2mp[i])
+        print('nmp_real', self.nmp_real)
         
 class DcdFile :
     def __init__(self, filename) :
@@ -98,7 +98,7 @@ class DcdFile :
         #self._header.tempk = float(bdata[3].strip('\0 '))
         self._header.tempk = float(bdata[3])
         self._header.lunit2mp = []
-        for i in xrange(self._header.nunit_real) :
+        for i in range(self._header.nunit_real) :
 #            self._header.lunit2mp.append(int(bdata[i + 4].strip('\0 ')))
             self._header.lunit2mp.append(int(bdata[i + 4]))
             
@@ -137,7 +137,7 @@ class DcdFile :
         
         p = struct.pack('80s', str(self._header.tempk))
         binary += re_null.sub(' ', p)
-        for i in xrange(self._header.nunit_real) :
+        for i in range(self._header.nunit_real) :
             p = struct.pack('80s', str(self._header.lunit2mp[i]))
             binary += re_null.sub(' ', p)
             
@@ -170,7 +170,7 @@ class DcdFile :
         b = self._pick_data()
         z = struct.unpack('f' * self._header.nmp_real, b)
         
-        for i in xrange(self._header.nmp_real) :
+        for i in range(self._header.nmp_real) :
             xyz = [x[i], y[i], z[i]]
             coord_matrix.append(xyz)
         
@@ -185,7 +185,7 @@ class DcdFile :
         self._file.seek(4+num, os.SEEK_CUR)
      
     def skip(self, num):
-        for i in xrange(num):
+        for i in range(num):
             self.skip_onestep()
        
     def write_onestep(self, coord_matrix):
@@ -230,7 +230,7 @@ class DcdFile :
     def _read_at(self, num):
         self._file.seek(0)
         self.read_header()
-        for i in xrange(num - 1) :
+        for i in range(num - 1) :
             self.read_onestep()
         return self.read_onestep()
         
@@ -239,7 +239,7 @@ class DcdFile :
 ############################
 if __name__ == '__main__':
     if len(sys.argv) < 4:
-        print 'Usage: % SCRIPT [DCD1] [DCD2] ([DCD3] ...) [output DCD]'
+        print('Usage: % SCRIPT [DCD1] [DCD2] ([DCD3] ...) [output DCD]')
         sys.exit(2)
         
     # Number of input DCD files
@@ -251,7 +251,7 @@ if __name__ == '__main__':
     
     # Count the total frame number
     num_frame = 1
-    for i in xrange(1,num_dcd) :
+    for i in range(1,num_dcd) :
         f_in = DcdFile(sys.argv[i])
         f_in.open_to_read()
         f_in.read_header()
@@ -274,17 +274,17 @@ if __name__ == '__main__':
     header.nstep = num_step
     f_out.set_header(header)
     f_out.write_header()
-    print sys.argv[1], f_in.get_header().nset
+    print(sys.argv[1], f_in.get_header().nset)
     while f_in.has_more_data() :
         f_out.write_onestep(f_in.read_onestep())
     f_in.close()
     
-    for i in xrange(2,num_dcd+1) :
+    for i in range(2,num_dcd+1) :
         f_in = DcdFile(sys.argv[i])
         f_in.open_to_read()
         f_in.read_header()
         f_in.skip_onestep()  # skip the first step
-        print sys.argv[i], f_in.get_header().nset - 1
+        print(sys.argv[i], f_in.get_header().nset - 1)
         while f_in.has_more_data() :
             f_out.write_onestep(f_in.read_onestep())
         f_in.close()

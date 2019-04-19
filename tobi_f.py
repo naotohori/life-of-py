@@ -26,8 +26,8 @@ class TobiParam(object):
         self._check(self.r2)
         self.param1 = np.zeros((self.NUM_PARA, self.NUM_PARA))
         self.param2 = np.zeros((self.NUM_PARA, self.NUM_PARA))
-        for i in xrange(self.NUM_PARA):
-            for j in xrange(self.NUM_PARA):
+        for i in range(self.NUM_PARA):
+            for j in range(self.NUM_PARA):
                 self.param1[i,j] = self.r1[(i,j)]
                 self.param2[i,j] = self.r2[(i,j)]
         
@@ -36,23 +36,23 @@ class TobiParam(object):
         f = open(filename, 'r')
         
         col = f.readline().split()[1:]
-        for i in xrange(ntype):
+        for i in range(ntype):
             l = f.readline()
             lsp = l.split()
             if lsp[0] != col[i]:
-                print 'Error: lsp[0]!=col[0]'
+                print('Error: lsp[0]!=col[0]')
                 sys.exit(2)
-            for m in xrange(ntype):
+            for m in range(ntype):
                 para[(TYPE2I[col[i]],TYPE2I[col[m]])] = float(lsp[m+1])
         f.close()
         
     def _check(self,para):
-        for mn in para.keys():
+        for mn in list(para.keys()):
             nm = (mn[1],mn[0])
             if para[mn] != para[nm]:
-                print 'Error: inconsistent'
-                print 'para[',mn,']=',para[mn]
-                print 'para[',nm,']=',para[nm]
+                print('Error: inconsistent')
+                print('para[',mn,']=',para[mn])
+                print('para[',nm,']=',para[nm])
     
 def get_atom_type(res, atom):
     if atom == 'N':
@@ -108,7 +108,7 @@ def get_atom_type(res, atom):
     elif res == 'CYS' and atom == 'SG':
         return TYPE2I['CSg']
     else:
-        print 'Error: get_atom_type in tobi.py'
+        print('Error: get_atom_type in tobi.py')
         sys.exit(2)
         
 def accept_residue(res):
@@ -172,8 +172,8 @@ def calc_tobi_for_pdb(pdb_filepath):
     xyz = np.zeros((3,max(num_atom),num_chain))
     atom2type = np.zeros( (max(num_atom),num_chain), dtype=np.int)
     
-    for ichain in xrange(num_chain):
-        for iatom in xrange(num_atom[ichain]):
+    for ichain in range(num_chain):
+        for iatom in range(num_atom[ichain]):
             c = atoms_chain[ichain][iatom].get_coord()
             xyz[0,iatom,ichain] = c[0]
             xyz[1,iatom,ichain] = c[1]
@@ -190,8 +190,8 @@ def calc_tobi_for_pdb(pdb_filepath):
 if __name__ == "__main__":
     
     if not len(sys.argv) in (2,3):
-        print 'Usage: SCRIPT [input PDB]'
-        print 'Usage: SCRIPT [input PDB dir] [output file]'
+        print('Usage: SCRIPT [input PDB]')
+        print('Usage: SCRIPT [input PDB dir] [output file]')
         sys.exit(2)
         
     import os
@@ -202,9 +202,9 @@ if __name__ == "__main__":
     if len(sys.argv) == 2:
         ene = calc_tobi_for_pdb(sys.argv[1])
         
-        for i in xrange(len(ene)):
-            for j in xrange(i+1,len(ene)):
-                print i+1,j+1,ene[i,j]    
+        for i in range(len(ene)):
+            for j in range(i+1,len(ene)):
+                print(i+1,j+1,ene[i,j])    
                 
     elif len(sys.argv) == 3:
         import glob
@@ -216,8 +216,8 @@ if __name__ == "__main__":
             
             ene = calc_tobi_for_pdb(pdbfilepath)
             
-            for i in xrange(len(ene)):
-                for j in xrange(i+1,len(ene)):
+            for i in range(len(ene)):
+                for j in range(i+1,len(ene)):
                     outfile.write('%s %i %i %12.6f\n' 
                       % ( os.path.basename(pdbfilepath)[:-4], i+1, j+1, ene[i,j]))
             

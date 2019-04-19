@@ -8,7 +8,7 @@ Created on 2013/08/01
 import sys
 
 if len(sys.argv) != 2:
-    print ' Usage: % SCRIPT [ts file]'
+    print(' Usage: % SCRIPT [ts file]')
     sys.exit(2)
     
 tsfilename = sys.argv[1]

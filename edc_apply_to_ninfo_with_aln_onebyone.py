@@ -48,7 +48,7 @@ for line in f_dist :
     #     Jenner             Dunkle
     imp_Jenner = int(linesp[1])
     imp_Dunkle = int(linesp[3])
-    if aln.has_key(imp_Jenner) :
+    if imp_Jenner in aln :
         aln[imp_Jenner] = aln[imp_Jenner] + (imp_Dunkle,)
     else :
         aln[imp_Jenner] = (imp_Dunkle,)
@@ -64,18 +64,18 @@ for line in f_edc :
     linesp = line.split()
     imp1_orig = int(linesp[3])
     imp2_orig = int(linesp[9])
-    if aln.has_key(imp1_orig):
+    if imp1_orig in aln:
         imp1_tp = aln[imp1_orig]
     else :
         continue
-    if aln.has_key(imp2_orig):
+    if imp2_orig in aln:
         imp2_tp = aln[imp2_orig]
     else :
         continue
     for imp1 in imp1_tp :
         for imp2 in imp2_tp :
             if (imp1, imp2) in energys :
-                print ('Error: (imp1,imp2) in energys = True',imp1_orig,imp2_orig,imp1,imp2)
+                print(('Error: (imp1,imp2) in energys = True',imp1_orig,imp2_orig,imp1,imp2))
             energys[(imp1,imp2)] = float(linesp[15])
 f_edc.close()
     

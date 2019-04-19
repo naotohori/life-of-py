@@ -6,11 +6,11 @@ Created on 2016/06/17
 '''
 
 import sys
-from file_io.pdb import PdbFile
+from .file_io.pdb import PdbFile
 
 if __name__ == '__main__':
     if len(sys.argv) != 3:
-        print 'Usage: %SCRIPT [input PDB file] [output]'
+        print('Usage: %SCRIPT [input PDB file] [output]')
         sys.exit(2)
 
 f_pdb = PdbFile(sys.argv[1])
@@ -19,7 +19,7 @@ chains = f_pdb.read_all()
 f_pdb.close()
 
 if len(chains) != 1:
-    print 'len(chains) != 1'
+    print('len(chains) != 1')
     sys.exit(2)
 
 f_out = open(sys.argv[-1],'w')

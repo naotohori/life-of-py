@@ -7,9 +7,9 @@ import sys
 from cafysis.file_io.pdb import PdbFile
 
 if len(sys.argv) != 5 :
-    print ''
-    print ' Usage: SCRIPT [input PDB] [The residue number of the first a.a.] [output PDB] [log file]'
-    print ''
+    print('')
+    print(' Usage: SCRIPT [input PDB] [The residue number of the first a.a.] [output PDB] [log file]')
+    print('')
     sys.exit(2)
     
 pdb_in = PdbFile(sys.argv[1])
@@ -21,7 +21,7 @@ res_id = int(sys.argv[2])
 f_log = open(sys.argv[4], 'w')
 f_log.write('#original -> new\n')
 for c in chains :
-    print sys.argv[1], '#residues', len(c.residues)
+    print(sys.argv[1], '#residues', len(c.residues))
     for r in c.residues :
         f_log.write('%i %s -> %i\n' % (r.atoms[0].res_seq, r.atoms[0].ins_code, res_id))
         for a in r.atoms :

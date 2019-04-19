@@ -8,7 +8,7 @@ from cafysis.file_io.ninfo import NinfoFile
 from cafysis.elements.ninfo import NinfoSet
 
 if len(sys.argv) < 4 :
-    print "Usage: SCRIPT [input ninfo] [factor] [unit ID ...] [output ninfo]"
+    print("Usage: SCRIPT [input ninfo] [factor] [unit ID ...] [output ninfo]")
     sys.exit(2)
     
 f_ninfo_in = NinfoFile(sys.argv[1])

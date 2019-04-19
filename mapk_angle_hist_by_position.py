@@ -8,8 +8,8 @@ import math
 from numpy import histogram
 
 if len(sys.argv) != 8:
-    print 'Usage: SCRIPT [angle data] [polar data] [theta from] [theta to] [phi from] [phi to] [output prefix]'
-    print ' (theta and phi is in the unit of degree)'
+    print('Usage: SCRIPT [angle data] [polar data] [theta from] [theta to] [phi from] [phi to] [output prefix]')
+    print(' (theta and phi is in the unit of degree)')
     sys.exit(2)
     
 file_in = open(sys.argv[1],'r')
@@ -32,7 +32,7 @@ COL_POL_THETA = 4 - 1
 COL_POL_PHI = 5 - 1
 
 #theta_bins = [x*5.0 for x in xrange(0,37)] #  5度
-theta_bins = [x*10.0 for x in xrange(0,19)] # 10度
+theta_bins = [x*10.0 for x in range(0,19)] # 10度
 #theta_bins = [x*15.0 for x in xrange(0,13)] #  15度
 
 
@@ -69,8 +69,8 @@ for l in file_in:
     weight.append(1.0/math.sin(math.radians(t)))
 
 if num_ang != num_pol:
-    print 'Error: angle data and polar coordinate data are inconsistent!'
-    print 'ABORT'
+    print('Error: angle data and polar coordinate data are inconsistent!')
+    print('ABORT')
     sys.exit(2)
         
         

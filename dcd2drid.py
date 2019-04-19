@@ -14,8 +14,8 @@ import cafysis.lib_f2py.py_drid as py_drid
 import numpy as np
 
 if len(sys.argv) not in (4,5):
-    print 'Usage: % SCRIPT [input DCD] [mask file] [output DRID]'
-    print '  or : % SCRIPT [input DCD] [mask file] [# solute in DCD] [output DRID]'
+    print('Usage: % SCRIPT [input DCD] [mask file] [output DRID]')
+    print('  or : % SCRIPT [input DCD] [mask file] [# solute in DCD] [output DRID]')
     sys.exit(2)
 
 dcd = DcdFile(sys.argv[1])
@@ -34,7 +34,7 @@ if len(sys.argv) == 5:
     flg_solute = True
     nsolute = int(sys.argv[3])
     if len(mask) != nsolute or len(mask[0]) != nsolute:
-        print 'Error: # solute and size of mask is not consistent'
+        print('Error: # solute and size of mask is not consistent')
         sys.exit(2)
 
 drid = DridFile(sys.argv[-1])

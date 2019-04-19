@@ -33,7 +33,7 @@ for ic, c1 in enumerate(chains1):
         print ('Error: c1.num_atom() != c2.num_atom()')
         sys.exit(2)
         
-    for i in xrange(c1.num_atom()):
+    for i in range(c1.num_atom()):
         a1 = c1.get_atom(i)
         a2 = c2.get_atom(i)
         v = (a2.xyz.x - a1.xyz.x, a2.xyz.y - a1.xyz.y, a2.xyz.z - a1.xyz.z)

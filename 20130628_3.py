@@ -21,7 +21,7 @@ import sys
 from math import atan2, sqrt, acos
 
 if len(sys.argv) != 3:
-    print 'Usage: SCRIPT [input DCD] [output file]'
+    print('Usage: SCRIPT [input DCD] [output file]')
     sys.exit(2)
 
 #RESIDUE_TOTAL = 868
@@ -48,7 +48,7 @@ while dcd.has_more_data() :
     #Fus3(1-353)の重心
     com = [0.0] * 3
     n_com = ID_FUS3_DOM_END - ID_FUS3_DOM_INI + 1
-    for i in xrange(ID_FUS3_DOM_INI, ID_FUS3_DOM_END+1):
+    for i in range(ID_FUS3_DOM_INI, ID_FUS3_DOM_END+1):
         com[0] += data[i][0]
         com[1] += data[i][1]
         com[2] += data[i][2]

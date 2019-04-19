@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
 import sys
-from file_io.ninfo import NinfoFile
-from elements.ninfo import NinfoSet
+from .file_io.ninfo import NinfoFile
+from .elements.ninfo import NinfoSet
 
 if len(sys.argv) < 7 or len(sys.argv)%1 != 0 :
     print ('Usage: SCRIPT [edc residue file] [ninfo file] [edc Amber mdout file] [(ID begin, ID end)...] [out file]')
@@ -38,7 +38,7 @@ class mpinfo :
         self.mp_name = ''
         self.ires_amber = 0
     def show(self):
-        print self.ichain, self.ires, self.imp, self.imp, self.ires_l, self.imp_l, self.res_name, self.mp_name, self.ires_amber
+        print(self.ichain, self.ires, self.imp, self.imp, self.ires_l, self.imp_l, self.res_name, self.mp_name, self.ires_amber)
         
 cafemp2mpinfo = {}
 for line in f_residue :
@@ -146,7 +146,7 @@ for con in ninfo.contacts :
                                  mpinfo2.ichain, mpinfo2.ires, mpinfo2.res_name, imp2, mpinfo2.mp_name,
                                  ires_amber1, ires_amber2, energy) )
 
-for unitpair in edcinfo.keys() :
+for unitpair in list(edcinfo.keys()) :
     f_out.write('#unit %i %i\n' % unitpair)
     f_out.write('#c1   res1 res1    mp1 mp1 |  c2   res2 res2    mp2 mp2 | amber1 amber2 | energy\n')
     for info in edcinfo[unitpair] :

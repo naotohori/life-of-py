@@ -22,7 +22,7 @@ def dcd_concatenate(filepaths):
     
     # Count the total frame number
     num_frame = 1
-    for i in xrange(0,num_dcd-1) :
+    for i in range(0,num_dcd-1) :
         f_in = DcdFile(filepaths[i])
         f_in.open_to_read()
         f_in.read_header()
@@ -51,7 +51,7 @@ def dcd_concatenate(filepaths):
         f_out.write_onestep(f_in.read_onestep())
     f_in.close()
     
-    for i in xrange(1,num_dcd) :
+    for i in range(1,num_dcd) :
         f_in = DcdFile(filepaths[i])
         f_in.open_to_read()
         f_in.read_header()
@@ -69,8 +69,8 @@ def dcd_concatenate(filepaths):
 
 if __name__ == '__main__':
     if len(sys.argv) < 4:
-        print 'Usage: % SCRIPT [DCD1] [DCD2] ([DCD3] ...) [output DCD]'
+        print('Usage: % SCRIPT [DCD1] [DCD2] ([DCD3] ...) [output DCD]')
         sys.exit(2)
     n_frames = dcd_concatenate(sys.argv[1:])
     for i,n in enumerate(n_frames):
-        print 'file ',i+1,': ', n
+        print('file ',i+1,': ', n)

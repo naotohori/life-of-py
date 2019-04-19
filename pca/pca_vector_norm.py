@@ -17,7 +17,7 @@ for line in f_vec :
     vec.append(float(line))
 f_vec.close()
     
-print ('dimension = %i' % len(vec))
+print(('dimension = %i' % len(vec)))
 
 #norm = 0.0
 #for v in vec :
@@ -25,12 +25,12 @@ print ('dimension = %i' % len(vec))
 #    
 #norm = math.sqrt(norm)
 
-for i in xrange(len(vec)/3) :
+for i in range(len(vec)/3) :
     a = vec[3*i]**2 + vec[3*i+1]**2 + vec[3*i+2]**2
-    print ('%i %30.20f' % (3*i, math.sqrt(a)))
+    print(('%i %30.20f' % (3*i, math.sqrt(a))))
     
 value_norm = norm(vec)
-print ('norm = %f' % value_norm)
+print(('norm = %f' % value_norm))
 
 if len(sys.argv) == 3:
     f_out = open(sys.argv[2], 'w')

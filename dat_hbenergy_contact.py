@@ -48,7 +48,7 @@ for d in dirs:
     rnd = d_sp[-1]
     type_pNcM = d.split('/')[-3][0:2]
     if type_pNcM not in ('pN','cM'):
-        print 'Error: not pN nor cM'
+        print('Error: not pN nor cM')
         sys.exit(2)
     simulations.append((type_pNcM,cM,frc,rnd))
 
@@ -61,8 +61,8 @@ for sim in simulations:
     os.chdir('%s/%s%s/%s_%s_%s' % (orig_dir, type_pNcM, cM, cM, frc, rnd))
 
     if not os.path.exists('Energies2_HB.dat'):
-        print ('Warning: No file Energies2_HB.dat in (type_pNcM, cM, frc, rnd)=(%s,%s,%s,%s)' 
-              % (type_pNcM, cM, frc, rnd) )
+        print(('Warning: No file Energies2_HB.dat in (type_pNcM, cM, frc, rnd)=(%s,%s,%s,%s)' 
+              % (type_pNcM, cM, frc, rnd) ))
         continue
 
     if os.path.exists(filename_out):

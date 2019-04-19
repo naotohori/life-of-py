@@ -10,7 +10,7 @@ from cafysis.para.rnaDT13 import DT13
 from cafysis.elements.ninfo import NinfoSet, BondLength, BondAngle, BaseStackDT, HBondDT
 
 if len(sys.argv) != 4:
-    print 'Usage: SCRIPT [cg pdb] [hb list file] [output ninfo]'
+    print('Usage: SCRIPT [cg pdb] [hb list file] [output ninfo]')
     sys.exit(2)
 
 f_in = PdbFile(sys.argv[1])
@@ -23,19 +23,19 @@ f_in.close()
 #n_mp = 3 * n_nt - 1
 
 if len(chains) > 1:
-    print 'Error: currently more than one chain can not be processed.'
+    print('Error: currently more than one chain can not be processed.')
     sys.exit(2)
 
 chain = chains[0]
 n_nt = chain.num_res()
-print '#nt: ', n_nt
+print('#nt: ', n_nt)
 
 seq = []
 for r in chain.residues:
     # "RA " ---> "A"
     seq.append(r.atoms[0].res_name.strip()[1])
-print 'Sequence:'
-print seq
+print('Sequence:')
+print(seq)
 
 ns = NinfoSet()
 
@@ -256,12 +256,12 @@ for l in open(sys.argv[2],'r'):
     ## Check
     if lsp[0] == 'CAN':
         if lsp[2] != 'B' or lsp[4] != 'B':
-            print 'Error: Canonical base pair should be by B and B'
+            print('Error: Canonical base pair should be by B and B')
             sys.exit(2)
     elif lsp[0] == 'NON':
         pass
     else:
-        print 'Error: unknown H-bond type'
+        print('Error: unknown H-bond type')
         sys.exit(2)
 
     hblist.append((lsp[0],int(lsp[1]),lsp[2],int(lsp[3]),lsp[4],int(lsp[5])))
@@ -300,7 +300,7 @@ def hb_ARNA_native(i,j):
         dih2 = ARNA.HBD_PSGC
         nHB = 3
     else:
-        print 'Canonical basepair should be A-U or G-C: ',i,j
+        print('Canonical basepair should be A-U or G-C: ',i,j)
         sys.exit(2)
     return dist, ang1, ang2, dih0, dih1, dih2, nHB
 

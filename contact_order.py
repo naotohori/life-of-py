@@ -18,7 +18,7 @@ CUTOFF = 8.0
 import sys
 
 if len(sys.argv) != 2:
-    print 'Usage: SCRIPT [pairdist.dat]'
+    print('Usage: SCRIPT [pairdist.dat]')
     sys.exit(2)
 
 
@@ -47,8 +47,8 @@ for l in open(sys.argv[1],'r'):
     s += sij
     m += 1
 
-print 's: ',s
-print 'm: ',m
-print 'n: ',n
-print 'ACO: ', s / float(m)
-print 'RCO: ', s / float(m*n)
+print('s: ',s)
+print('m: ',m)
+print('n: ',n)
+print('ACO: ', s / float(m))
+print('RCO: ', s / float(m*n))

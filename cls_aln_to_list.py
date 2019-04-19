@@ -40,7 +40,7 @@ class AlnFile :
             line = self._file.readline()
                 
         length = len(al.seq[0])
-        for idx in xrange(len(al.names)) :
+        for idx in range(len(al.names)) :
             if len(al.seq[idx]) != length :
                 raise Error('AlnFile', 'read_all', 'al.seq[idx] != length')
             
@@ -69,18 +69,18 @@ class AlnFile :
 #            else :
 #                raise Error('AlnFile', 'read_all', 'unknown letter in seq_idnt')
         
-        for i in xrange(length) :
+        for i in range(length) :
             ref = al.seq[0][i]
             flg = True 
-            for idx in xrange(len(al.names)) :
+            for idx in range(len(al.names)) :
                 if al.seq[idx][i] != ref :
                     flg = False
                     break
             al.loc2idnt.append(flg)
                 
-        for i in xrange(length) :
+        for i in range(length) :
             flg = True
-            for idx in xrange(len(al.names)) :
+            for idx in range(len(al.names)) :
                 if al.seq[idx][i] == '-' :
                     flg = False
                     break
@@ -129,16 +129,16 @@ f_out = open(sys.argv[2], 'w')
 
 al = f_aln.read_all()
 
-for i in xrange(al.length) :
-    print al.seq[0][i], al.seq[1][i], al.loc2res[0][i], al.loc2res[1][i], al.loc2idnt[i], al.gap[i]
-print 'al.loc2res'
-print al.loc2res[0]
-print 'al.res2loc'
-print al.res2loc[0]
-print 'loc2idnt'
-print al.loc2idnt
-print 'idnt2loc'
-print al.idnt2loc
+for i in range(al.length) :
+    print(al.seq[0][i], al.seq[1][i], al.loc2res[0][i], al.loc2res[1][i], al.loc2idnt[i], al.gap[i])
+print('al.loc2res')
+print(al.loc2res[0])
+print('al.res2loc')
+print(al.res2loc[0])
+print('loc2idnt')
+print(al.loc2idnt)
+print('idnt2loc')
+print(al.idnt2loc)
 
 # write header
 f_out.write('#')
@@ -147,11 +147,11 @@ for name in al.names :
 f_out.write('\n')
 
 # write data
-for i in xrange(al.length) :
+for i in range(al.length) :
     if al.gap[i] :
         continue
     f_out.write(' ')
-    for idx in xrange(len(al.names)) :
+    for idx in range(len(al.names)) :
         f_out.write(' %5i' % al.loc2res[idx][i])
     f_out.write('\n')
 

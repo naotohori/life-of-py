@@ -7,7 +7,7 @@ from cafysis.elements.coord import Coord
 import sys
 
 if len(sys.argv) != 3:
-    print 'Usage: SCRIPT [input aa PDB] [output cg PDB]'
+    print('Usage: SCRIPT [input aa PDB] [output cg PDB]')
     sys.exit(2)
 
 ATOMS_P = ('P', 'OP1', 'OP2')

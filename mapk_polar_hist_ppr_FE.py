@@ -29,10 +29,10 @@
 import sys
 import math
 from numpy import histogram, histogram2d, zeros
-from gnu_data import convert_array_for3D
+from .gnu_data import convert_array_for3D
 
 if len(sys.argv) != 3:
-    print 'Usage: SCRIPT [input data] [output prefix]'
+    print('Usage: SCRIPT [input data] [output prefix]')
     sys.exit(2)
     
 file_in = open(sys.argv[1],'r')
@@ -42,22 +42,22 @@ COL_DIST = 1 - 1
 COL_THETA = 4 - 1
 COL_PHI = 5 - 1
 
-phi_bins = [x*10.0 for x in xrange(-18,19)] # 10度
+phi_bins = [x*10.0 for x in range(-18,19)] # 10度
 #phi_bins = [x*15.0 for x in xrange(-12,13)] # 15度
 
 DIV_Z = 17  # nの値。-180から180は 2n = 2 x DIV_Z に分割される。
 theta_bins = []
 theta_bins.append(0.0)          # i=0
-for i in xrange(1,DIV_Z):       # i=1,2,3,....,(n-1)
+for i in range(1,DIV_Z):       # i=1,2,3,....,(n-1)
     theta_bins.append(math.degrees(math.acos(1.0-i/float(DIV_Z))))
 theta_bins.append(90.0)         # i=n
-for i in xrange(1,DIV_Z):       # i=(n+1),(n+2),....,(2n-1)
+for i in range(1,DIV_Z):       # i=(n+1),(n+2),....,(2n-1)
     j = DIV_Z - i
     theta_bins.append(180.0-theta_bins[j])
 theta_bins.append(180.0)        # i=2n
 
 #dist_bins = [x*5.0 for x in xrange(0,61)]
-dist_bins = [x*10.0 for x in xrange(0,31)]
+dist_bins = [x*10.0 for x in range(0,31)]
 
 phi = []
 theta = [] 
@@ -144,8 +144,8 @@ H, theta_edge, phi_edge = histogram2d(theta,phi,bins=[theta_bins,phi_bins])
     # normed=Trueにすると変になる。（範囲の広さに応じてnormalizeしてる?)
     
     
-for i in xrange(len(H)):
-    for j in xrange(len(H[i])):
+for i in range(len(H)):
+    for j in range(len(H[i])):
         if H[i,j] == 0:
             H[i,j] = 1
 Prob = zeros((len(H),len(H[0])))
@@ -153,8 +153,8 @@ Prob = zeros((len(H),len(H[0])))
 FE = zeros((len(H),len(H[0])))
 hsum = H.sum()
 
-for i in xrange(len(H)):
-    for j in xrange(len(H[i])):
+for i in range(len(H)):
+    for j in range(len(H[i])):
         Prob[i,j] = H[i,j] / hsum
         FE[i,j] = -math.log(Prob[i,j])
         
@@ -176,17 +176,17 @@ FE_raw = convert_array_for3D(FE)
 FE_plt = convert_array_for3D(FE)
 
 fe_max = -99999.9
-for i in xrange(len(FE_plt)):
-    for j in xrange(len(FE_plt[i])):
+for i in range(len(FE_plt)):
+    for j in range(len(FE_plt[i])):
         if FE_plt[i,j] > fe_max:
             fe_max = FE_plt[i,j]
             
-for i in xrange(len(FE_plt)):
-    for j in xrange(len(FE_plt[i])):
+for i in range(len(FE_plt)):
+    for j in range(len(FE_plt[i])):
         FE_plt[i,j] = FE_plt[i,j] - fe_max
 
-for i in xrange(len(FE_plt)):
-    for j in xrange(len(FE_plt[i])):
+for i in range(len(FE_plt)):
+    for j in range(len(FE_plt[i])):
         file_gnu.write('%8.3f %8.3f %10.5e %10.5e\n' % 
                        (phi_edge[j],theta_edge[i],FE_plt[i,j],FE_raw[i,j]))
     file_gnu.write("\n")

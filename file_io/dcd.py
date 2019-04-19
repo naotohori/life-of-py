@@ -24,21 +24,21 @@ class DcdHeader(object):
         self.with_unit_cell = False
         
     def show(self):
-        print 'format', self.format
+        print('format', self.format)
         if self.title is not None:
             for line in self.title :
-                print line
-        print 'nset', self.nset
-        print 'istart', self.istart
-        print 'nstep_save', self.nstep_save
-        print 'nstep', self.nstep
-        print 'nunit_real', self.nunit_real
-        print 'delta', self.delta
-        print 'tempk', self.tempk
+                print(line)
+        print('nset', self.nset)
+        print('istart', self.istart)
+        print('nstep_save', self.nstep_save)
+        print('nstep', self.nstep)
+        print('nunit_real', self.nunit_real)
+        print('delta', self.delta)
+        print('tempk', self.tempk)
         if self.nunit_real is not None:
-            for i in xrange(self.nunit_real) :
-                print 'lunit2mp[', i, ']', self.lunit2mp[i]
-        print 'nmp_real', self.nmp_real
+            for i in range(self.nunit_real) :
+                print('lunit2mp[', i, ']', self.lunit2mp[i])
+        print('nmp_real', self.nmp_real)
         
 class DcdFile :
     def __init__(self, filename) :
@@ -110,7 +110,7 @@ class DcdFile :
             #self._header.tempk = float(bdata[3].strip('\0 '))
             self._header.tempk = float(bdata[3])
             self._header.lunit2mp = []
-            for i in xrange(self._header.nunit_real) :
+            for i in range(self._header.nunit_real) :
     #            self._header.lunit2mp.append(int(bdata[i + 4].strip('\0 ')))
                 self._header.lunit2mp.append(int(bdata[i + 4]))
                 
@@ -140,7 +140,7 @@ class DcdFile :
             nline = (size - 4) / 80
             bdata = struct.unpack(('i' + '80s' * nline), b)
             self._header.title = []
-            for i in xrange(nline):
+            for i in range(nline):
                 self._header.title.append(bdata[i+1])
                 
             # nmp_real
@@ -181,7 +181,7 @@ class DcdFile :
         
         p = struct.pack('80s', str(self._header.tempk))
         binary += re_null.sub(' ', p)
-        for i in xrange(self._header.nunit_real) :
+        for i in range(self._header.nunit_real) :
             p = struct.pack('80s', str(self._header.lunit2mp[i]))
             binary += re_null.sub(' ', p)
             
@@ -219,7 +219,7 @@ class DcdFile :
         b = self._pick_data()
         z = struct.unpack('f' * self._header.nmp_real, b)
         
-        for i in xrange(self._header.nmp_real) :
+        for i in range(self._header.nmp_real) :
             xyz = [x[i], y[i], z[i]]
             coord_matrix.append(xyz)
         
@@ -279,7 +279,7 @@ class DcdFile :
             raise EOFError('EOF in a middle of dcd.skip_onestep().')
 
     def skip(self, num):
-        for i in xrange(num):
+        for i in range(num):
             self.skip_onestep()
        
     def write_onestep(self, coord_matrix):
@@ -333,7 +333,7 @@ class DcdFile :
     def _read_at(self, num):
         self._file.seek(0)
         self.read_header()
-        for i in xrange(num - 1) :
+        for i in range(num - 1) :
             self.read_onestep()
         return self.read_onestep()
         

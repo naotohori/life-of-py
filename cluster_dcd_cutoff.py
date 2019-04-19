@@ -8,7 +8,7 @@ import scipy.cluster.hierarchy
 from cafysis.file_io.dcd import DcdFile
 
 if len(sys.argv) != 6:
-    print 'Usage: SCRIPT [DCD file] [Native (reference) DCD] [prefix] [cutoff] [nskip (to calculate frame id)]'
+    print('Usage: SCRIPT [DCD file] [Native (reference) DCD] [prefix] [cutoff] [nskip (to calculate frame id)]')
     sys.exit(2)
 
 dcd_filepath = sys.argv[1]
@@ -127,7 +127,7 @@ while dcd.has_more_data():
 # Check this code correctly working
 for icls in range(ncls):
     if cls_num_node[icls] != fcls.tolist().count(icls+1):
-        print 'Error: cls_num_node[icls] != fcls.count(icls+1)'
+        print('Error: cls_num_node[icls] != fcls.count(icls+1)')
         sys.exit(2)
 
 for icls in range(ncls):

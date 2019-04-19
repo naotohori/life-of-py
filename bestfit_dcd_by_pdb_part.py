@@ -7,8 +7,8 @@ from numpy import zeros, asarray, float64
 import sys
 
 if len(sys.argv) < 6:
-    print ('Usage: % SCRIPT [PDB filename] [DCD filename] [out DCD filename] '
-            +'[serial ID begin] [serial ID end]')
+    print(('Usage: % SCRIPT [PDB filename] [DCD filename] [out DCD filename] '
+            +'[serial ID begin] [serial ID end]'))
     sys.exit(2)
     
 filename_pdb = sys.argv[1]
@@ -17,7 +17,7 @@ filename_out_dcd = sys.argv[3]
 
 id_begin = []
 id_end = []
-for iarg in xrange(4, len(sys.argv)-1, 2) :
+for iarg in range(4, len(sys.argv)-1, 2) :
     id_begin.append(int(sys.argv[iarg]))
     id_end.append(int(sys.argv[iarg+1]))
 
@@ -45,8 +45,8 @@ ref_idx = []
 pre_idx = []
 
 # all to all
-for i in xrange(len(id_begin)) :
-    for j in xrange(id_begin[i], id_end[i]+1) :
+for i in range(len(id_begin)) :
+    for j in range(id_begin[i], id_end[i]+1) :
         ref_idx.append(j)
         pre_idx.append(j)
     
@@ -77,10 +77,10 @@ while dcd.has_more_data() :
             post_dcd[j][i] = post[i][j]
     
     if ier == 0 :
-        print k, rmsd
+        print(k, rmsd)
         out_dcd.write_onestep(post_dcd)
     else :
-        print 'error in %i-th structure' % k
+        print('error in %i-th structure' % k)
         
 dcd.close()
 out_dcd.close()

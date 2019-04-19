@@ -68,7 +68,7 @@ for irep in range(1, Nrep+1):
         data = dcd.read_onestep()
 
     if len(data) != nmp:
-        print ('Error len(data) != nmp in replica %i. len(data)=%i' % (irep,len(data)))
+        print(('Error len(data) != nmp in replica %i. len(data)=%i' % (irep,len(data))))
         sys.exit(2)
 
     f_rst.write('nmp_all: %i\n' % (nmp,))

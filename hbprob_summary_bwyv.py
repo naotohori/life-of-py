@@ -35,7 +35,7 @@ for l in open(filepath_inp, 'r'):
 
     sim_done.add(sim)
 
-    if n_ratio.has_key(key):
+    if key in n_ratio:
         n_ratio[key] = n_ratio[key] + 1
         sum_ratio[key] = sum_ratio[key] + ratio
     else:
@@ -72,7 +72,7 @@ for l in open(filepath_inp, 'r'):
     ratio = float(l[4])
 
     key = ((cM,frc), ihb)
-    if sum2_ratio.has_key(key):
+    if key in sum2_ratio:
         sum2_ratio[key] = sum2_ratio[key] + (ratio - avg_ratio[key]) ** 2
     else:
         sum2_ratio[key] = (ratio - avg_ratio[key]) ** 2

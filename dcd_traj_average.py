@@ -9,7 +9,7 @@ from cafysis.file_io.dcd import DcdFile
 from cafysis.file_io.pdb import PdbFile
 
 if len(sys.argv) != 4:
-    print ' Usage: % SCRIPT [input DCD] [input PDB] [output PDB] '
+    print(' Usage: % SCRIPT [input DCD] [input PDB] [output PDB] ')
     sys.exit(2)
     
 dcd = DcdFile(sys.argv[1])
@@ -26,7 +26,7 @@ f_out = PdbFile(sys.argv[3])
 f_out.open_to_write()
 
 ave = []
-for i in xrange(nmp) :
+for i in range(nmp) :
     xyz = [0.0, 0.0, 0.0]
     ave.append(xyz)
     
@@ -34,8 +34,8 @@ nframe = 0
 while dcd.has_more_data() :
     data = dcd.read_onestep()
     nframe += 1
-    print nframe
-    for i in xrange(nmp) :
+    print(nframe)
+    for i in range(nmp) :
         ave[i][0] += data[i][0]
         ave[i][1] += data[i][1]
         ave[i][2] += data[i][2]
@@ -48,7 +48,7 @@ for xyz in ave :
     
 imp = 0
 for c in chains:
-    for i in xrange(c.num_atom()) :
+    for i in range(c.num_atom()) :
         imp += 1
         c.get_atom(i).xyz.x = ave[i][0]
         c.get_atom(i).xyz.y = ave[i][1]

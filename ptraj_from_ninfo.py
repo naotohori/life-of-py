@@ -8,7 +8,7 @@ Created on 2011/12/14
 if __name__ == '__main__':
     import sys
     if not len(sys.argv) in (4,) :
-        print 'Usage: % SCRIPT [ninfo file(i)] [cafemol PDB file(i)] [ptraj file(o)]'
+        print('Usage: % SCRIPT [ninfo file(i)] [cafemol PDB file(i)] [ptraj file(o)]')
         sys.exit(2)
     
     path_output = 'measure/'
@@ -37,7 +37,7 @@ if __name__ == '__main__':
     ires_total = 0
     ires_prev = -1
     for c in chains:
-        for i in xrange(c.num_atom()):
+        for i in range(c.num_atom()):
             ires = c.get_atom(i).res_seq
             if ires != ires_prev:
                 ires_total += 1
@@ -45,8 +45,8 @@ if __name__ == '__main__':
             imp2ires.append(ires_total)
     
     file_ptraj = open(sys.argv[-1],'w')
-    print imp2ires
-    print len(imp2ires)
+    print(imp2ires)
+    print(len(imp2ires))
     
     for bd in ns.bondlengths:
         type_out = bd.type
@@ -68,7 +68,7 @@ if __name__ == '__main__':
             com1 = def_S
             com2 = def_P
         else:
-            print 'Error: invalid bond type, '+bd.type
+            print('Error: invalid bond type, '+bd.type)
             sys.exit(2)
             
         cmd = ('distance bond_%i_%i :%i@%s :%i@%s out %s/bond_%s_%0'
@@ -114,7 +114,7 @@ if __name__ == '__main__':
             com2 = def_P
             com3 = def_S
         else:
-            print 'Error: invalid angle type, '+ba.type
+            print('Error: invalid angle type, '+ba.type)
             sys.exit(2)
         
         cmd = ('angle angl_%i_%i_%i :%i@%s :%i@%s :%i@%s out %s/angl_%s_%0'
@@ -172,7 +172,7 @@ if __name__ == '__main__':
         elif dih.type[1:3] == 'SS':
             continue
         else:
-            print 'Error: invalid dihedral type, ' + dih.type
+            print('Error: invalid dihedral type, ' + dih.type)
             sys.exit(2)
             
         cmd = ('dihedral dih_%i_%i_%i_%i :%i@%s :%i@%s :%i@%s :%i@%s out %s/dih_%s_%0'
@@ -201,7 +201,7 @@ if __name__ == '__main__':
         elif con.type[0] in ('Y','U','C'):
             com1 = def_YUC
         else:
-            print 'Error: invalid contact type, '+con.type
+            print('Error: invalid contact type, '+con.type)
             sys.exit(2)
         if con.type[2] == 'p':
             com2 = def_pro
@@ -214,7 +214,7 @@ if __name__ == '__main__':
         elif con.type[2] in ('Y','U','C'):
             com2 = def_YUC
         else:
-            print 'Error: invalid contact type, '+con.type
+            print('Error: invalid contact type, '+con.type)
             sys.exit(2)
         if type_out in ('p-A','p-G','p-R','p-Y','p-U','p-C'):
             type_out = 'p-B'
@@ -242,14 +242,14 @@ if __name__ == '__main__':
         elif bp.type[0] in ('Y','U','C'):
             com1 = def_YUC
         else:
-            print 'Error: invalid basepair type, '+bp.type
+            print('Error: invalid basepair type, '+bp.type)
             sys.exit(2)
         if bp.type[2] in ('A','G','R'):
             com2 = def_RAG
         elif bp.type[2] in ('Y','U','C'):
             com2 = def_YUC
         else:
-            print 'Error: invalid basepair type, '+bp.type
+            print('Error: invalid basepair type, '+bp.type)
             sys.exit(2)
             
         cmd = ('distance bp_%i_%i :%i@%s :%i@%s out %s/bp_HB%i_%0'
@@ -267,14 +267,14 @@ if __name__ == '__main__':
         elif bs.type[0] in ('Y','U','C'):
             com1 = def_YUC
         else:
-            print 'Error: invalid basestack type, '+bs.type
+            print('Error: invalid basestack type, '+bs.type)
             sys.exit(2)
         if bs.type[2] in ('A','G','R'):
             com2 = def_RAG
         elif bs.type[2] in ('Y','U','C'):
             com2 = def_YUC
         else:
-            print 'Error: invalid basestack type, '+bs.type
+            print('Error: invalid basestack type, '+bs.type)
             sys.exit(2)
             
         cmd = ('distance bs_%i_%i :%i@%s :%i@%s out %s/bs_%0'

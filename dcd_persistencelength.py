@@ -49,7 +49,7 @@ while dcd.has_more_data() :
     data = dcd.read_onestep_np()
         
     #print 'Start i loop'
-    for i in xrange(args.offset+args.gap, nmp-args.gap, args.gap) :
+    for i in range(args.offset+args.gap, nmp-args.gap, args.gap) :
 
         #print i, i-args.gap
         vi = data[i] - data[i-args.gap]
@@ -57,7 +57,7 @@ while dcd.has_more_data() :
         n_unit_len_sq += 1
 
         #print 'Start j loop'
-        for j in xrange(i+args.gap, nmp, args.gap) :
+        for j in range(i+args.gap, nmp, args.gap) :
 
             #print '    ',j, j-args.gap
             vj = data[j] - data[j-args.gap]
@@ -74,7 +74,7 @@ unit_len = np.sqrt(unit_len_sq)
 
 ## Calculate average correlation
 cor = []
-for i in xrange(nmp/args.gap-1):
+for i in range(nmp/args.gap-1):
     if num_n[i] == 0:
         cor.append(1.0)
     else:
@@ -98,7 +98,7 @@ def func_exp(x,Lp):
 
 para, dev = curve_fit(func_exp, ij, cor[:n_cor])
 
-print ('Persistent length: %f nm' % (para[0]*0.1,))
+print(('Persistent length: %f nm' % (para[0]*0.1,)))
 
 ## Output
 f_out = open(args.out, 'w')

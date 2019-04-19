@@ -33,7 +33,7 @@ for line in f_trna :
         imp_pair_m = (int(linesp[2]), int(linesp[3]))
         
 if unit_A == None or unit_P == None or unit_E == None or unit_m == None :
-    print 'Error:  tRNA information is not enough'
+    print('Error:  tRNA information is not enough')
     sys.exit(2)
         
 f_out_ninfo = NinfoFile(sys.argv[3])
@@ -320,12 +320,12 @@ for con in ninfo.contacts :
         imp_set.add(imps)
 
 for imps in dupl_set:
-    print '#################### Warning: contact duplication'
-    print '%i %i' % imps
+    print('#################### Warning: contact duplication')
+    print('%i %i' % imps)
     for con in ninfo.contacts:
         if con.imp1 in imps and con.imp2 in imps :
             con.show()
-            print ''
+            print('')
 
 imp_set = set()
 dupl_set = set()
@@ -341,10 +341,10 @@ for con in ninfo.basepairs :
         imp_set.add(imps)
 
 for imps in dupl_set:
-    print '#################### Warning: contact duplication'
-    print '%i %i' % imps
+    print('#################### Warning: contact duplication')
+    print('%i %i' % imps)
     for con in ninfo.basepairs:
         if con.imp1 in imps and con.imp2 in imps :
             con.show()
-            print ''
+            print('')
 

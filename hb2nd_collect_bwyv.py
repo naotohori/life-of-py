@@ -18,8 +18,8 @@ elif len(sys.argv) == 3:
     step_ignore = int(sys.argv[2])
     flg_final = False
 else:
-    print 'Usage: SCRIPT [output file] [step_ignore]'
-    print ' or  : SCRIPT [output file] [step_ignore] [step_final]'
+    print('Usage: SCRIPT [output file] [step_ignore]')
+    print(' or  : SCRIPT [output file] [step_ignore] [step_final]')
     sys.exit(2)
 
 f_out = open(sys.argv[1], 'w')
@@ -88,7 +88,7 @@ for sim in simulations:
         elif (not S1) and (not S2) and (not L1) and (not L2):
             count['U'] = count['U'] + 1
         else:
-            print 'Error hendesuyo'
+            print('Error hendesuyo')
 
         num = num + 1
         if flg_final and step == step_final:

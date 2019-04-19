@@ -21,18 +21,18 @@ class Ninfo(object):
         self.type = type_str
 
     def show(self):
-        print 'id',self.id
-        print 'iunit1',self.iunit1
-        print 'iunit2',self.iunit2
-        print 'imp1',self.imp1
-        print 'imp2',self.imp2
-        print 'imp1un',self.imp1un
-        print 'imp2un',self.imp2un
-        print 'native',self.native
-        print 'factor',self.factor
-        print 'correct_mgo',self.correct_mgo
-        print 'coef',self.coef
-        print 'type',self.type
+        print('id',self.id)
+        print('iunit1',self.iunit1)
+        print('iunit2',self.iunit2)
+        print('imp1',self.imp1)
+        print('imp2',self.imp2)
+        print('imp1un',self.imp1un)
+        print('imp2un',self.imp2un)
+        print('native',self.native)
+        print('factor',self.factor)
+        print('correct_mgo',self.correct_mgo)
+        print('coef',self.coef)
+        print('type',self.type)
         
 #**      ibd iunit1-iunit2   imp1 - imp2 imp1un-imp2un      bd_nat    factor_bd  correct_mgo      coef_bd
 #bond      1      1      1      1      2      1      2       3.8531       1.0000       1.0000     110.4000 pp
@@ -77,8 +77,8 @@ class BondAngle(Ninfo):
     
     def show(self):
         Ninfo.show(self)
-        print 'imp3',self.imp3
-        print 'imp3un',self.imp3un
+        print('imp3',self.imp3)
+        print('imp3un',self.imp3un)
 
 class Dihedral(Ninfo):
 #**     idih iunit1-iunit2   imp1 - imp2 - imp3 - imp4 imp1un-imp2un-imp3un-imp4un      dih_nat   factor_dih  correct_mgo   coef_dih_1   coef_dih_3
@@ -100,11 +100,11 @@ class Dihedral(Ninfo):
     
     def show(self):
         Ninfo.show(self)
-        print 'imp3',self.imp3
-        print 'imp4',self.imp4
-        print 'imp3un',self.imp3un
-        print 'imp4un',self.imp4un
-        print 'coef_3',self.coef_3
+        print('imp3',self.imp3)
+        print('imp4',self.imp4)
+        print('imp3un',self.imp3un)
+        print('imp4un',self.imp4un)
+        print('coef_3',self.coef_3)
 
 class Contact(Ninfo):
     _counter = 0
@@ -648,8 +648,8 @@ class NinfoSet(object):
     def dict_of_ninfoset_by_unit(self):
         di = {}
         self.update_info()
-        for i in xrange(1, self.max_unit+1):
-            for j in xrange(i, self.max_unit+1):
+        for i in range(1, self.max_unit+1):
+            for j in range(i, self.max_unit+1):
                 ns = NinfoSet()
                 di[(i,j)] = ns
         for bl in self.bondlengths:

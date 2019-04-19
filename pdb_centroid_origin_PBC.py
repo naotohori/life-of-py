@@ -17,7 +17,7 @@ import math
 import copy
 
 if len(sys.argv) != 6:
-    print 'Usage: SCRIPT [input PDB] [ID domain begin (starting with 1)] [ID domain end] [Box size] [output PDB]'
+    print('Usage: SCRIPT [input PDB] [ID domain begin (starting with 1)] [ID domain end] [Box size] [output PDB]')
     sys.exit(2)
 
 ID_DOM_INI = int(sys.argv[2]) - 1  # 重心を求める際に必要

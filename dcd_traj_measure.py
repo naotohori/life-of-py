@@ -53,63 +53,63 @@ class DCD_END(Exception):
     pass
 
 if len(sys.argv) != 3:
-    print ' Usage: % SCRIPT [input DCD] [command file] '
-    print '      command file is...'
-    print '      ##########################################'
-    print '      #frameskip 5                             #'
-    print '      #display 1000                            #'
-    print '      #out_time 1                              #'
-    print '      #          (0:nothing, 1:frame, 2:time)  #'
-    print '      #                                        #'
-    print '      #def_mp  mp1  34                         #'
-    print '      #def_mp  mp2  189                        #'
-    print '      #def_mp   A   200                        #'
-    print '      #     :    :   :                         #'
-    print '      #                                        #'
-    print '      #def_com com1 2 3 4 5 - 10 12 14 - 20    #'
-    print '      #def_com com2 2 3 4 5 - 10 12 14 - 20    #'
-    print '      #     :    :   :                         #'
-    print '      #                                        #'
-    print '      #def_mol mol1 2 3 4 5 - 10 12 14 - 20    #'
-    print '      #def_mol mol2 2 3 4 5 - 10 12 14 - 20    #'
-    print '      #     :    :   :                         #'
-    print '      #                                        #'
-    print '      #distance  1   2                         #'
-    print '      #distance  3   A                         #'
-    print '      #distance 100  com2                      #'
-    print '      #distance com1 com2                      #'
-    print '      #     :    :   :                         #'
-    print '      #                                        #'
-    print '      #angle     10  11  12  13                #'
-    print '      #angle     com1  11  com2  13            #'
-    print '      #     :    :   :                         #'
-    print '      #                                        #'
-    print '      #locaxis com1 com2 com3                  #'
-    print '      # !location of com1 on axis (com2->com3) #'
-    print '      #     :    :   :                         #'
-    print '      #                                        #'
-    print '      #def_ninfo ninfo1 filename               #'
-    print '      #q all ninfo1                            #'
-    print '      #q contact ninfo1                        #'
-    print '      #q basepair ninfo1                       #'
-    print '      #q basestack ninfo1                      #'
-    print '      #     :    :   :                         #'
-    print '      #                                        #'
-    print '      #dock mol mol cutdist cutnum cutcom      #'
-    print '      #dock mol mol   10.0    4     100.0      #'
-    print '      #     :    :   :                         #'
-    print '      #                                        #'
-    print '      #enc contact mol mol 10.0 100.0          #'
-    print '      #     :    :   :                         #'
-    print '      #                                        #'
-    print '      #polar com1                              #'
-    print '      #     :    :   :                         #'
-    print '      #                                        #'
-    print '      #rg    mol                               #'
-    print '      #     :    :   :                         #'
-    print '      #                                        #'
-    print '      #dt_hb name r theta1 theta2 phi phi1 phi2#'
-    print '      ##########################################'
+    print(' Usage: % SCRIPT [input DCD] [command file] ')
+    print('      command file is...')
+    print('      ##########################################')
+    print('      #frameskip 5                             #')
+    print('      #display 1000                            #')
+    print('      #out_time 1                              #')
+    print('      #          (0:nothing, 1:frame, 2:time)  #')
+    print('      #                                        #')
+    print('      #def_mp  mp1  34                         #')
+    print('      #def_mp  mp2  189                        #')
+    print('      #def_mp   A   200                        #')
+    print('      #     :    :   :                         #')
+    print('      #                                        #')
+    print('      #def_com com1 2 3 4 5 - 10 12 14 - 20    #')
+    print('      #def_com com2 2 3 4 5 - 10 12 14 - 20    #')
+    print('      #     :    :   :                         #')
+    print('      #                                        #')
+    print('      #def_mol mol1 2 3 4 5 - 10 12 14 - 20    #')
+    print('      #def_mol mol2 2 3 4 5 - 10 12 14 - 20    #')
+    print('      #     :    :   :                         #')
+    print('      #                                        #')
+    print('      #distance  1   2                         #')
+    print('      #distance  3   A                         #')
+    print('      #distance 100  com2                      #')
+    print('      #distance com1 com2                      #')
+    print('      #     :    :   :                         #')
+    print('      #                                        #')
+    print('      #angle     10  11  12  13                #')
+    print('      #angle     com1  11  com2  13            #')
+    print('      #     :    :   :                         #')
+    print('      #                                        #')
+    print('      #locaxis com1 com2 com3                  #')
+    print('      # !location of com1 on axis (com2->com3) #')
+    print('      #     :    :   :                         #')
+    print('      #                                        #')
+    print('      #def_ninfo ninfo1 filename               #')
+    print('      #q all ninfo1                            #')
+    print('      #q contact ninfo1                        #')
+    print('      #q basepair ninfo1                       #')
+    print('      #q basestack ninfo1                      #')
+    print('      #     :    :   :                         #')
+    print('      #                                        #')
+    print('      #dock mol mol cutdist cutnum cutcom      #')
+    print('      #dock mol mol   10.0    4     100.0      #')
+    print('      #     :    :   :                         #')
+    print('      #                                        #')
+    print('      #enc contact mol mol 10.0 100.0          #')
+    print('      #     :    :   :                         #')
+    print('      #                                        #')
+    print('      #polar com1                              #')
+    print('      #     :    :   :                         #')
+    print('      #                                        #')
+    print('      #rg    mol                               #')
+    print('      #     :    :   :                         #')
+    print('      #                                        #')
+    print('      #dt_hb name r theta1 theta2 phi phi1 phi2#')
+    print('      ##########################################')
     sys.exit(2)
 
 JUDGE_CONTACT = 1.2
@@ -150,7 +150,7 @@ for line in f_cmd :
     elif linesp[0] == 'out_time' :
         out_time = int(linesp[1])
         if not out_time in (0,1,2):
-            print ('out_time is should be 0,1 or 2\n>>>>' + line)
+            print(('out_time is should be 0,1 or 2\n>>>>' + line))
             sys.exit(2)
             
     elif linesp[0] == 'distance':
@@ -162,13 +162,13 @@ for line in f_cmd :
             linesp[2] = int(linesp[2])
         if re1 and re2 :
             if int(linesp[1]) > nmp or int(linesp[2]) > nmp :
-                print ('id is larger than nmp\n in the line:' + line)
+                print(('id is larger than nmp\n in the line:' + line))
                 sys.exit(2)
         cmds.append(tuple(linesp))
 
     elif linesp[0] == 'angle':
         if len(linesp) != 5:
-            print ('not enough arguments for angle in the line:' + line)
+            print(('not enough arguments for angle in the line:' + line))
             sys.exit(2)
         #linesp[1] = int(linesp[1])
         #linesp[2] = int(linesp[2])
@@ -178,7 +178,7 @@ for line in f_cmd :
 
     elif linesp[0] == 'delta_angle':
         if len(linesp) != 3:
-            print ('not enough arguments for delta_angle in the line:' + line)
+            print(('not enough arguments for delta_angle in the line:' + line))
             sys.exit(2)
         linesp[1] = int(linesp[1])
         linesp[2] = int(linesp[2])
@@ -190,7 +190,7 @@ for line in f_cmd :
         flg_sequence = False
         for arg in linesp[2:] :
             if flg_sequence :
-                mps.extend([imp for imp in xrange(mps[-1] + 1, int(arg) + 1)])
+                mps.extend([imp for imp in range(mps[-1] + 1, int(arg) + 1)])
                 flg_sequence = False
             if arg == '-' :
                 flg_sequence = True
@@ -208,7 +208,7 @@ for line in f_cmd :
         flg_sequence = False
         for arg in linesp[2:] :
             if flg_sequence :
-                mps.extend([imp for imp in xrange(mps[-1] + 1, int(arg) + 1)])
+                mps.extend([imp for imp in range(mps[-1] + 1, int(arg) + 1)])
                 flg_sequence = False
             if arg == '-' :
                 flg_sequence = True
@@ -380,7 +380,7 @@ for cmd in cmds :
         if cmd[2] in defs:
             out_files[-1].write(defs[cmd[2]][1])
         else :
-            print ('%s is not in definitions\n' % cmd[2])
+            print(('%s is not in definitions\n' % cmd[2]))
             sys.exit(2)
         out_files[-1].write('\n')
     elif cmd[0] == 'dock' :
@@ -515,7 +515,7 @@ try:
         iframe += 1
         if display != 0 :
             if (iframe % display == 0) :
-                print ('%i frame done' % iframe)
+                print(('%i frame done' % iframe))
             
         # Skip
         if frameskip > 1 and iframe != 0 :
@@ -531,7 +531,7 @@ try:
             flg_initial_data = False
             
         coms = {}
-        for key, d in defs.items():
+        for key, d in list(defs.items()):
             if d[0] in ('com', 'RgCom'):
                 com = [0.0, 0.0, 0.0]
                 for imp in d[1] :
@@ -697,7 +697,7 @@ try:
             elif cmd[0] == 'q' :
                 type = cmd[1]
                 if defs[cmd[2]][0] != 'ninfo' :
-                    print ('definition error : %s is not ninfo file\n' % cmd[1])
+                    print(('definition error : %s is not ninfo file\n' % cmd[1]))
                     sys.exit(2)
                 ns = defs[cmd[2]][2]
                 n_denominator = 0

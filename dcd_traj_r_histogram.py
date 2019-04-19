@@ -14,7 +14,7 @@ if len(sys.argv) != 5:
     print ('\n Usage: SCRIPT [input DCD] [nmp] [nskip] [max r]\n')
     sys.exit(2)
 
-print '#',sys.argv
+print('#',sys.argv)
     
 nmp = int(sys.argv[2])
 nskip = int(sys.argv[3])
@@ -44,7 +44,7 @@ while dcd.has_more_data() :
 dcd.close()
 
 for i in range(nbin):
-    print bin_edges[i], bin_edges[i+1], hist_all[i] / float(icount)
+    print(bin_edges[i], bin_edges[i+1], hist_all[i] / float(icount))
 
 
 '''

@@ -12,7 +12,7 @@ from cafysis.elements.ninfo import NinfoSet, BondLength, BondAngle, BaseStackDT,
 NNHB_NT_SEP = 5
 
 if len(sys.argv) != 6:
-    print 'Usage: SCRIPT [cg pdb] [hb list file] [st list file] [GO/NN] [output ninfo]'
+    print('Usage: SCRIPT [cg pdb] [hb list file] [st list file] [GO/NN] [output ninfo]')
     sys.exit(2)
 
 path_hb_file = sys.argv[2]
@@ -37,19 +37,19 @@ f_in.close()
 #n_mp = 3 * n_nt - 1
 
 if len(chains) > 1:
-    print 'Error: currently more than one chain can not be processed.'
+    print('Error: currently more than one chain can not be processed.')
     sys.exit(2)
 
 chain = chains[0]
 n_nt = chain.num_res()
-print '#nt: ', n_nt
+print('#nt: ', n_nt)
 
 seq = []
 for r in chain.residues:
     # "RA " ---> "A"
     seq.append(r.atoms[0].res_name.strip()[1])
-print 'Sequence:'
-print seq
+print('Sequence:')
+print(seq)
 
 ns = NinfoSet()
 
@@ -246,18 +246,18 @@ for l in open(path_hb_file):
     ## Check
     if lsp[0] == 'CAN':
         if lsp[2] != 'B' or lsp[4] != 'B':
-            print 'Error: Canonical base pair should be by B and B'
+            print('Error: Canonical base pair should be by B and B')
             sys.exit(2)
     elif lsp[0] == 'NON':
         pass
     else:
-        print 'Error: unknown H-bond type'
+        print('Error: unknown H-bond type')
         sys.exit(2)
 
     def take2(ls):
         i = iter(ls)
         while 1:
-            yield i.next(), i.next()
+            yield next(i), next(i)
 
     atoms1 = []
     atoms2 = []
@@ -370,7 +370,7 @@ def hb_ARNA_native(i,j):
         dih2 = ARNA.HBD_PSGU
         nHB = 2
     else:
-        print 'Canonical basepair should be A-U, G-C, or G-U: ',i,j
+        print('Canonical basepair should be A-U, G-C, or G-U: ',i,j)
         sys.exit(2)
     return dist, ang1, ang2, dih0, dih1, dih2, nHB
 
@@ -411,7 +411,7 @@ for c in hblist + nnlist:
          dih0_native, dih1_native, dih2_native, nHB) = hb_ARNA_native(nt_1, nt_2)
 
         if nHB != c[5]:
-            print ('Error: nHB != c[5] in ninfo_RNA15_pdb',c)
+            print(('Error: nHB != c[5] in ninfo_RNA15_pdb',c))
             sys.exit(2)
 
         sectert = 'S'
@@ -511,7 +511,7 @@ for l in open(path_st_file):
     elif lsp[0] == 'F':
         tstlist_force.append( (nt1, nt2) )
     else:
-        print 'Error: unknown stack type'
+        print('Error: unknown stack type')
         sys.exit(2)
 
 #### Remove inner stem

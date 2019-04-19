@@ -38,4 +38,4 @@ if __name__ == "__main__":
         print ('Usage: SCRIPT [dcd file]')
         sys.exit(2)
 
-    print ('# frames = %i' % (count(sys.argv[1])))
+    print(('# frames = %i' % (count(sys.argv[1]))))

@@ -48,7 +48,7 @@ def hb_concatenate(dir_in, name, dir_out, nrun):
 if __name__ == '__main__':
         
     if len(sys.argv) != 5:
-        print 'Usage: % SCRIPT [input root dir] [name (file prefix)] [output dir] [last run number]'
+        print('Usage: % SCRIPT [input root dir] [name (file prefix)] [output dir] [last run number]')
         sys.exit(2)
 
     dir_in = sys.argv[1]
@@ -57,7 +57,7 @@ if __name__ == '__main__':
     nrun = int(sys.argv[4])
 
     if nrun < 3:
-        print 'Usage: Error nrun < 3'
+        print('Usage: Error nrun < 3')
         sys.exit(2)
 
     hb_concatenate(dir_in, name, dir_out, nrun)

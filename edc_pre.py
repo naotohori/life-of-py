@@ -2,14 +2,14 @@
 # -*- coding: utf-8 -*-
 # 2011/05/29 coded by Naoto HORI
 
-from file_io.pdb import PdbFile
-from file_io.ninfo import NinfoFile
-from elements.ninfo import NinfoSet
+from .file_io.pdb import PdbFile
+from .file_io.ninfo import NinfoFile
+from .elements.ninfo import NinfoSet
 import sys
 
 if len(sys.argv) < 9 or len(sys.argv)%2 != 1 :
-    print ('Usage: SCRIPT [input PDB] [cafe_to_amber file] [ninfo file] '+
-           '[(imp begin, imp end) ...] [log file] [Amber file] [residue file]')
+    print(('Usage: SCRIPT [input PDB] [cafe_to_amber file] [ninfo file] '+
+           '[(imp begin, imp end) ...] [log file] [Amber file] [residue file]'))
     sys.exit(2)
     
 # Output file
@@ -71,12 +71,12 @@ for (i,c) in enumerate(cafe_chains):
 
 # check
 f_out.write('#check\n')
-for i in xrange(len(cafe_res)) :
+for i in range(len(cafe_res)) :
     n_amber = aa_res[i+1][1] - aa_res[i+1][0] + 1
     n_cafe = cafe_res[i+1][1]- cafe_res[i+1][0] + 1
     if n_cafe != n_amber :
-        print 'Inconsistent!!'
-        print i+1, 'amber=', n_amber, 'cafe=', n_cafe
+        print('Inconsistent!!')
+        print(i+1, 'amber=', n_amber, 'cafe=', n_cafe)
     f_out.write('%3i , amber= %6i-%6i , cafe= %6i-%6i\n' % (i+1, aa_res[i+1][0], aa_res[i+1][1],
                                         cafe_res[i+1][0], cafe_res[i+1][1]) )
 f_out.write('\n\n')
@@ -99,7 +99,7 @@ for (i,arg) in enumerate(sys.argv[4:-3]) :
 # Generate ligand set : imp(cafe)
 ligand_set = set()
 for pair in id_pairs :
-    for imp in xrange(pair[0], pair[1]+1) :
+    for imp in range(pair[0], pair[1]+1) :
         ligand_set.add(imp)
 f_out.write('#Ligands imp(cafe)\n')
 for i in ligand_set :
@@ -198,7 +198,7 @@ recepter_output_pairs.append( (imp_begin, imp_pre) )
     
 ### Residue file output
 f_residue.write('#ichain ires  imp ires_l  imp_l  res  mp   ires_aa\n')
-for imp in xrange(1, len(cafe_mp_info)+1) :
+for imp in range(1, len(cafe_mp_info)+1) :
     mp_info = cafe_mp_info[imp]
     ichain  = cafe_mp_info[imp][0]
     ires    = cafe_mp_info[imp][1]

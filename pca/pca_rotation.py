@@ -4,10 +4,10 @@ import sys
 from file_pdb import PdbFile
 
 if (len(sys.argv) < 5) or (len(sys.argv) % 2 != 1) :
-    print ''
+    print('')
     #print ' Usage: SCRIPT [input pca file] [input pdb file] [(ID begin, ID end) ...] [output pull file]'
-    print ' Usage: SCRIPT [input pca file] [input pdb file] [(ID begin, ID end) ...]'
-    print ''
+    print(' Usage: SCRIPT [input pca file] [input pdb file] [(ID begin, ID end) ...]')
+    print('')
     sys.exit(2)
     
 f_in = open(sys.argv[1], 'r')
@@ -18,10 +18,10 @@ f_pdb.close()
 #f_out = open(sys.argv[-1], 'w')
 
 mps = []
-for i_pair in xrange((len(sys.argv)-3) / 2) :
+for i_pair in range((len(sys.argv)-3) / 2) :
     id_begin = int(sys.argv[3+i_pair*2])
     id_end = int(sys.argv[3+i_pair*2+1])
-    for imp in xrange(id_begin, id_end+1) :
+    for imp in range(id_begin, id_end+1) :
         mps.append(imp)
         
 imp = 0
@@ -45,7 +45,7 @@ for line in f_in :
 xyzs = []
 imp = 0
 for c in chains :
-    for imp_chain in xrange(c.num_atom()) :
+    for imp_chain in range(c.num_atom()) :
         imp += 1
         if imp in mps :
             xyzs.append(c.get_atom(imp_chain).xyz)
@@ -67,18 +67,18 @@ for vec in vecs:
     translate[0] += vec[0]
     translate[1] += vec[1]
     translate[2] += vec[2]
-print 'translation='
+print('translation=')
 #print [value / len(xyzs) for value in translate]
-print translate
+print(translate)
     
     
 anglmt = [0.0, 0.0, 0.0]
-for i in xrange(len(mps)) :
+for i in range(len(mps)) :
     anglmt[0] += xyzs[i].y * vecs[i][2] - xyzs[i].z * vecs[i][1]
     anglmt[1] += xyzs[i].z * vecs[i][0] - xyzs[i].x * vecs[i][2]
     anglmt[2] += xyzs[i].x * vecs[i][1] - xyzs[i].y * vecs[i][0]
     
-print 'rotation='
-print anglmt
+print('rotation=')
+print(anglmt)
     
     

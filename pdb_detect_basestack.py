@@ -17,8 +17,8 @@ from cafysis.file_io.pdb import PdbFile
 from cafysis.elements.coord import Coord
 
 if len(sys.argv) not in (2,3):
-    print 'Usage: SCRIPT [PDB]  (score cutoff = 0.5)'
-    print '  or : SCRIPT [PDB] [score cutoff]'
+    print('Usage: SCRIPT [PDB]  (score cutoff = 0.5)')
+    print('  or : SCRIPT [PDB] [score cutoff]')
     sys.exit(2)
 
 SCORE_CUT = 0.5
@@ -86,10 +86,10 @@ for ic, c in enumerate(chains):
         coms.append(com)
 
         if xyz_a is None:
-            print 'Error: can not find atom "a" in ', ic+1, '-th chain, ',ir+1, '-th residue, ', ntd
+            print('Error: can not find atom "a" in ', ic+1, '-th chain, ',ir+1, '-th residue, ', ntd)
             sys.exit(2)
         if xyz_b is None:
-            print 'Error: can not find atom "b" in ', ic+1, '-th chain, ',ir+1, '-th residue, ', ntd
+            print('Error: can not find atom "b" in ', ic+1, '-th chain, ',ir+1, '-th residue, ', ntd)
             sys.exit(2)
         
         xyz_a -= com
@@ -168,8 +168,8 @@ for i in range(nres-1):
     if score is not None and score >= SCORE_CUT:
         si, sj = sgn
         d, omega, xi = param
-        print ('%s %+4i %+4i  %5.3f  %4.2f %6.2f %6.2f' % 
-               ('S', si*locations[i][1], sj*locations[i+1][1], score, d, omega, xi))
+        print(('%s %+4i %+4i  %5.3f  %4.2f %6.2f %6.2f' % 
+               ('S', si*locations[i][1], sj*locations[i+1][1], score, d, omega, xi)))
 
 ''' Tertiary stacking '''
 for i in range(nres):
@@ -184,5 +184,5 @@ for i in range(nres):
         if score is not None and score >= SCORE_CUT:
             si, sj = sgn
             d, omega, xi = param
-            print ('%s %+4i %+4i  %5.2f  %4.2f %6.2f %6.2f' % 
-                   ('T', si*locations[i][1], sj*locations[j][1], score, d, omega, xi))
+            print(('%s %+4i %+4i  %5.2f  %4.2f %6.2f %6.2f' % 
+                   ('T', si*locations[i][1], sj*locations[j][1], score, d, omega, xi)))

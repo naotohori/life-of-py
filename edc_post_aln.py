@@ -11,8 +11,8 @@ from cafysis.elements.ninfo import NinfoSet
 
 if __name__ == '__main__':
     if len(sys.argv) != 10:
-        print 'Usage: SCRIPT [ninfo (one-by-one)] [unit] [dist] [side] [unit] [dist] [side] [edc (post_edc.out)] [out]'
-        print ''
+        print('Usage: SCRIPT [ninfo (one-by-one)] [unit] [dist] [side] [unit] [dist] [side] [edc (post_edc.out)] [out]')
+        print('')
         sys.exit(2)
         
     fninfo_in = NinfoFile(sys.argv[1])
@@ -40,7 +40,7 @@ if __name__ == '__main__':
         elif side == 2:
             aln1[mp2] = mp1
         else:
-            print '"side" is not acceptable. See usage'
+            print('"side" is not acceptable. See usage')
             sys.exit(2)
     
     unit_aln2 = int(sys.argv[5])
@@ -64,7 +64,7 @@ if __name__ == '__main__':
             #aln[mp2 - delta2] = mp1 - delta1
             aln2[mp2] = mp1
         else:
-            print '"side" is not acceptable. See usage'
+            print('"side" is not acceptable. See usage')
             sys.exit(2)
             
     class pairinfo:
@@ -127,11 +127,11 @@ if __name__ == '__main__':
             aln_mp1_u = aln2[con.imp1un]
             aln_mp2_u = aln1[con.imp2un]
         else:
-            print 'Error:'
-            print 'unit_aln1:',unit_aln1
-            print 'unit_aln2:',unit_aln2
-            print 'con.iunit1:',iunit1
-            print 'con.iunit2:',iunit2
+            print('Error:')
+            print('unit_aln1:',unit_aln1)
+            print('unit_aln2:',unit_aln2)
+            print('con.iunit1:',iunit1)
+            print('con.iunit2:',iunit2)
             sys.exit(2)
             
         if (aln_mp1_u,aln_mp2_u) in pairlist:
@@ -140,8 +140,8 @@ if __name__ == '__main__':
             energy = pairlist[(aln_mp2_u,aln_mp1_u)].energy
         else:
             energy = 0.0
-            print 'caution: pair is not found.'
-            print 'icon=',con.id
+            print('caution: pair is not found.')
+            print('icon=',con.id)
         
         if energy < 0.0:
             con.factor = -1.0 * energy

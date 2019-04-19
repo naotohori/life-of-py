@@ -16,8 +16,8 @@ NUM_OUTFILE_OPEN = 100
 
 if __name__ == '__main__':
     if len(sys.argv) < 5:
-        print 'Usage: %SCRIPT [input Dir] [name] [final ID] [output DIR]'
-        print '       ID shoule be from 1 to final ID.'
+        print('Usage: %SCRIPT [input Dir] [name] [final ID] [output DIR]')
+        print('       ID shoule be from 1 to final ID.')
         sys.exit(2)
 
     dir_in = sys.argv[1]
@@ -49,7 +49,7 @@ if __name__ == '__main__':
         id_finish = id_end_now
 
         # Prepare output files
-        list_id_out = range(id_begin_now, id_end_now+1)
+        list_id_out = list(range(id_begin_now, id_end_now+1))
         out_ts_files = {}
         out_dcd_files = {}
         for id_lab in list_id_out:
@@ -91,9 +91,9 @@ if __name__ == '__main__':
 
 
         # Close output files
-        for f in out_ts_files.values():
+        for f in list(out_ts_files.values()):
             f.close()
-        for f in out_dcd_files.values():
+        for f in list(out_dcd_files.values()):
             f.close()
     
 

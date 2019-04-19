@@ -26,9 +26,9 @@ f_vec2.close()
 
 if len(vec1) != len(vec2) :
     print ('Error: two vectors have different dimension.')
-    print ('       len(vec1) = %i, len(vec2) =%i\n' %(len(vec1), len(vec2)))
+    print(('       len(vec1) = %i, len(vec2) =%i\n' %(len(vec1), len(vec2))))
     sys.exit(2)
     
-print ('dimension = %i' % len(vec1))
+print(('dimension = %i' % len(vec1)))
 
-print dot(vec1, vec2)
+print(dot(vec1, vec2))

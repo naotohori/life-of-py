@@ -5,10 +5,10 @@ from file_pdb import PdbFile
 from numpy import float64, zeros
 
 if (len(sys.argv) < 6) or (len(sys.argv) % 2 != 0) :
-    print ''
-    print ' Usage: SCRIPT [input pca file] [input pdb file] [(ID begin, ID end) ...] [output pca file]'
+    print('')
+    print(' Usage: SCRIPT [input pca file] [input pdb file] [(ID begin, ID end) ...] [output pca file]')
     #print ' Usage: SCRIPT [input pca file] [input pdb file] [(ID begin, ID end) ...]'
-    print ''
+    print('')
     sys.exit(2)
 
 f_in = open(sys.argv[1], 'r')
@@ -19,10 +19,10 @@ f_pdb.close()
 f_out = open(sys.argv[-1], 'w')
 
 mps = []
-for i_pair in xrange((len(sys.argv) - 3) / 2) :
+for i_pair in range((len(sys.argv) - 3) / 2) :
     id_begin = int(sys.argv[3 + i_pair * 2])
     id_end = int(sys.argv[3 + i_pair * 2 + 1])
-    for imp in xrange(id_begin, id_end + 1) :
+    for imp in range(id_begin, id_end + 1) :
         mps.append(imp)
 nmp = len(mps)
 
@@ -47,7 +47,7 @@ for line in f_in :
 xyzs = []
 imp = 0
 for c in chains :
-    for imp_chain in xrange(c.num_atom()) :
+    for imp_chain in range(c.num_atom()) :
         imp += 1
         if imp in mps :
             xyzs.append(c.get_atom(imp_chain).xyz)
@@ -60,8 +60,8 @@ for xyz in xyzs:
     center[0] += xyz.x
     center[1] += xyz.y
     center[2] += xyz.z
-print 'center='
-print [value / len(xyzs) for value in center]
+print('center=')
+print([value / len(xyzs) for value in center])
 
 # calculate translation
 translate = [0.0, 0.0, 0.0]
@@ -69,8 +69,8 @@ for vec in vecs:
     translate[0] += vec[0]
     translate[1] += vec[1]
     translate[2] += vec[2]
-print 'translate(BEFORE)='
-print translate
+print('translate(BEFORE)=')
+print(translate)
 
 # remove translation
 translate[0] /= float(nmp)

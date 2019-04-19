@@ -6,10 +6,10 @@ from py_gauss_jordan import gauss_jordan
 from numpy import float64, zeros
 
 if (len(sys.argv) < 6) or (len(sys.argv) % 2 != 0) :
-    print ''
+    print('')
     #print ' Usage: SCRIPT [input pca file] [input pdb file] [(ID begin, ID end) ...] [output pca file]'
-    print ' Usage: SCRIPT [input pca file] [input pdb file] [(ID begin, ID end) ...]'
-    print ''
+    print(' Usage: SCRIPT [input pca file] [input pdb file] [(ID begin, ID end) ...]')
+    print('')
     sys.exit(2)
 
 f_in = open(sys.argv[1], 'r')
@@ -20,10 +20,10 @@ f_pdb.close()
 f_out = open(sys.argv[-1], 'w')
 
 mps = []
-for i_pair in xrange((len(sys.argv) - 3) / 2) :
+for i_pair in range((len(sys.argv) - 3) / 2) :
     id_begin = int(sys.argv[3 + i_pair * 2])
     id_end = int(sys.argv[3 + i_pair * 2 + 1])
-    for imp in xrange(id_begin, id_end + 1) :
+    for imp in range(id_begin, id_end + 1) :
         mps.append(imp)
 nmp = len(mps)
 
@@ -48,7 +48,7 @@ for line in f_in :
 xyzs = []
 imp = 0
 for c in chains :
-    for imp_chain in xrange(c.num_atom()) :
+    for imp_chain in range(c.num_atom()) :
         imp += 1
         if imp in mps :
             xyzs.append(c.get_atom(imp_chain).xyz)
@@ -61,8 +61,8 @@ for xyz in xyzs:
     center[0] += xyz.x
     center[1] += xyz.y
     center[2] += xyz.z
-print 'center='
-print [value / len(xyzs) for value in center]
+print('center=')
+print([value / len(xyzs) for value in center])
 
 # calculate translation
 translate = [0.0, 0.0, 0.0]
@@ -70,8 +70,8 @@ for vec in vecs:
     translate[0] += vec[0]
     translate[1] += vec[1]
     translate[2] += vec[2]
-print 'translate(BEFORE)='
-print translate
+print('translate(BEFORE)=')
+print(translate)
 
 # remove translation
 translate[0] /= float(nmp)
@@ -88,18 +88,18 @@ for vec in vecs:
     translate[0] += vec[0]
     translate[1] += vec[1]
     translate[2] += vec[2]
-print 'translate(AFTER)='
-print translate
+print('translate(AFTER)=')
+print(translate)
 
 # calculate angular momentum
 anglmt = [0.0, 0.0, 0.0]
-for i in xrange(len(mps)) :
+for i in range(len(mps)) :
     anglmt[0] += xyzs[i].y * vecs[i][2] - xyzs[i].z * vecs[i][1]
     anglmt[1] += xyzs[i].z * vecs[i][0] - xyzs[i].x * vecs[i][2]
     anglmt[2] += xyzs[i].x * vecs[i][1] - xyzs[i].y * vecs[i][0]
 
-print 'angular momentum(BEFORE)='
-print anglmt
+print('angular momentum(BEFORE)=')
+print(anglmt)
 
 txx = 0.0
 txy = 0.0
@@ -136,7 +136,7 @@ etator[2,2] = 1.0
 
 ier = gauss_jordan(rot, etator, 3)
 if ier == -1 :
-    print 'util_ppgauss is failed'
+    print('util_ppgauss is failed')
     sys.exit(2)
     
 #print 'etator'
@@ -155,13 +155,13 @@ for (i,vec) in enumerate(vecs):
 
 # calculate angular momentum
 anglmt = [0.0, 0.0, 0.0]
-for i in xrange(len(mps)) :
+for i in range(len(mps)) :
     anglmt[0] += xyzs[i].y * vecs[i][2] - xyzs[i].z * vecs[i][1]
     anglmt[1] += xyzs[i].z * vecs[i][0] - xyzs[i].x * vecs[i][2]
     anglmt[2] += xyzs[i].x * vecs[i][1] - xyzs[i].y * vecs[i][0]
 
-print 'angular momentum(AFTER)='
-print anglmt
+print('angular momentum(AFTER)=')
+print(anglmt)
 
 for vec in vecs:
     f_out.write('%30.20f\n' % vec[0])

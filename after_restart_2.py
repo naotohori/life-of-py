@@ -11,7 +11,7 @@ from cafysis.file_io.ts import TsFile
 
 if __name__ == '__main__':
     if len(sys.argv) < 5:
-        print 'Usage: % SCRIPT [name] [Dir 1] [Dir 2] ([Dir 3] ...) [output dir]'
+        print('Usage: % SCRIPT [name] [Dir 1] [Dir 2] ([Dir 3] ...) [output dir]')
         sys.exit(2)
     
     name = sys.argv[1]
@@ -60,11 +60,11 @@ if __name__ == '__main__':
             nstep_ts += 1
         
         if i_dir == 0:
-            print ('TS  in %s: #frame = %i' % (d, nstep_ts))
-            print ('DCD in %s: #frame = %i' % (d, nstep_dcd))
+            print(('TS  in %s: #frame = %i' % (d, nstep_ts)))
+            print(('DCD in %s: #frame = %i' % (d, nstep_dcd)))
         else:
-            print ('TS  in %s: #frame = %i (the first step is eliminated.)' % (d, nstep_ts))
-            print ('DCD in %s: #frame = %i (the first step is eliminated.)' % (d, nstep_dcd))
+            print(('TS  in %s: #frame = %i (the first step is eliminated.)' % (d, nstep_ts)))
+            print(('DCD in %s: #frame = %i (the first step is eliminated.)' % (d, nstep_dcd)))
 
         if nstep_ts != nstep_dcd:
             print( 'Warning: nstep_ts != nstep_dcd' )
@@ -75,5 +75,5 @@ if __name__ == '__main__':
         in_ts.close()
         in_dcd.close()
     
-    print('Total # of frames in  TS output to %s: %i' % (dir_out, nstep_total_ts))
-    print('Total # of frames in DCD output to %s: %i' % (dir_out, nstep_total_dcd))
+    print(('Total # of frames in  TS output to %s: %i' % (dir_out, nstep_total_ts)))
+    print(('Total # of frames in DCD output to %s: %i' % (dir_out, nstep_total_dcd)))

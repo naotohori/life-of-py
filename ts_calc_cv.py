@@ -15,7 +15,7 @@ BOLTZC = 0.0019872041
 
 if __name__ == '__main__':
     if len(sys.argv) != 5:
-        print 'Usage: %SCRIPT [search query (use "")] [skip] [end] [Energy cutoff]'
+        print('Usage: %SCRIPT [search query (use "")] [skip] [end] [Energy cutoff]')
         sys.exit(2)
 
     nframe_skip = int(sys.argv[2])
@@ -60,5 +60,5 @@ if __name__ == '__main__':
             n += 1
 
         fn = float(n)
-        print temp, ((e_sq/fn - (e/fn)**2) / (BOLTZC*temp*temp))
+        print(temp, ((e_sq/fn - (e/fn)**2) / (BOLTZC*temp*temp)))
 

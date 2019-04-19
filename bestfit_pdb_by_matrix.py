@@ -5,7 +5,7 @@ from numpy import zeros, ones, float64, dot
 import sys
 
 if len(sys.argv) != 4:
-    print 'Usage: % SCRIPT [PDB filename] [matrix filename] [out PDB filename]'
+    print('Usage: % SCRIPT [PDB filename] [matrix filename] [out PDB filename]')
     sys.exit(2)
     
 filename_pdb = sys.argv[1]
@@ -26,11 +26,11 @@ for chain in chains :
 file_mat = file(filename_mat,'r')
 mat_lines = file_mat.readlines()
 if mat_lines[0][0:7] != '#matrix' :
-    print 'Error: format of matrix file'
+    print('Error: format of matrix file')
     sys.exit()
     
 transform = zeros((4,4),dtype=float64)
-for i in xrange(4) :
+for i in range(4) :
     transform[i] = mat_lines[i+1].strip().split()
     
 file_mat.close()

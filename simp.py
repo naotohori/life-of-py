@@ -18,7 +18,7 @@ class nya(object):
         dist = scipy.linalg.norm
         self.adj_mat = scipy.zeros((self.num_atoms, self.num_atoms))
         self.deg_mat = [0] * self.num_atoms
-        for i in xrange(self.num_atoms - 1):
+        for i in range(self.num_atoms - 1):
             for j in range(i + 1, self.num_atoms):
                 if dist(self.coords[i, :] - self.coords[j, :]) <= cutoff:
                     self.deg_mat[i] += 1.0
@@ -33,18 +33,18 @@ class nya(object):
 
     def cmpt_hessian(self):
         self.hessian = scipy.zeros((3*self.num_atoms, 3*self.num_atoms))
-        for i in xrange(self.num_atoms - 1):
+        for i in range(self.num_atoms - 1):
             for j in range(i + 1, self.num_atoms):
                 v_ij = self.coords[j, :] - self.coords[i, :]
                 d2 = sum(v_ij * v_ij)
-                for a in xrange(3):
-                    for b in xrange(3):
+                for a in range(3):
+                    for b in range(3):
                         self.hessian[3*i + a, 3*j + b] = -v_ij[a] * v_ij[b] / d2 * self.adj_mat[i, j]
                         self.hessian[3*j + b, 3*i + a] = self.hessian[3*i + a, 3*j + b]
-        for i in xrange(self.num_atoms):
-            for a in xrange(3):
+        for i in range(self.num_atoms):
+            for a in range(3):
                 for b in range(a, 3):
-                    for j in xrange(self.num_atoms):
+                    for j in range(self.num_atoms):
                         if j != i: 
                             self.hessian[3*i + a, 3*i + b] += -self.hessian[3*i + a, 3*j + b]
                     self.hessian[3*i + b, 3*i + a] = self.hessian[3*i + a, 3*i + b]
@@ -59,20 +59,20 @@ class nya(object):
         Bfactors = [self.inverse_hessian[3*i,3*i] +
                     self.inverse_hessian[3*i+1, 3*i+1] +
                     self.inverse_hessian[3*i+2, 3*i+2] 
-                    for i in xrange(self.num_atoms)]
+                    for i in range(self.num_atoms)]
         k = sum(self.pdb_Bfactors) / sum(Bfactors)
-        self.Bfactors = [Bfactors[i] * k for i in xrange(self.num_atoms)]
+        self.Bfactors = [Bfactors[i] * k for i in range(self.num_atoms)]
 
     def cmpt_cross_correlation(self):
         self.cross_correlation = scipy.zeros((self.num_atoms, self.num_atoms))
         self.norm_cross_correlation = scipy.zeros((self.num_atoms, self.num_atoms))
-        for i in xrange(self.num_atoms):
+        for i in range(self.num_atoms):
             for j in range(i, self.num_atoms):
                 self.cross_correlation[i, j] = (self.inverse_hessian[3*i, 3*j] + 
                                                 self.inverse_hessian[3*i+1, 3*j+1] +
                                                 self.inverse_hessian[3*i+2, 3*j+2])
                 self.cross_correlation[j, i] = self.cross_correlation[i, j]
-        for i in xrange(self.num_atoms):
+        for i in range(self.num_atoms):
             for j in range(i, self.num_atoms):
                 if i == j:
                     self.norm_cross_correlation[i, i] = 1.0
@@ -101,8 +101,8 @@ def get_coords(lines):
             y = float(line[38:46])
             z = float(line[46:54])
         except ValueError:
-            print "Invalid format(coords)"
-            print line
+            print("Invalid format(coords)")
+            print(line)
             quit()
         return (x, y, z)
     return [ext_coords(line) for line in lines]
@@ -112,15 +112,15 @@ def get_Bfactors(lines):
         try:
             b = float(line[60:66])
         except ValueError:
-            print "Invalid format(B-factors)"
-            print line
+            print("Invalid format(B-factors)")
+            print(line)
             quit()
         return b
     return [ext_Bfactors(line) for line in lines]
 
 def plot_figs():
     pylab.subplot(221, aspect="equal")
-    X, Y = pylab.meshgrid(range(ins.num_atoms), range(ins.num_atoms))
+    X, Y = pylab.meshgrid(list(range(ins.num_atoms)), list(range(ins.num_atoms)))
     pylab.pcolor(X, Y, ins.norm_cross_correlation)
     pylab.colorbar()
     pylab.clim(-0.15, 0.15)
@@ -136,7 +136,7 @@ def plot_figs():
     pylab.grid()
 
     pylab.subplot(223, aspect="equal")
-    X, Y = pylab.meshgrid(range(ins.num_atoms), range(ins.num_atoms))
+    X, Y = pylab.meshgrid(list(range(ins.num_atoms)), list(range(ins.num_atoms)))
     pylab.pcolor(X, Y, ins.adj_mat)
     pylab.colorbar()
     pylab.title("Adjacency Mat.")

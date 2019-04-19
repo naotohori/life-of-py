@@ -7,7 +7,7 @@ import sys
 from numpy import histogram
 
 if len(sys.argv) != 3:
-    print 'Usage: SCRIPT [input data] [output prefix]'
+    print('Usage: SCRIPT [input data] [output prefix]')
     sys.exit(2)
     
 file_in = open(sys.argv[1],'r')
@@ -15,7 +15,7 @@ file_pfx = sys.argv[2]
 
 COL_DIST = 1 - 1
 
-dist_bins = [x*2.0 for x in xrange(0,81)]
+dist_bins = [x*2.0 for x in range(0,81)]
 
 dist = []
 

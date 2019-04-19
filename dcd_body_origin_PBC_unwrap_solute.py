@@ -20,7 +20,7 @@ import copy
 MAXD = 50.0
 
 if len(sys.argv) != 6:
-    print 'Usage: SCRIPT [input DCD] [ID domain begin] [ID domain end] [Box size] [output DCD]'
+    print('Usage: SCRIPT [input DCD] [ID domain begin] [ID domain end] [Box size] [output DCD]')
     sys.exit(2)
 
 ID_DOM_INI = int(sys.argv[2]) - 1  # 重心を求める際に必要

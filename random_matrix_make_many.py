@@ -2,11 +2,11 @@
 
 import sys
 import random
-from matrix_transform_make import matrix_transform_make
+from .matrix_transform_make import matrix_transform_make
 from math import pi
 
 if len(sys.argv) != 7:
-     print 'Usage: % SCRIPT [number of files] [seed] [filename prefix] [x] [y] [z]'
+     print('Usage: % SCRIPT [number of files] [seed] [filename prefix] [x] [y] [z]')
      sys.exit(2)
 
 n = int(sys.argv[1])
@@ -16,7 +16,7 @@ x = float(sys.argv[4])
 y = float(sys.argv[5])
 z = float(sys.argv[6])
 
-for i in xrange(1,n+1) :
+for i in range(1,n+1) :
      filename = '%s_%04i.mat' % (filename_pre, i)
      a = random.random() * 2.0 * pi
      b = random.random() * 2.0 * pi

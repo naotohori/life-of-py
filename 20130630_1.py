@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 from scipy.constants.constants import pi
 
 if len(sys.argv) != 4:
-    print 'Usage: SCRIPT [input data] [output prefix] [output file]'
+    print('Usage: SCRIPT [input data] [output prefix] [output file]')
     sys.exit(2)
     
 file_in = open(sys.argv[1],'r')
@@ -50,8 +50,8 @@ for l in file_in:
         theta3.append(t)
         phi3.append(p)
     
-theta_bins = [x*10.0 for x in xrange(0,19)]
-phi_bins = [x*10.0 for x in xrange(-18,19)]
+theta_bins = [x*10.0 for x in range(0,19)]
+phi_bins = [x*10.0 for x in range(-18,19)]
 #theta_bins = [x*15.0 for x in xrange(0,13)]
 #phi_bins = [x*15.0 for x in xrange(-12,13)]
 
@@ -79,9 +79,9 @@ Hnw, theta_edge, phi_edge = histogram2d(theta,phi,bins=[theta_bins,phi_bins],
 
 Hj = zeros((18,36))
 Hnj = zeros((18,36))
-for t in xrange(18):
+for t in range(18):
     t_deg = t*10.0 + 5.0
-    for p in xrange(36):
+    for p in range(36):
         Hj[t,p] = H[t,p] / math.sin(math.radians(t_deg))
         Hnj[t,p] = Hn[t,p] / math.sin(math.radians(t_deg))
 #Hj = zeros((12,24))

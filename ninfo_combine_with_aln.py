@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
 def show_usage() :
-    print ''
-    print ' usage: SCRIPT [ninfo file 1] [ninfo file 2] [cmd file] [ninfo output file]'
-    print ''
+    print('')
+    print(' usage: SCRIPT [ninfo file 1] [ninfo file 2] [cmd file] [ninfo output file]')
+    print('')
     
 import sys
 from file_ninfo import NinfoFile
@@ -87,11 +87,11 @@ for cmd in cmds :
         if con.iunit1 != sub_iunit1 or con.iunit2 != sub_iunit2 :
             continue
         con_append = deepcopy(con)
-        if aln1.has_key(con.imp1) :
+        if con.imp1 in aln1 :
             con_append.imp1 = aln1[con.imp1]
         else :
             continue
-        if aln2.has_key(con.imp2) :
+        if con.imp2 in aln2 :
             con_append.imp2 = aln2[con.imp2]
         else :
             continue
@@ -103,11 +103,11 @@ for cmd in cmds :
         if bp.iunit1 != sub_iunit1 or bp.iunit2 != sub_iunit2 :
             continue
         bp_append = deepcopy(bp)
-        if aln1.has_key(bp.imp1) :
+        if bp.imp1 in aln1 :
             bp_append.imp1 = aln1[bp.imp1]
         else :
             continue
-        if aln2.has_key(bp.imp2) :
+        if bp.imp2 in aln2 :
             bp_append.imp2 = aln2[bp.imp2]
         else :
             continue

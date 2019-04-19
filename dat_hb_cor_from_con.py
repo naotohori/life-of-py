@@ -25,8 +25,8 @@ if len(sys.argv) == 6:
 elif len(sys.argv) == 5:
     flg_final = False
 else:
-    print 'Usage: SCRIPT [HB file (bwyv.hb)] [dir_search] [step_ignore] [dir_out]'
-    print ' or  : SCRIPT [HB file (bwyv.hb)] [dir_search] [step_ignore] [step_final] [dir_out]'
+    print('Usage: SCRIPT [HB file (bwyv.hb)] [dir_search] [step_ignore] [dir_out]')
+    print(' or  : SCRIPT [HB file (bwyv.hb)] [dir_search] [step_ignore] [step_final] [dir_out]')
     sys.exit(2)
 
 filepath_hb = sys.argv[1]
@@ -93,7 +93,7 @@ for cM in cM_values:
             try:
                 f_con = open('hbcon.out','r')
             except:
-                print ('Skip %s' % (os.getcwd(),) )
+                print(('Skip %s' % (os.getcwd(),) ))
                 os.chdir(orig_dir)
                 continue
         

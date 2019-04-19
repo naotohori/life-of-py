@@ -21,14 +21,14 @@ class DridHeader(object):
         self.n_centroids = lambda: self.mask.shape[0]
         
     def show(self):
-        print self.title
+        print(self.title)
         #print '#(centroid)', len(self.centroids)
         #print '#(atom)', len(self.atoms)
-        print '#(centroids)', len(self.mask.shape[0])
-        print '#(atoms)', len(self.mask.shape[1])
-        print '##### Mask #####'
-        print self.mask
-        print '##### Mask #####'
+        print('#(centroids)', len(self.mask.shape[0]))
+        print('#(atoms)', len(self.mask.shape[1]))
+        print('##### Mask #####')
+        print(self.mask)
+        print('##### Mask #####')
         #for i in xrange(len(self.centroids)) :
         #    print 'centroid %i %i' % (i,self.centroids[i])
         #for i in xrange(len(self.atoms)) :
@@ -68,8 +68,8 @@ class DridFile:
         self._header.version = int( self._header.title[3:] )
             
         if self._header.version != 2:
-            print 'Caution: This is not DRID ver.2 format!!'
-            print self._header.title
+            print('Caution: This is not DRID ver.2 format!!')
+            print(self._header.title)
 
         if self._header.version == 1:
             # centroids 
@@ -161,7 +161,7 @@ class DridFile:
         self._file.seek(4+num, os.SEEK_CUR)
      
     def skip(self, num):
-        for i in xrange(num):
+        for i in range(num):
             self.skip_onestep()
        
     def write_onestep(self, data):
@@ -197,7 +197,7 @@ class DridFile:
     def _read_at(self, num):
         self._file.seek(0)
         self.read_header()
-        for i in xrange(num - 1) :
+        for i in range(num - 1) :
             self.read_onestep()
         return self.read_onestep()
         

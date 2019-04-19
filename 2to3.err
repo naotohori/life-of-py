@@ -1,0 +1,446 @@
+RefactoringTool: Skipping optional fixer: buffer
+RefactoringTool: Skipping optional fixer: idioms
+RefactoringTool: Skipping optional fixer: set_literal
+RefactoringTool: Skipping optional fixer: ws_comma
+RefactoringTool: Refactored ./20130628_1.py
+RefactoringTool: Refactored ./20130628_3.py
+RefactoringTool: Refactored ./20130630_1.py
+RefactoringTool: Refactored ./20130702_1.py
+RefactoringTool: Refactored ./20130702_2.py
+RefactoringTool: No changes to ./20130703_1.py
+RefactoringTool: Refactored ./after_restart.py
+RefactoringTool: Refactored ./after_restart_2.py
+RefactoringTool: Refactored ./bestfit_dcd_by_pdb.py
+RefactoringTool: Refactored ./bestfit_dcd_by_pdb_part.py
+RefactoringTool: Refactored ./bestfit_dcd_by_pdb_part_onlyRMSD.py
+RefactoringTool: Refactored ./bestfit_pdb_by_matrix.py
+RefactoringTool: Refactored ./bfactor.py
+RefactoringTool: No changes to ./bfactor_average_residue.py
+RefactoringTool: No changes to ./bfactor_only_cgatom.py
+RefactoringTool: No changes to ./bfactor_write_to_pdb.py
+RefactoringTool: Refactored ./calc_RDT_Mg.py
+RefactoringTool: Refactored ./cls_aln_to_list.py
+RefactoringTool: Refactored ./cls_pdb_atom_pair_distance.py
+RefactoringTool: Refactored ./cls_pdb_atom_pair_distance_unitimp.py
+RefactoringTool: No changes to ./cls_pickup_shortdistance.py
+RefactoringTool: Refactored ./cls_vec_apply_alignment.py
+RefactoringTool: Refactored ./cluster_dcd.py
+RefactoringTool: Refactored ./cluster_dcd_cutoff.py
+RefactoringTool: Refactored ./cluster_dend.py
+RefactoringTool: Refactored ./cluster_drid.py
+RefactoringTool: Refactored ./cluster_drid_cutoff.py
+RefactoringTool: Refactored ./contact_order.py
+RefactoringTool: Refactored ./coord2dcd.py
+RefactoringTool: Refactored ./dat_ave_sigma.py
+RefactoringTool: Refactored ./dat_column_hist.py
+RefactoringTool: Refactored ./dat_hb2nd_bwyv.py
+RefactoringTool: Refactored ./dat_hb_contact.py
+RefactoringTool: Refactored ./dat_hb_cor.py
+RefactoringTool: Refactored ./dat_hb_cor_from_con.py
+RefactoringTool: Refactored ./dat_hb_prob.py
+RefactoringTool: Refactored ./dat_hbenergy_contact.py
+RefactoringTool: Refactored ./dat_hbenergy_hb2nd.py
+RefactoringTool: Refactored ./dat_hbprob.py
+RefactoringTool: Refactored ./dat_stprob.py
+RefactoringTool: Refactored ./dcd2dcd_with_ts.py
+RefactoringTool: Refactored ./dcd2drid.py
+RefactoringTool: Refactored ./dcd2movie_with_ts.py
+RefactoringTool: Refactored ./dcd_align_and_origin_PBC.py
+RefactoringTool: Refactored ./dcd_body_origin_PBC.py
+RefactoringTool: Refactored ./dcd_body_origin_PBC_unwrap_solute.py
+RefactoringTool: Refactored ./dcd_centroid_origin.py
+RefactoringTool: Refactored ./dcd_centroid_origin_PBC.py
+RefactoringTool: Refactored ./dcd_concatenate.py
+RefactoringTool: Refactored ./dcd_concatenate_dist.py
+RefactoringTool: Refactored ./dcd_concatenate_noskip.py
+RefactoringTool: Refactored ./dcd_contactmap.py
+RefactoringTool: No changes to ./dcd_dih_rna_bb.py
+RefactoringTool: No changes to ./dcd_dihxy_rna_bb.py
+RefactoringTool: Refactored ./dcd_domain_angle.py
+RefactoringTool: Refactored ./dcd_frame_count.py
+RefactoringTool: Refactored ./dcd_frame_extract.py
+RefactoringTool: Refactored ./dcd_frame_extract_as_dat.py
+RefactoringTool: Refactored ./dcd_frame_extract_as_movie.py
+RefactoringTool: Refactored ./dcd_onlyS.py
+RefactoringTool: Refactored ./dcd_pairwise.py
+RefactoringTool: Refactored ./dcd_persistencelength.py
+RefactoringTool: Refactored ./dcd_positioning.py
+RefactoringTool: No changes to ./dcd_rmsd_correlation.py
+RefactoringTool: Refactored ./dcd_show_header.py
+RefactoringTool: Refactored ./dcd_struct_extract.py
+RefactoringTool: Can't parse ./dcd_traj_PhosDistribution_nt.py: ParseError: bad input: type=4, value='\n', context=('', (77, 19))
+RefactoringTool: No changes to ./dcd_traj_SaltAtmosphere.py
+RefactoringTool: No changes to ./dcd_traj_SaltCount.py
+RefactoringTool: No changes to ./dcd_traj_SaltDistribution.py
+RefactoringTool: No changes to ./dcd_traj_SaltDistribution_nt.py
+RefactoringTool: No changes to ./dcd_traj_SaltFluctuation.py
+RefactoringTool: No changes to ./dcd_traj_SaltPhosDistribution_nt.py
+RefactoringTool: Refactored ./dcd_traj_average.py
+RefactoringTool: Refactored ./dcd_traj_diffuse.py
+RefactoringTool: Refactored ./dcd_traj_distance.py
+RefactoringTool: Refactored ./dcd_traj_distance_PBC.py
+RefactoringTool: Refactored ./dcd_traj_measure.py
+RefactoringTool: Refactored ./dcd_traj_pca_coord.py
+RefactoringTool: Refactored ./dcd_traj_r_histogram.py
+RefactoringTool: No changes to ./dcd_traj_r_histogram_out.py
+RefactoringTool: Refactored ./dcd_traj_shape.py
+RefactoringTool: Refactored ./dcd_traj_so.py
+RefactoringTool: Refactored ./ddrid_ref.py
+RefactoringTool: Refactored ./distance2contactlist.py
+RefactoringTool: Refactored ./drid_frame_count.py
+RefactoringTool: Refactored ./drid_generate_mask_rna.py
+RefactoringTool: Refactored ./drid_pairwise.py
+RefactoringTool: Refactored ./edc_apply_to_ninfo_with_aln.py
+RefactoringTool: Refactored ./edc_apply_to_ninfo_with_aln_onebyone.py
+RefactoringTool: Refactored ./edc_factor_to_coef.py
+RefactoringTool: Refactored ./edc_factor_to_coef_onebyone.py
+RefactoringTool: Refactored ./edc_post.py
+RefactoringTool: Refactored ./edc_post_add_unitimp.py
+RefactoringTool: Refactored ./edc_post_aln.py
+RefactoringTool: Refactored ./edc_pre.py
+RefactoringTool: No changes to ./edc_pre_add_mpunit.py
+RefactoringTool: Refactored ./gnu_data.py
+RefactoringTool: Refactored ./hb2nd_collect_bwyv.py
+RefactoringTool: Refactored ./hb2nd_collect_bwyv_simple.py
+RefactoringTool: Refactored ./hb2nd_summary_bwyv.py
+RefactoringTool: Refactored ./hb2nd_summary_bwyv_simple.py
+RefactoringTool: Refactored ./hb_concatenate.py
+RefactoringTool: Refactored ./hb_prob_summary_bwyv.py
+RefactoringTool: Refactored ./hbcontact_collect.py
+RefactoringTool: Refactored ./hbprob_summary_bwyv.py
+RefactoringTool: Refactored ./make_replica_rst.py
+RefactoringTool: Refactored ./mapk_Rg_hist.py
+RefactoringTool: Refactored ./mapk_angle_hist.py
+RefactoringTool: Refactored ./mapk_angle_hist_by_position.py
+RefactoringTool: Refactored ./mapk_polar_hist.py
+RefactoringTool: Refactored ./mapk_polar_hist_ppr.py
+RefactoringTool: Refactored ./mapk_polar_hist_ppr_FE.py
+RefactoringTool: Refactored ./matrix_make.py
+RefactoringTool: Refactored ./matrix_transform_make.py
+RefactoringTool: Refactored ./mtx_coord_transform.py
+RefactoringTool: Refactored ./ninfo_RNA13_pdb.py
+RefactoringTool: Refactored ./ninfo_RNA13_pdb_multichain.py
+RefactoringTool: No changes to ./ninfo_RNA13_seq.py
+RefactoringTool: Refactored ./ninfo_RNA15_pdb.py
+RefactoringTool: Refactored ./ninfo_SOPSC_noSCforGLY.py
+RefactoringTool: Refactored ./ninfo_change_gmp_by_list.py
+RefactoringTool: Refactored ./ninfo_change_mp_by_aln.py
+RefactoringTool: Refactored ./ninfo_change_mp_by_list.py
+RefactoringTool: Refactored ./ninfo_combine_with_aln.py
+RefactoringTool: Refactored ./ninfo_contact_summary.py
+RefactoringTool: Refactored ./ninfo_copy_bindingsite.py
+RefactoringTool: Refactored ./ninfo_del_interaction.py
+RefactoringTool: Refactored ./ninfo_divide.py
+RefactoringTool: Refactored ./ninfo_make_inputlist.py
+RefactoringTool: Refactored ./ninfo_onebyone_makelist.py
+RefactoringTool: No changes to ./ninfo_sort_mp.py
+RefactoringTool: Refactored ./ninfo_split.py
+RefactoringTool: No changes to ./ninfo_ssRNA15.py
+RefactoringTool: Refactored ./ninfo_substitute_tRNA.py
+RefactoringTool: Refactored ./pdb2dcd.py
+RefactoringTool: Refactored ./pdb2drid.py
+RefactoringTool: Refactored ./pdb2fasta.py
+RefactoringTool: Can't parse ./pdb2ninfo_protein.py: ParseError: bad input: type=1, value='sys', context=('\n                ', (27, 16))
+RefactoringTool: Refactored ./pdb_aa2cg.py
+RefactoringTool: Refactored ./pdb_centroid_origin_PBC.py
+RefactoringTool: Refactored ./pdb_cg_pair_distance.py
+RefactoringTool: Refactored ./pdb_cg_separate_by_input.py
+RefactoringTool: Refactored ./pdb_chain_separate.py
+RefactoringTool: Refactored ./pdb_chain_separate_number.py
+RefactoringTool: Refactored ./pdb_change_residue_number.py
+RefactoringTool: Refactored ./pdb_contact_map_closest_atom.py
+RefactoringTool: Refactored ./pdb_detect_basestack.py
+RefactoringTool: Refactored ./pdb_domain_angle.py
+RefactoringTool: Refactored ./pdb_make_so_list.py
+RefactoringTool: Refactored ./pdb_make_vector_movement.py
+RefactoringTool: Refactored ./pdb_move_to_COM.py
+RefactoringTool: Refactored ./pdb_ninfo.py
+RefactoringTool: Refactored ./pdb_rewrite_chain.py
+RefactoringTool: Refactored ./pdb_rna_delete_hydrogen.py
+RefactoringTool: Refactored ./pdb_rna_extract_backbone.py
+RefactoringTool: Refactored ./pdb_rna_nucleotide_com.py
+RefactoringTool: Refactored ./pdb_shape.py
+RefactoringTool: Refactored ./pdb_show_ires_inum.py
+RefactoringTool: Refactored ./pdb_split_model.py
+RefactoringTool: Refactored ./plot_files_2column.py
+RefactoringTool: Refactored ./ptraj_from_ninfo.py
+RefactoringTool: Refactored ./random_matrix_apply.py
+RefactoringTool: Refactored ./random_matrix_make_many.py
+RefactoringTool: Refactored ./replica_flow.py
+RefactoringTool: Refactored ./replica_to_label.py
+RefactoringTool: Refactored ./replica_to_label_many100.py
+RefactoringTool: Refactored ./replica_to_label_many_onebyone.py
+RefactoringTool: Refactored ./simp.py
+RefactoringTool: Refactored ./st_concatenate.py
+RefactoringTool: Refactored ./stprob_summary_bwyv.py
+RefactoringTool: Refactored ./tobi.py
+RefactoringTool: Refactored ./tobi_f.py
+RefactoringTool: Refactored ./torsion.py
+RefactoringTool: Refactored ./ts_calc_cv.py
+RefactoringTool: Refactored ./ts_concatenate.py
+RefactoringTool: Refactored ./ts_concatenate_vpk.py
+RefactoringTool: Refactored ./ts_split_unit.py
+RefactoringTool: No changes to ./wham_add_rw_energy.py
+RefactoringTool: No changes to ./wham_add_rw_energy_2d.py
+RefactoringTool: No changes to ./wham_sum_opt_energy.py
+RefactoringTool: No changes to ./wham_sum_opt_energy_sed.py
+RefactoringTool: Can't parse ./elements/ali.py: ParseError: bad input: type=4, value='\n', context=('', (21, 13))
+RefactoringTool: No changes to ./elements/coord.py
+RefactoringTool: Refactored ./elements/error.py
+RefactoringTool: Refactored ./elements/ninfo.py
+RefactoringTool: Refactored ./elements/pdb.py
+RefactoringTool: Refactored ./elements/psf.py
+RefactoringTool: Refactored ./file_io/coord.py
+RefactoringTool: Refactored ./file_io/dcd.py
+RefactoringTool: Refactored ./file_io/drid.py
+RefactoringTool: Refactored ./file_io/func_line2ninfo.py
+RefactoringTool: No changes to ./file_io/func_ninfo2line.py
+RefactoringTool: Refactored ./file_io/ninfo.py
+RefactoringTool: No changes to ./file_io/pdb.py
+RefactoringTool: Refactored ./file_io/psf.py
+RefactoringTool: Refactored ./file_io/psf_new.py
+RefactoringTool: Refactored ./file_io/ts.py
+RefactoringTool: No changes to ./para/BetancourtThirumalai.py
+RefactoringTool: No changes to ./para/btmap_to_Betancourt.py
+RefactoringTool: No changes to ./para/rnaDT13.py
+RefactoringTool: No changes to ./para/rnaDT15.py
+RefactoringTool: Refactored ./pca/pca_dcd.py
+RefactoringTool: Refactored ./pca/pca_dcd_preIMKL.py
+RefactoringTool: Refactored ./pca/pca_dcd_to_pc.py
+RefactoringTool: Refactored ./pca/pca_dcd_to_pc_filter.py
+RefactoringTool: Refactored ./pca/pca_dihxy_to_pc.py
+RefactoringTool: Refactored ./pca/pca_make_pullfile.py
+RefactoringTool: Refactored ./pca/pca_pdb_to_pc.py
+RefactoringTool: Refactored ./pca/pca_remove_translation.py
+RefactoringTool: Refactored ./pca/pca_remove_translation_rotation.py
+RefactoringTool: Refactored ./pca/pca_rotation.py
+RefactoringTool: No changes to ./pca/pca_tcl_arrow.py
+RefactoringTool: Refactored ./pca/pca_ts_freeenergy.py
+RefactoringTool: No changes to ./pca/pca_value2contribution.py
+RefactoringTool: Refactored ./pca/pca_vector_add.py
+RefactoringTool: Refactored ./pca/pca_vector_dot.py
+RefactoringTool: Refactored ./pca/pca_vector_mask.py
+RefactoringTool: Refactored ./pca/pca_vector_norm.py
+RefactoringTool: No changes to ./pca/pca_vector_scale.py
+RefactoringTool: Files that were modified:
+RefactoringTool: ./20130628_1.py
+RefactoringTool: ./20130628_3.py
+RefactoringTool: ./20130630_1.py
+RefactoringTool: ./20130702_1.py
+RefactoringTool: ./20130702_2.py
+RefactoringTool: ./20130703_1.py
+RefactoringTool: ./after_restart.py
+RefactoringTool: ./after_restart_2.py
+RefactoringTool: ./bestfit_dcd_by_pdb.py
+RefactoringTool: ./bestfit_dcd_by_pdb_part.py
+RefactoringTool: ./bestfit_dcd_by_pdb_part_onlyRMSD.py
+RefactoringTool: ./bestfit_pdb_by_matrix.py
+RefactoringTool: ./bfactor.py
+RefactoringTool: ./bfactor_average_residue.py
+RefactoringTool: ./bfactor_only_cgatom.py
+RefactoringTool: ./bfactor_write_to_pdb.py
+RefactoringTool: ./calc_RDT_Mg.py
+RefactoringTool: ./cls_aln_to_list.py
+RefactoringTool: ./cls_pdb_atom_pair_distance.py
+RefactoringTool: ./cls_pdb_atom_pair_distance_unitimp.py
+RefactoringTool: ./cls_pickup_shortdistance.py
+RefactoringTool: ./cls_vec_apply_alignment.py
+RefactoringTool: ./cluster_dcd.py
+RefactoringTool: ./cluster_dcd_cutoff.py
+RefactoringTool: ./cluster_dend.py
+RefactoringTool: ./cluster_drid.py
+RefactoringTool: ./cluster_drid_cutoff.py
+RefactoringTool: ./contact_order.py
+RefactoringTool: ./coord2dcd.py
+RefactoringTool: ./dat_ave_sigma.py
+RefactoringTool: ./dat_column_hist.py
+RefactoringTool: ./dat_hb2nd_bwyv.py
+RefactoringTool: ./dat_hb_contact.py
+RefactoringTool: ./dat_hb_cor.py
+RefactoringTool: ./dat_hb_cor_from_con.py
+RefactoringTool: ./dat_hb_prob.py
+RefactoringTool: ./dat_hbenergy_contact.py
+RefactoringTool: ./dat_hbenergy_hb2nd.py
+RefactoringTool: ./dat_hbprob.py
+RefactoringTool: ./dat_stprob.py
+RefactoringTool: ./dcd2dcd_with_ts.py
+RefactoringTool: ./dcd2drid.py
+RefactoringTool: ./dcd2movie_with_ts.py
+RefactoringTool: ./dcd_align_and_origin_PBC.py
+RefactoringTool: ./dcd_body_origin_PBC.py
+RefactoringTool: ./dcd_body_origin_PBC_unwrap_solute.py
+RefactoringTool: ./dcd_centroid_origin.py
+RefactoringTool: ./dcd_centroid_origin_PBC.py
+RefactoringTool: ./dcd_concatenate.py
+RefactoringTool: ./dcd_concatenate_dist.py
+RefactoringTool: ./dcd_concatenate_noskip.py
+RefactoringTool: ./dcd_contactmap.py
+RefactoringTool: ./dcd_dih_rna_bb.py
+RefactoringTool: ./dcd_dihxy_rna_bb.py
+RefactoringTool: ./dcd_domain_angle.py
+RefactoringTool: ./dcd_frame_count.py
+RefactoringTool: ./dcd_frame_extract.py
+RefactoringTool: ./dcd_frame_extract_as_dat.py
+RefactoringTool: ./dcd_frame_extract_as_movie.py
+RefactoringTool: ./dcd_onlyS.py
+RefactoringTool: ./dcd_pairwise.py
+RefactoringTool: ./dcd_persistencelength.py
+RefactoringTool: ./dcd_positioning.py
+RefactoringTool: ./dcd_rmsd_correlation.py
+RefactoringTool: ./dcd_show_header.py
+RefactoringTool: ./dcd_struct_extract.py
+RefactoringTool: ./dcd_traj_SaltAtmosphere.py
+RefactoringTool: ./dcd_traj_SaltCount.py
+RefactoringTool: ./dcd_traj_SaltDistribution.py
+RefactoringTool: ./dcd_traj_SaltDistribution_nt.py
+RefactoringTool: ./dcd_traj_SaltFluctuation.py
+RefactoringTool: ./dcd_traj_SaltPhosDistribution_nt.py
+RefactoringTool: ./dcd_traj_average.py
+RefactoringTool: ./dcd_traj_diffuse.py
+RefactoringTool: ./dcd_traj_distance.py
+RefactoringTool: ./dcd_traj_distance_PBC.py
+RefactoringTool: ./dcd_traj_measure.py
+RefactoringTool: ./dcd_traj_pca_coord.py
+RefactoringTool: ./dcd_traj_r_histogram.py
+RefactoringTool: ./dcd_traj_r_histogram_out.py
+RefactoringTool: ./dcd_traj_shape.py
+RefactoringTool: ./dcd_traj_so.py
+RefactoringTool: ./ddrid_ref.py
+RefactoringTool: ./distance2contactlist.py
+RefactoringTool: ./drid_frame_count.py
+RefactoringTool: ./drid_generate_mask_rna.py
+RefactoringTool: ./drid_pairwise.py
+RefactoringTool: ./edc_apply_to_ninfo_with_aln.py
+RefactoringTool: ./edc_apply_to_ninfo_with_aln_onebyone.py
+RefactoringTool: ./edc_factor_to_coef.py
+RefactoringTool: ./edc_factor_to_coef_onebyone.py
+RefactoringTool: ./edc_post.py
+RefactoringTool: ./edc_post_add_unitimp.py
+RefactoringTool: ./edc_post_aln.py
+RefactoringTool: ./edc_pre.py
+RefactoringTool: ./edc_pre_add_mpunit.py
+RefactoringTool: ./gnu_data.py
+RefactoringTool: ./hb2nd_collect_bwyv.py
+RefactoringTool: ./hb2nd_collect_bwyv_simple.py
+RefactoringTool: ./hb2nd_summary_bwyv.py
+RefactoringTool: ./hb2nd_summary_bwyv_simple.py
+RefactoringTool: ./hb_concatenate.py
+RefactoringTool: ./hb_prob_summary_bwyv.py
+RefactoringTool: ./hbcontact_collect.py
+RefactoringTool: ./hbprob_summary_bwyv.py
+RefactoringTool: ./make_replica_rst.py
+RefactoringTool: ./mapk_Rg_hist.py
+RefactoringTool: ./mapk_angle_hist.py
+RefactoringTool: ./mapk_angle_hist_by_position.py
+RefactoringTool: ./mapk_polar_hist.py
+RefactoringTool: ./mapk_polar_hist_ppr.py
+RefactoringTool: ./mapk_polar_hist_ppr_FE.py
+RefactoringTool: ./matrix_make.py
+RefactoringTool: ./matrix_transform_make.py
+RefactoringTool: ./mtx_coord_transform.py
+RefactoringTool: ./ninfo_RNA13_pdb.py
+RefactoringTool: ./ninfo_RNA13_pdb_multichain.py
+RefactoringTool: ./ninfo_RNA13_seq.py
+RefactoringTool: ./ninfo_RNA15_pdb.py
+RefactoringTool: ./ninfo_SOPSC_noSCforGLY.py
+RefactoringTool: ./ninfo_change_gmp_by_list.py
+RefactoringTool: ./ninfo_change_mp_by_aln.py
+RefactoringTool: ./ninfo_change_mp_by_list.py
+RefactoringTool: ./ninfo_combine_with_aln.py
+RefactoringTool: ./ninfo_contact_summary.py
+RefactoringTool: ./ninfo_copy_bindingsite.py
+RefactoringTool: ./ninfo_del_interaction.py
+RefactoringTool: ./ninfo_divide.py
+RefactoringTool: ./ninfo_make_inputlist.py
+RefactoringTool: ./ninfo_onebyone_makelist.py
+RefactoringTool: ./ninfo_sort_mp.py
+RefactoringTool: ./ninfo_split.py
+RefactoringTool: ./ninfo_ssRNA15.py
+RefactoringTool: ./ninfo_substitute_tRNA.py
+RefactoringTool: ./pdb2dcd.py
+RefactoringTool: ./pdb2drid.py
+RefactoringTool: ./pdb2fasta.py
+RefactoringTool: ./pdb_aa2cg.py
+RefactoringTool: ./pdb_centroid_origin_PBC.py
+RefactoringTool: ./pdb_cg_pair_distance.py
+RefactoringTool: ./pdb_cg_separate_by_input.py
+RefactoringTool: ./pdb_chain_separate.py
+RefactoringTool: ./pdb_chain_separate_number.py
+RefactoringTool: ./pdb_change_residue_number.py
+RefactoringTool: ./pdb_contact_map_closest_atom.py
+RefactoringTool: ./pdb_detect_basestack.py
+RefactoringTool: ./pdb_domain_angle.py
+RefactoringTool: ./pdb_make_so_list.py
+RefactoringTool: ./pdb_make_vector_movement.py
+RefactoringTool: ./pdb_move_to_COM.py
+RefactoringTool: ./pdb_ninfo.py
+RefactoringTool: ./pdb_rewrite_chain.py
+RefactoringTool: ./pdb_rna_delete_hydrogen.py
+RefactoringTool: ./pdb_rna_extract_backbone.py
+RefactoringTool: ./pdb_rna_nucleotide_com.py
+RefactoringTool: ./pdb_shape.py
+RefactoringTool: ./pdb_show_ires_inum.py
+RefactoringTool: ./pdb_split_model.py
+RefactoringTool: ./plot_files_2column.py
+RefactoringTool: ./ptraj_from_ninfo.py
+RefactoringTool: ./random_matrix_apply.py
+RefactoringTool: ./random_matrix_make_many.py
+RefactoringTool: ./replica_flow.py
+RefactoringTool: ./replica_to_label.py
+RefactoringTool: ./replica_to_label_many100.py
+RefactoringTool: ./replica_to_label_many_onebyone.py
+RefactoringTool: ./simp.py
+RefactoringTool: ./st_concatenate.py
+RefactoringTool: ./stprob_summary_bwyv.py
+RefactoringTool: ./tobi.py
+RefactoringTool: ./tobi_f.py
+RefactoringTool: ./torsion.py
+RefactoringTool: ./ts_calc_cv.py
+RefactoringTool: ./ts_concatenate.py
+RefactoringTool: ./ts_concatenate_vpk.py
+RefactoringTool: ./ts_split_unit.py
+RefactoringTool: ./wham_add_rw_energy.py
+RefactoringTool: ./wham_add_rw_energy_2d.py
+RefactoringTool: ./wham_sum_opt_energy.py
+RefactoringTool: ./wham_sum_opt_energy_sed.py
+RefactoringTool: ./elements/coord.py
+RefactoringTool: ./elements/error.py
+RefactoringTool: ./elements/ninfo.py
+RefactoringTool: ./elements/pdb.py
+RefactoringTool: ./elements/psf.py
+RefactoringTool: ./file_io/coord.py
+RefactoringTool: ./file_io/dcd.py
+RefactoringTool: ./file_io/drid.py
+RefactoringTool: ./file_io/func_line2ninfo.py
+RefactoringTool: ./file_io/func_ninfo2line.py
+RefactoringTool: ./file_io/ninfo.py
+RefactoringTool: ./file_io/pdb.py
+RefactoringTool: ./file_io/psf.py
+RefactoringTool: ./file_io/psf_new.py
+RefactoringTool: ./file_io/ts.py
+RefactoringTool: ./para/BetancourtThirumalai.py
+RefactoringTool: ./para/btmap_to_Betancourt.py
+RefactoringTool: ./para/rnaDT13.py
+RefactoringTool: ./para/rnaDT15.py
+RefactoringTool: ./pca/pca_dcd.py
+RefactoringTool: ./pca/pca_dcd_preIMKL.py
+RefactoringTool: ./pca/pca_dcd_to_pc.py
+RefactoringTool: ./pca/pca_dcd_to_pc_filter.py
+RefactoringTool: ./pca/pca_dihxy_to_pc.py
+RefactoringTool: ./pca/pca_make_pullfile.py
+RefactoringTool: ./pca/pca_pdb_to_pc.py
+RefactoringTool: ./pca/pca_remove_translation.py
+RefactoringTool: ./pca/pca_remove_translation_rotation.py
+RefactoringTool: ./pca/pca_rotation.py
+RefactoringTool: ./pca/pca_tcl_arrow.py
+RefactoringTool: ./pca/pca_ts_freeenergy.py
+RefactoringTool: ./pca/pca_value2contribution.py
+RefactoringTool: ./pca/pca_vector_add.py
+RefactoringTool: ./pca/pca_vector_dot.py
+RefactoringTool: ./pca/pca_vector_mask.py
+RefactoringTool: ./pca/pca_vector_norm.py
+RefactoringTool: ./pca/pca_vector_scale.py
+RefactoringTool: There were 3 errors:
+RefactoringTool: Can't parse ./dcd_traj_PhosDistribution_nt.py: ParseError: bad input: type=4, value='\n', context=('', (77, 19))
+RefactoringTool: Can't parse ./pdb2ninfo_protein.py: ParseError: bad input: type=1, value='sys', context=('\n                ', (27, 16))
+RefactoringTool: Can't parse ./elements/ali.py: ParseError: bad input: type=4, value='\n', context=('', (21, 13))

@@ -27,23 +27,23 @@ class TobiParam(object):
         f = open(filename, 'r')
         
         col = f.readline().split()[1:]
-        for i in xrange(ntype):
+        for i in range(ntype):
             l = f.readline()
             lsp = l.split()
             if lsp[0] != col[i]:
-                print 'Error: lsp[0]!=col[0]'
+                print('Error: lsp[0]!=col[0]')
                 sys.exit(2)
-            for m in xrange(ntype):
+            for m in range(ntype):
                 para[(TYPE2I[col[i]],TYPE2I[col[m]])] = float(lsp[m+1])
         f.close()
         
     def _check(self,para):
-        for mn in para.keys():
+        for mn in list(para.keys()):
             nm = (mn[1],mn[0])
             if para[mn] != para[nm]:
-                print 'Error: inconsistent'
-                print 'para[',mn,']=',para[mn]
-                print 'para[',nm,']=',para[nm]
+                print('Error: inconsistent')
+                print('para[',mn,']=',para[mn])
+                print('para[',nm,']=',para[nm])
     
 def get_atom_type(res, atom):
     if atom == 'N':
@@ -99,7 +99,7 @@ def get_atom_type(res, atom):
     elif res == 'CYS' and atom == 'SG':
         return TYPE2I['CSg']
     else:
-        print 'Error: get_atom_type in tobi.py'
+        print('Error: get_atom_type in tobi.py')
         sys.exit(2)
         
 
@@ -107,7 +107,7 @@ if __name__ == "__main__":
     
     
     if len(sys.argv) != 2:
-        print 'Usage: SCRIPT [input PDB]'
+        print('Usage: SCRIPT [input PDB]')
         sys.exit(2)
         
     import os
@@ -169,10 +169,10 @@ if __name__ == "__main__":
         atoms_chain.append(atoms)
         types_chain.append(types)
     
-    print 'start main'
+    print('start main')
     
-    for i in xrange(num_chain):
-        for j in xrange(i+1, num_chain):
+    for i in range(num_chain):
+        for j in range(i+1, num_chain):
             energy[(i,j)] = 0.0
             
             #ii=0
@@ -195,8 +195,8 @@ if __name__ == "__main__":
                         energy[(i,j)] += params.r2[(t1,t2)]
                     #print '%i %i %i %i %10.5f' % (ii, jj, t1, t2, ene)
                     
-    for i in xrange(num_chain):
-        for j in xrange(i+1,num_chain):
-            print '%i %i %12.6f' % (i,j,energy[(i,j)])
+    for i in range(num_chain):
+        for j in range(i+1,num_chain):
+            print('%i %i %12.6f' % (i,j,energy[(i,j)]))
                     
             

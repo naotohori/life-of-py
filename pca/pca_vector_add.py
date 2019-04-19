@@ -31,7 +31,7 @@ for f in fs_in[1:] :
         i += 1
     if i != n :
         print ('')
-        print ('Error: i != n; i=%i, n=%i', (i,n))
+        print(('Error: i != n; i=%i, n=%i', (i,n)))
         print ('')
         sys.exit(2)
 

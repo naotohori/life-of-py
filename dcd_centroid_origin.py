@@ -13,7 +13,7 @@ from cafysis.file_io.dcd import DcdFile
 import sys
 
 if len(sys.argv) != 5:
-    print 'Usage: SCRIPT [input DCD] [ID domain begin] [ID domain end] [output DCD]'
+    print('Usage: SCRIPT [input DCD] [ID domain begin] [ID domain end] [output DCD]')
     sys.exit(2)
 
 ID_DOM_INI = int(sys.argv[2]) - 1  # 重心を求める際に必要
@@ -39,7 +39,7 @@ while dcd.has_more_data() :
     #重心(CAのみで計算）が原点に重なるように並進
     com = [0.0] * 3
     n_com = ID_DOM_END - ID_DOM_INI + 1
-    for i in xrange(ID_DOM_INI, ID_DOM_END+1):
+    for i in range(ID_DOM_INI, ID_DOM_END+1):
         com[0] += data[i][0]
         com[1] += data[i][1]
         com[2] += data[i][2]

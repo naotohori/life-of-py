@@ -4,8 +4,8 @@ import sys
 import scipy.cluster.hierarchy
 
 if len(sys.argv) not in (3,4):
-    print 'Usage: SCRIPT [prefix] [p (number of leaves)]'
-    print 'Usage: SCRIPT [prefix] [p (number of leaves)] [["NOLABEL"]]'
+    print('Usage: SCRIPT [prefix] [p (number of leaves)]')
+    print('Usage: SCRIPT [prefix] [p (number of leaves)] [["NOLABEL"]]')
     sys.exit(2)
 
 if len(sys.argv) == 3:
@@ -14,8 +14,8 @@ else:
     if sys.argv[3] == "NOLABEL":
         flg_no_label = True
     else:
-        print 'Usage: SCRIPT [prefix] [p (number of leaves)]'
-        print 'Usage: SCRIPT [prefix] [p (number of leaves)] [["NOLABEL"]]'
+        print('Usage: SCRIPT [prefix] [p (number of leaves)]')
+        print('Usage: SCRIPT [prefix] [p (number of leaves)] [["NOLABEL"]]')
         sys.exit(2)
 
 prefix = sys.argv[1]

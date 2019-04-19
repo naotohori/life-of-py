@@ -14,9 +14,9 @@ import sys
 import re
 
 if len(sys.argv) != 4:
-    print
-    print 'Usage: % SCRIPT [cafemol pdb file] [cafemol input file]  [output prefix]'
-    print
+    print()
+    print('Usage: % SCRIPT [cafemol pdb file] [cafemol input file]  [output prefix]')
+    print()
     sys.exit(2)
 
 f_pdb = open(sys.argv[1], 'r')
@@ -41,7 +41,7 @@ for line in f_inp :
             data[i] = (mo.groups()[1:])
 f_inp.close()
 
-for i in xrange(1, len(data)+1) :
+for i in range(1, len(data)+1) :
     f_out = open(out_prefix+data[i][1], 'w')
     for line in f_pdb :
         if line[:2] == '>>' :

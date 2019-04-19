@@ -31,10 +31,10 @@ chains = file_pdb.read_all()
 
 xyz = []
 for c in chains:
-    for i in xrange(c.num_atom()):
+    for i in range(c.num_atom()):
         xyz.append(c.get_atom(i).xyz)
     
-print ("## Confirmation: number of atoms = %i" % len(xyz))
+print(("## Confirmation: number of atoms = %i" % len(xyz)))
         
 f_out = open(sys.argv[-1],'w')
 

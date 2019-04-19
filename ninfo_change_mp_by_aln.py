@@ -11,9 +11,9 @@ from cafysis.file_io.ninfo import NinfoFile
 
 if __name__ == '__main__':
     if len(sys.argv) != 6:
-        print 'Usage: %SCRIPT [ninfo] [target unit] [aln file] [side] [OUT ninfo]'
-        print '       side=1  old -> new'
-        print '       side=2  new -> old'
+        print('Usage: %SCRIPT [ninfo] [target unit] [aln file] [side] [OUT ninfo]')
+        print('       side=1  old -> new')
+        print('       side=2  new -> old')
         sys.exit(2)
 
     target = int(sys.argv[2])
@@ -39,7 +39,7 @@ if __name__ == '__main__':
             #aln[mp2 - delta2] = mp1 - delta1
             aln[mp2] = mp1
         else:
-            print '"side" is not acceptable. See usage'
+            print('"side" is not acceptable. See usage')
             sys.exit(2)
             
     ns = NinfoSet()

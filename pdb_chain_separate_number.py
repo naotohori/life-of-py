@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import sys
-from file_io.pdb import PdbFile
+from .file_io.pdb import PdbFile
 
 if len(sys.argv) != 3:
     print ('\n Usage: SCRIPT [input PDB file] [output DIR (with/without prefix)]\n')
@@ -12,7 +12,7 @@ f_pdb.open_to_read()
 chains = f_pdb.read_all()
 f_pdb.close()
 
-print ('%i chains' %len(chains))
+print(('%i chains' %len(chains)))
 inum = 0
 for c in chains :
     inum += 1

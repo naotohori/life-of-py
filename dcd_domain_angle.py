@@ -34,7 +34,7 @@ mp_domA_0 = 3 * (110 - 11)
 mp_domA_1 = 3 * ( 72 - 11)
 
 mp_domB = []
-for nt12 in range(42, 47+1)+range(174,178+1)+range(130,166+1):
+for nt12 in list(range(42, 47+1))+list(range(174,178+1))+list(range(130,166+1)):
     nt = nt12 - 11
     mp_domB.append( 3 * (nt-1) )  # Use phosphate
 

@@ -26,7 +26,7 @@ for line in f_dst:
         continue
     
     if imp_out in imp_out_to_in:
-        print ('Error: %i is already exist in imp_out_to_in' % imp_out)
+        print(('Error: %i is already exist in imp_out_to_in' % imp_out))
         sys.exit(2)
     imp_out_to_in[imp_out] = imp_in
     
@@ -39,7 +39,7 @@ for line in f_vec :
     v = (float(linesp[2]), float(linesp[3]), float(linesp[4]))
     mpvec[imp] = v
     
-for imp_out in xrange(imp_begin, imp_end+1) :
+for imp_out in range(imp_begin, imp_end+1) :
     if imp_out in imp_out_to_in :
         imp_in = imp_out_to_in[imp_out]
         if not imp_in in mpvec :

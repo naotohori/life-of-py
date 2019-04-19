@@ -8,7 +8,7 @@ Created on 2013/08/05
 import sys
 
 if len(sys.argv) != 4:
-    print 'Usage SCRIPT [input pdb] [digit of IDs] [output prefix]'
+    print('Usage SCRIPT [input pdb] [digit of IDs] [output prefix]')
     sys.exit(2)
     
 f_in = open(sys.argv[1])
@@ -27,7 +27,7 @@ for l in f_in:
             f_out.write(l)
         else:
             print('file is not open for a line:')
-            print('     '+l)
+            print(('     '+l))
     elif l[0:6] == 'ENDMDL':
         f_out.write('END')
         f_out.close()

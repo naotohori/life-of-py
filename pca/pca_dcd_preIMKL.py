@@ -6,7 +6,7 @@ from cafysis.file_io.dcd import DcdFile
 from numpy import zeros, float32
 
 if len(sys.argv) != 3:
-    print 'Usage: % SCRIPT [input DCD] [output]'
+    print('Usage: % SCRIPT [input DCD] [output]')
     sys.exit(2)
     
 filename_out = sys.argv[2]
@@ -16,7 +16,7 @@ dcd.open_to_read()
 dcd.read_header()
 nmp = dcd.get_header().nmp_real
 
-print 'nmp=%i\n'%nmp
+print('nmp=%i\n'%nmp)
 num_model = 0
 covariance = zeros((nmp*3, nmp*3), dtype=float32)
 variance = zeros((nmp*3,), dtype=float32)
@@ -24,7 +24,7 @@ variance = zeros((nmp*3,), dtype=float32)
 while dcd.has_more_data() :
     data = dcd.read_onestep()
     num_model += 1
-    print num_model
+    print(num_model)
     
 #    for i_mp in xrange(nmp) :
 #        for i_xyz in xrange(3) :
@@ -46,8 +46,8 @@ while dcd.has_more_data() :
 
 file_out = open(filename_out,'w')
 file_out.write('%i\n' % nmp*3)
-for i in xrange(nmp*3) :
-    for j in xrange(i,nmp*3):
+for i in range(nmp*3) :
+    for j in range(i,nmp*3):
         file_out.write('%22.20f\n' % a[i,j])
 
 file_out.close()

@@ -11,7 +11,7 @@ from cafysis.file_io.ts import TsFile
 from cafysis.file_io.pdb import PdbFile
 
 if len(sys.argv) != 5:
-    print 'Usage: % SCRIPT [input DCD] [ts file] [reference PDB] [output movie]'
+    print('Usage: % SCRIPT [input DCD] [ts file] [reference PDB] [output movie]')
     sys.exit(2)
 
 # Read the reference PDB
@@ -40,7 +40,7 @@ imodel = 0
 i_org = 0
 while dcd.has_more_data():
     if not ts.has_more_data():
-        print 'Not enough data in .ts file (1)'
+        print('Not enough data in .ts file (1)')
         sys.exit(2)
         
     tsdata, lines = ts.read_onestep()
@@ -48,7 +48,7 @@ while dcd.has_more_data():
     # skip step=1
     if tsdata[0][ts.head_col.step] == 1:
         if not ts.has_more_data():
-            print 'Not enough data in .ts file (2)'
+            print('Not enough data in .ts file (2)')
             sys.exit(2)
         tsdata, lines = ts.read_onestep()
     

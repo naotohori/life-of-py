@@ -7,7 +7,7 @@ import sys
 from cafysis.file_io.dcd import DcdFile
 
 if (len(sys.argv) != 2):
-    print 'Usage: % SCRIPT [filename]'
+    print('Usage: % SCRIPT [filename]')
     sys.exit(2)
     
 dcd = DcdFile(sys.argv[1])

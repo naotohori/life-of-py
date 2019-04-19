@@ -16,7 +16,7 @@ element2mass = {'P':30.973761, 'O':15.9994, 'C':12.0107, 'N':14.0067}
 
 if __name__ == '__main__':
     if len(sys.argv) != 3:
-        print 'Usage: %SCRIPT [input PDB file] [output PDB]'
+        print('Usage: %SCRIPT [input PDB file] [output PDB]')
         sys.exit(2)
         
 
@@ -34,7 +34,7 @@ pdb_out.write_remark('At %s' % (datetime.datetime.fromtimestamp(time.time()).str
 
 chains_com = []
 
-import elements
+from . import elements
 
 i_serial = 0
 
@@ -54,10 +54,10 @@ for c in chains:
         for a in r.atoms:
             if a.element.strip() == 'H':
                 continue
-            if element2mass.has_key(a.element.strip()):
+            if a.element.strip() in element2mass:
                 mass = element2mass[a.element.strip()]
             else:
-                print 'Error: no key %s in element2mass.' % (a.element,)
+                print('Error: no key %s in element2mass.' % (a.element,))
             xyz_sum += a.xyz * mass
             mass_sum += mass
         a_com.xyz = xyz_sum / float(mass_sum)

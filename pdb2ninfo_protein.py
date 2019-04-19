@@ -23,7 +23,7 @@ def generate_FENEs(chains, ns):
         iunit += 1
         for i in range(c.num_res()-1):
             if fene_SC:
-                print ('Error: side chain modeis has not been implemented yet!!'
+                print ('Error: side chain modeis has not been implemented yet!!')
                 sys.exit(2)
             else:
                 ninfo = Fene(iunit1=iunit, iunit2=iunit, imp1=imp_offset+i+1, imp2=imp_offset+i+2, imp1un=i+1, imp2un=i+2)

@@ -33,7 +33,7 @@ for l in open(filepath_inp, 'r'):
 
     sim_done.add(sim)
 
-    if n_ratio.has_key(key):
+    if key in n_ratio:
         n_ratio[key] = n_ratio[key] + 1
         sum_ratio[key] = sum_ratio[key] + ratio
         sum2_ratio[key] = sum2_ratio[key] + ratio * ratio

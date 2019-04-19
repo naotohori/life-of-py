@@ -32,7 +32,7 @@ dcd.read_header()
 nmp = dcd.get_header().nmp_real
 
 if (nmp-1)*(nmp-2)/2 != ncon:
-    print 'Warning: (nmp-1)*(nmp-2)/2 != ncon,  ncon=%i, nmp=%i' % (ncon,nmp)
+    print('Warning: (nmp-1)*(nmp-2)/2 != ncon,  ncon=%i, nmp=%i' % (ncon,nmp))
     #sys.exit(2)
 
 f_out = open(sys.argv[-1],'w')

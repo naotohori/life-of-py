@@ -74,7 +74,7 @@ for iP in range(nP):
     f_out.write('\n\n')
 
 # all 
-for i in range(bin)
+for i in range(bin):
     r1 = math.sqrt(bins[i])
     r2 = math.sqrt(bins[i+1])
     div_factor = float(nstep) * nP * 4.0 / 3.0 * math.pi * (r2**3 - r1**3)
