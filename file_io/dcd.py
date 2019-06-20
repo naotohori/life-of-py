@@ -10,6 +10,7 @@ from cafysis.elements.error import MyError
 
 class DcdHeader(object):
     def __init__(self):
+        self.format = 'cafemol'
         self.nset = None
         self.istart = None
         self.nstep_save = None
@@ -20,20 +21,24 @@ class DcdHeader(object):
         self.tempk = None
         self.lunit2mp = None
         self.nmp_real = None
+        self.with_unit_cell = False
         
     def show(self):
-        for line in self.title :
-            print line
-        print 'nset', self.nset
-        print 'istart', self.istart
-        print 'nstep_save', self.nstep_save
-        print 'nstep', self.nstep
-        print 'nunit_real', self.nunit_real
-        print 'delta', self.delta
-        print 'tempk', self.tempk
-        for i in xrange(self.nunit_real) :
-            print 'lunit2mp[', i, ']', self.lunit2mp[i]
-        print 'nmp_real', self.nmp_real
+        print('format', self.format)
+        if self.title is not None:
+            for line in self.title :
+                print(line)
+        print('nset', self.nset)
+        print('istart', self.istart)
+        print('nstep_save', self.nstep_save)
+        print('nstep', self.nstep)
+        print('nunit_real', self.nunit_real)
+        print('delta', self.delta)
+        print('tempk', self.tempk)
+        if self.nunit_real is not None:
+            for i in range(self.nunit_real) :
+                print('lunit2mp[', i, ']', self.lunit2mp[i])
+        print('nmp_real', self.nmp_real)
         
 class DcdFile :
     def __init__(self, filename) :
@@ -58,37 +63,92 @@ class DcdFile :
         if not self._file :
             raise MyError('DcdFile', 'read_header', 'Logical: _file is None')
         
+        ###########################################
+        # Check the format reading title lines
+        ###########################################
+
+        self._file.seek(0)
+
+        # Skip the first block
+        b = self._pick_data()
+        
+        # title block 
+        b = self._pick_data()
+        size = len(b)
+        nline = (size - 4) / 80
+        bdata = struct.unpack(('i' + '80s' * nline), b)
+        if bdata[1].find('Git commit') != -1 or bdata[2].find('CafeMol') != -1:
+            self._header.format = 'cafemol'
+        else:
+            self._header.format = 'charmm'
+            
+
+        ###########################################
+        # Load header infomation
+        ###########################################
+
         self._file.seek(0)
         
-        # first block 
-        b = self._pick_data()
-        bdata = struct.unpack('4siii5iifi9i', b)
-        #bdata = struct.unpack('4siii5iid9i',b)
-        if bdata[0] != 'CORD' :
-            raise MyError('DcdFile', 'read_header', '%s is not coordinate file' % (self._filename,))
-        self._header.nset = bdata[1]
-        self._header.istart = bdata[2]
-        self._header.nstep_save = bdata[3]
-        self._header.nstep = bdata[4]
-        self._header.nunit_real = bdata[5]
-        self._header.delta = bdata[10]
-        
-        # title block (number of line can be changed)
-        b = self._pick_data()
-        bdata = struct.unpack(('i' + '80s' * (3 + self._header.nunit_real)), b)
-        self._header.title = (bdata[1], bdata[2])
-        #self._header.tempk = float(bdata[3].strip('\0 '))
-        self._header.tempk = float(bdata[3])
-        self._header.lunit2mp = []
-        for i in xrange(self._header.nunit_real) :
-#            self._header.lunit2mp.append(int(bdata[i + 4].strip('\0 ')))
-            self._header.lunit2mp.append(int(bdata[i + 4]))
+        if self._header.format == 'cafemol':
+            # first block 
+            b = self._pick_data()
+            bdata = struct.unpack('4siii5iifi9i', b)
+            #bdata = struct.unpack('4siii5iid9i',b)
+            if bdata[0] != 'CORD' :
+                raise MyError('DcdFile', 'read_header', '%s is not coordinate file' % (self._filename,))
+            self._header.nset = bdata[1]
+            self._header.istart = bdata[2]
+            self._header.nstep_save = bdata[3]
+            self._header.nstep = bdata[4]
+            self._header.nunit_real = bdata[5]
+            self._header.delta = bdata[10]
             
-        # nmp_real
-        b = self._pick_data()
-        self._header.nmp_real = struct.unpack('i', b)[0]
+            # title block (number of line can be changed)
+            b = self._pick_data()
+            bdata = struct.unpack(('i' + '80s' * (3 + self._header.nunit_real)), b)
+            self._header.title = (bdata[1], bdata[2])
+            #self._header.tempk = float(bdata[3].strip('\0 '))
+            self._header.tempk = float(bdata[3])
+            self._header.lunit2mp = []
+            for i in range(self._header.nunit_real) :
+    #            self._header.lunit2mp.append(int(bdata[i + 4].strip('\0 ')))
+                self._header.lunit2mp.append(int(bdata[i + 4]))
+                
+            # nmp_real
+            b = self._pick_data()
+            self._header.nmp_real = struct.unpack('i', b)[0]
+
+        elif self._header.format == 'charmm':
+            # first block 
+            b = self._pick_data()
+            bdata = struct.unpack('4s20i', b)
+            if (bdata[11] == 1):
+                self._header.with_unit_cell = True
+            #bdata = struct.unpack('4siii5iid9i',b)
+            #if bdata[0] != 'CORD' :
+            #    raise MyError('DcdFile', 'read_header', '%s is not coordinate file' % (self._filename,))
+            #self._header.nset = bdata[1]
+            #self._header.istart = bdata[2]
+            #self._header.nstep_save = bdata[3]
+            #self._header.nstep = bdata[4]
+            #self._header.nunit_real = bdata[5]
+            #self._header.delta = bdata[10]
+            
+            # title block (number of line can be changed)
+            b = self._pick_data()
+            size = len(b)
+            nline = (size - 4) / 80
+            bdata = struct.unpack(('i' + '80s' * nline), b)
+            self._header.title = []
+            for i in range(nline):
+                self._header.title.append(bdata[i+1])
+                
+            # nmp_real
+            b = self._pick_data()
+            self._header.nmp_real = struct.unpack('i', b)[0]
 
         self._seek_data = self._file.tell()
+        
         
     def write_header(self):
         if not self._header :
@@ -121,7 +181,7 @@ class DcdFile :
         
         p = struct.pack('80s', str(self._header.tempk))
         binary += re_null.sub(' ', p)
-        for i in xrange(self._header.nunit_real) :
+        for i in range(self._header.nunit_real) :
             p = struct.pack('80s', str(self._header.lunit2mp[i]))
             binary += re_null.sub(' ', p)
             
@@ -145,6 +205,11 @@ class DcdFile :
         return self._header
     
     def read_onestep(self):
+
+        if (self._header.with_unit_cell):
+            num = struct.unpack('i', self._file.read(4))[0]
+            self._file.seek(4+num, os.SEEK_CUR)
+
         """return 2-dimensional lists"""
         coord_matrix = []
         b = self._pick_data()
@@ -154,7 +219,7 @@ class DcdFile :
         b = self._pick_data()
         z = struct.unpack('f' * self._header.nmp_real, b)
         
-        for i in xrange(self._header.nmp_real) :
+        for i in range(self._header.nmp_real) :
             xyz = [x[i], y[i], z[i]]
             coord_matrix.append(xyz)
         
@@ -200,15 +265,21 @@ class DcdFile :
         return data
     
     def skip_onestep(self):
-        num = struct.unpack('i', self._file.read(4))[0]
-        self._file.seek(4+num, os.SEEK_CUR)
-        num = struct.unpack('i', self._file.read(4))[0]
-        self._file.seek(4+num, os.SEEK_CUR)
-        num = struct.unpack('i', self._file.read(4))[0]
-        self._file.seek(4+num, os.SEEK_CUR)
-     
+        try:
+            if (self._header.with_unit_cell):
+                num = struct.unpack('i', self._file.read(4))[0]
+                self._file.seek(4+num, os.SEEK_CUR)
+            num = struct.unpack('i', self._file.read(4))[0]
+            self._file.seek(4+num, os.SEEK_CUR)
+            num = struct.unpack('i', self._file.read(4))[0]
+            self._file.seek(4+num, os.SEEK_CUR)
+            num = struct.unpack('i', self._file.read(4))[0]
+            self._file.seek(4+num, os.SEEK_CUR)
+        except:
+            raise EOFError('EOF in a middle of dcd.skip_onestep().')
+
     def skip(self, num):
-        for i in xrange(num):
+        for i in range(num):
             self.skip_onestep()
        
     def write_onestep(self, coord_matrix):
@@ -262,7 +333,7 @@ class DcdFile :
     def _read_at(self, num):
         self._file.seek(0)
         self.read_header()
-        for i in xrange(num - 1) :
+        for i in range(num - 1) :
             self.read_onestep()
         return self.read_onestep()
         

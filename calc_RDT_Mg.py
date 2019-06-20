@@ -25,7 +25,7 @@ for arg in sys.argv[4:-1] :
 # Output file preparing
 import os
 if os.path.exists(sys.argv[-1]) :
-    if raw_input('File %s exists. Rewrite? [Y/n]'%sys.argv[-1]) != 'Y' :
+    if input('File %s exists. Rewrite? [Y/n]'%sys.argv[-1]) != 'Y' :
         sys.exit(2)
 file_out = open(sys.argv[-1], 'w')
 
@@ -95,9 +95,9 @@ minset_water= []
 minset_metal= []
 minset_pro  = []
 
-print (' the number of Mg : ',len(MgIds))
+print((' the number of Mg : ',len(MgIds)))
 for icount, i in enumerate(MgIds) :
-    print ('%i/%i' % (icount+1,len(MgIds)) )
+    print(('%i/%i' % (icount+1,len(MgIds)) ))
     ''' 各Mgに対し、他の全残基に対する距離を計算'''
     #print (i)
     for (i_chain, chain) in enumerate(chains) :
@@ -162,22 +162,22 @@ hist_pro  = histogram(minset_pro,   HIST_BIN)
 
 # output to file_out
 file_out.write('#0 Phosphate\n')
-for i in xrange(len(hist_phos[0])) :
+for i in range(len(hist_phos[0])) :
     file_out.write("%f %i\n" % (hist_phos[1][i], hist_phos[0][i]) )
 file_out.write('\n\n#1 Base\n')
-for i in xrange(len(hist_base[0])) :
+for i in range(len(hist_base[0])) :
     file_out.write("%f %i\n" % (hist_base[1][i], hist_base[0][i]) )
 file_out.write('\n\n#2 Sugar\n')
-for i in xrange(len(hist_sugar[0])) :
+for i in range(len(hist_sugar[0])) :
     file_out.write("%f %i\n" % (hist_sugar[1][i], hist_sugar[0][i]) )
 file_out.write('\n\n#3 Oxygen of Water\n')
-for i in xrange(len(hist_water[0])) :
+for i in range(len(hist_water[0])) :
     file_out.write("%f %i\n" % (hist_water[1][i], hist_water[0][i]) )
 file_out.write('\n\n#4 Metal\n')
-for i in xrange(len(hist_metal[0])) :
+for i in range(len(hist_metal[0])) :
     file_out.write("%f %i\n" % (hist_metal[1][i], hist_metal[0][i]) )
 file_out.write('\n\n#4 Protein\n')
-for i in xrange(len(hist_pro[0])) :
+for i in range(len(hist_pro[0])) :
     file_out.write("%f %i\n" % (hist_pro[1][i], hist_pro[0][i]) )
 file_out.close()
                 

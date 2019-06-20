@@ -40,7 +40,7 @@ class CoordFile :
         self._file.read(8)  # 0.000
         z = struct.unpack('d' * self._nmp, self._file.read(8*self._nmp))
         
-        for i in xrange(self._nmp) :
+        for i in range(self._nmp) :
             xyz = [x[i], y[i], z[i]]
             coord_matrix.append(xyz)
         
@@ -50,7 +50,7 @@ class CoordFile :
         self._file.seek(3*8*(self._nmp+1), os.SEED_CUR)
      
     def skip(self, num):
-        for i in xrange(num):
+        for i in range(num):
             self.skip_onestep()
        
     def write_onestep(self, coord_matrix):
@@ -81,7 +81,7 @@ class CoordFile :
 
     def _read_at(self, num):
         self._file.seek(0)
-        for i in xrange(num - 1) :
+        for i in range(num - 1) :
             self.read_onestep()
         return self.read_onestep()
         

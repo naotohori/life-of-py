@@ -4,7 +4,7 @@ from file_pdb import PdbFile
 import sys
 
 if len(sys.argv) != 2 :
-    print 'Usage: SCRIPT [input PDB]'
+    print('Usage: SCRIPT [input PDB]')
     sys.exit(2)
 
 pdb_cafemol = PdbFile(sys.argv[1])
@@ -26,6 +26,6 @@ print('#ic   ires  res_c res    imp name')
 for (ic, c) in enumerate(cafe_chains):
     for (ir, r) in enumerate(c.residues):
         for (ia, a) in enumerate(r.atoms):
-            print('%3i %6i %6i %s %6i %s'
-               % (ic+1, a.res_seq+offset, a.res_seq, a.res_name, a.res_seq, a.name))
+            print(('%3i %6i %6i %s %6i %s'
+               % (ic+1, a.res_seq+offset, a.res_seq, a.res_name, a.res_seq, a.name)))
     offset += c.get_atom(-1).res_seq

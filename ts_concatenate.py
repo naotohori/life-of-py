@@ -57,7 +57,7 @@ def ts_concatenate(dir_in, dir_out, nrun):
             iline = 0
    
     if iline != 0:
-        print 'Error: iline != 0, irun = ',irun
+        print('Error: iline != 0, irun = ',irun)
      
     f_in.close()
    
@@ -93,7 +93,7 @@ def ts_concatenate(dir_in, dir_out, nrun):
                 iline = 0
      
         if iline != 0:
-            print 'Error: iline != 0, irun = ',irun
+            print('Error: iline != 0, irun = ',irun)
      
         f_in.close()
      
@@ -105,7 +105,7 @@ def ts_concatenate(dir_in, dir_out, nrun):
 if __name__ == '__main__':
         
     if len(sys.argv) != 4:
-        print 'Usage: % SCRIPT [input root dir] [output dir] [last run number]'
+        print('Usage: % SCRIPT [input root dir] [output dir] [last run number]')
         sys.exit(2)
 
     dir_in = sys.argv[1]
@@ -113,7 +113,7 @@ if __name__ == '__main__':
     nrun = int(sys.argv[3])
 
     if nrun < 3:
-        print 'Usage: Error nrun < 3'
+        print('Usage: Error nrun < 3')
         sys.exit(2)
 
     ts_concatenate(dir_in, dir_out, nrun)

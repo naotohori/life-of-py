@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
 def show_usage() :
-    print ''
-    print ' usage: SCRIPT [input pdb] [output fasta] [[TITLE]]'
-    print ''
+    print('')
+    print(' usage: SCRIPT [input pdb] [output fasta] [[TITLE]]')
+    print('')
     
 import sys
 if not len(sys.argv) in (3,4) :
@@ -35,18 +35,18 @@ str = ''
 for c in chains :
     for r in c.residues :
         c3 = r.atoms[0].res_name
-        if amino.has_key(c3):
+        if c3 in amino:
             c1 = amino[c3]
-        elif rna.has_key(c3) :
+        elif c3 in rna :
             c1 = rna[c3]
         else:
-            print 'no data', c3
+            print('no data', c3)
             sys.exit(2)
         str += c1
         
 #print str
 
 lines = int (len(str) / 80)
-for i in xrange(lines) :
+for i in range(lines) :
     f_fasta.write(str[i*80:(i+1)*80] + '\n')
 f_fasta.write(str[lines*80:] + '\n')

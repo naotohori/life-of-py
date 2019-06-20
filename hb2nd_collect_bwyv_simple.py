@@ -17,8 +17,8 @@ elif len(sys.argv) == 4:
     step_ignore = int(sys.argv[3])
     flg_final = False
 else:
-    print 'Usage: SCRIPT [filename hb2nd] [output file] [step_ignore]'
-    print ' or  : SCRIPT [filename hb2nd] [output file] [step_ignore] [step_final]'
+    print('Usage: SCRIPT [filename hb2nd] [output file] [step_ignore]')
+    print(' or  : SCRIPT [filename hb2nd] [output file] [step_ignore] [step_final]')
     sys.exit(2)
 
 filename_hb2nd = sys.argv[1]

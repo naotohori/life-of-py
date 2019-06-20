@@ -12,7 +12,7 @@ from cafysis.file_io.drid import DridFile, DridHeader
 from cafysis.lib_f2py import py_ddrid
 
 if len(sys.argv) != 4:
-    print 'Usage: % SCRIPT [input drid] [reference drid] [output dDRID]'
+    print('Usage: % SCRIPT [input drid] [reference drid] [output dDRID]')
     sys.exit(2)
 
 drid = DridFile(sys.argv[1])
@@ -24,7 +24,7 @@ drid_ref.open_to_read()
 drid_ref.read_header()
 
 if not np.array_equal(drid.get_header().mask, drid_ref.get_header().mask):
-    print 'Two masks are not identical'
+    print('Two masks are not identical')
     sys.exit(2)
 
 x_ref = drid_ref.read_onestep()

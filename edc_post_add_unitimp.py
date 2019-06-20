@@ -9,8 +9,8 @@ import sys
 
 if __name__ == '__main__':
     if len(sys.argv) != 4:
-        print 'Usage: SCRIPT [edc_pre.3i8h.out] [../post_edc_3i8h/edc_post.out] [post_edc.out]'
-        print 'assuming at ~/ribo/ribo_015/forDunkleJenner/'
+        print('Usage: SCRIPT [edc_pre.3i8h.out] [../post_edc_3i8h/edc_post.out] [post_edc.out]')
+        print('assuming at ~/ribo/ribo_015/forDunkleJenner/')
         sys.exit(2)
         
 f_out = open(sys.argv[-1],'w')

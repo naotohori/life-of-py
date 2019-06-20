@@ -10,8 +10,8 @@ from cafysis.file_io.dcd import DcdFile
 from numpy import zeros, int32
 
 if not len(sys.argv) in (4,5):
-    print 'Usage: % SCRIPT [input DCD] [cutoff] [output]'
-    print '       % SCRIPT [input DCD] [cutoff] [output] [output PNG file (optional)]'
+    print('Usage: % SCRIPT [input DCD] [cutoff] [output]')
+    print('       % SCRIPT [input DCD] [cutoff] [output] [output PNG file (optional)]')
     sys.exit(2)
     
 cutoff = float(sys.argv[2])
@@ -28,8 +28,8 @@ cut_square = cutoff * cutoff
 while dcd.has_more_data() :
     data = dcd.read_onestep()
     
-    for i in xrange(nmp) :
-        for j in xrange(i+1,nmp) :
+    for i in range(nmp) :
+        for j in range(i+1,nmp) :
             distance = ( (data[i][0] - data[j][0]) ** 2
                         +(data[i][1] - data[j][1]) ** 2
                         +(data[i][2] - data[j][2]) ** 2 )
@@ -37,8 +37,8 @@ while dcd.has_more_data() :
                 hist[i][j] += 1
 
 file_out = open(filepath_out,'w')
-for i in xrange(nmp) :
-    for j in xrange(i+1,nmp) :
+for i in range(nmp) :
+    for j in range(i+1,nmp) :
         file_out.write('%8i %8i %20i\n'%(i+1,j+1,hist[i][j]))
     file_out.write('\n')
 file_out.close()    

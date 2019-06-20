@@ -31,4 +31,4 @@ if __name__ == "__main__":
         print ('Usage: SCRIPT [drid file]')
         sys.exit(2)
 
-    print ('# frames = ', count(sys.argv[1]))
+    print(('# frames = ', count(sys.argv[1])))

@@ -40,22 +40,22 @@ for line in open(sys.argv[1], 'r'):
     x2 = float(linesp[8])
     if (x1 < pc1_min or x1 > pc1_max or x2 < pc2_min or x2 > pc2_max):
         num_out_range += 1
-        print ("#Out of the range: %s" % line.strip())
+        print(("#Out of the range: %s" % line.strip()))
         continue
     ene.append(float(linesp[3]))
     pc1.append(float(linesp[7]))
     pc2.append(float(linesp[8]))
     
 print("### Number of out-of-range")
-print ("%i" % num_out_range)
+print(("%i" % num_out_range))
 print("### Confirmation: number of data")
-print("ene: %i" % len(ene))
-print("pc1: %i" % len(pc1))
-print("pc2: %i" % len(pc2))
+print(("ene: %i" % len(ene)))
+print(("pc1: %i" % len(pc1)))
+print(("pc2: %i" % len(pc2)))
 print("### Confirmation: min and max")
-print("ene: %f - %f" % (min(ene), max(ene)))
-print("pc1: %f - %f" % (min(pc1), max(pc1)))
-print("pc2: %f - %f" % (min(pc2), max(pc2)))
+print(("ene: %f - %f" % (min(ene), max(ene))))
+print(("pc1: %f - %f" % (min(pc1), max(pc1))))
+print(("pc2: %f - %f" % (min(pc2), max(pc2))))
 
 pc1_bins = np.arange(pc1_min, pc1_max, pc1_wid)
 pc2_bins = np.arange(pc2_min, pc2_max, pc2_wid)

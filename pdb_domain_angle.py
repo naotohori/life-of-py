@@ -36,7 +36,7 @@ mp_domA_0 = 3 * (110 - 11)
 mp_domA_1 = 3 * ( 72 - 11)
 
 mp_domB = []
-for nt12 in range(42, 47+1)+range(174,178+1)+range(130,166+1):
+for nt12 in list(range(42, 47+1))+list(range(174,178+1))+list(range(130,166+1)):
     nt = nt12 - 11
     mp_domB.append( 3 * (nt-1) )  # Use phosphate
 
@@ -77,7 +77,7 @@ r1 = np.dot(c.get_atom( mp_domA_1-1 ).xyz.get_as_ndarray(), vA[0])
 if r1 < r0:
     vA[0] *= -1.0
 
-print 'Principal vector of domain A', vA[0]
+print('Principal vector of domain A', vA[0])
 
 
 '''
@@ -109,10 +109,10 @@ r1 = np.dot(c.get_atom( mp_domB_1-1 ).xyz.get_as_ndarray(), vB[0])
 if r1 < r0:
     vB[0] *= -1.0
 
-print 'Principal vector of domain B', vB[0]
+print('Principal vector of domain B', vB[0])
 
 
 ''' Angle between domain A and B '''
 #cos_theta = np.dot(vA[0],vB[0]) / math.sqrt(np.dot(vA[0],vA[0]) * np.dot(vB[0],vB[0]))
 theta = math.acos( np.dot(vA[0],vB[0]) / math.sqrt(np.dot(vA[0],vA[0]) * np.dot(vB[0],vB[0])) )
-print 180.0 * theta / math.pi
+print(180.0 * theta / math.pi)

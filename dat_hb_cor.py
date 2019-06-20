@@ -25,8 +25,8 @@ if len(sys.argv) == 5:
 elif len(sys.argv) == 4:
     flg_final = False
 else:
-    print 'Usage: SCRIPT [HB file (bwyv.hb)] [dir_search] [step_ignore]'
-    print ' or  : SCRIPT [HB file (bwyv.hb)] [dir_search] [step_ignore] [step_final]'
+    print('Usage: SCRIPT [HB file (bwyv.hb)] [dir_search] [step_ignore]')
+    print(' or  : SCRIPT [HB file (bwyv.hb)] [dir_search] [step_ignore] [step_final]')
     sys.exit(2)
 
 filepath_hb = sys.argv[1]
@@ -81,7 +81,7 @@ for sim in simulations:
             continue
 
     if flg_skip:
-        print ('Skip %s' % (os.getcwd(),) )
+        print(('Skip %s' % (os.getcwd(),) ))
         os.chdir(orig_dir)
         continue
 
@@ -93,7 +93,7 @@ for sim in simulations:
     for l in f_data[0]:
         lines = [l]
         for i in range(1,num_con):
-            lines.append(f_data[i].next())
+            lines.append(next(f_data[i]))
 
         if (lines[0].find('#') != -1):
             continue

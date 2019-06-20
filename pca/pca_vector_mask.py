@@ -21,7 +21,7 @@ for arg in sys.argv[2:-1] :
 
 mask_id = []
 for pair in id_pairs:
-    mask_id.extend(range(pair[0], pair[1]+1)) 
+    mask_id.extend(list(range(pair[0], pair[1]+1))) 
 
 i_xyz = 0
 i_mp = 0

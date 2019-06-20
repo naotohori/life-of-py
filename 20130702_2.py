@@ -30,7 +30,7 @@ import matplotlib.pyplot as plt
 from scipy.constants.constants import pi
 
 if len(sys.argv) != 4:
-    print 'Usage: SCRIPT [input data] [output prefix] [output file]'
+    print('Usage: SCRIPT [input data] [output prefix] [output file]')
     sys.exit(2)
     
 file_in = open(sys.argv[1],'r')
@@ -41,16 +41,16 @@ COL_DIST = 1 - 1
 COL_THETA = 4 - 1
 COL_PHI = 5 - 1
 
-phi_bins = [x*10.0 for x in xrange(-18,19)]
+phi_bins = [x*10.0 for x in range(-18,19)]
 #phi_bins = [x*15.0 for x in xrange(-12,13)]
 
 DIV_Z = 17  # nの値。-180から180は 2n = 2 x DIV_Z に分割される。
 theta_bins = []
 theta_bins.append(0.0)          # i=0
-for i in xrange(1,DIV_Z):       # i=1,2,3,....,(n-1)
+for i in range(1,DIV_Z):       # i=1,2,3,....,(n-1)
     theta_bins.append(math.degrees(math.acos(1.0-i/float(DIV_Z))))
 theta_bins.append(90.0)         # i=n
-for i in xrange(1,DIV_Z):       # i=(n+1),(n+2),....,(2n-1)
+for i in range(1,DIV_Z):       # i=(n+1),(n+2),....,(2n-1)
     j = DIV_Z - i
     theta_bins.append(180.0-theta_bins[j])
 theta_bins.append(180.0)        # i=2n
@@ -102,24 +102,24 @@ m = len(H[0])
 Hplt = zeros((n+1,m+1))
 
 Hplt[0,0] = H[0,0]
-for i in xrange(1, n):
+for i in range(1, n):
     Hplt[i,0] = (H[i-1,0]+H[i,0]) * 0.5
 Hplt[n,0] = H[n-1,0]
 
-for j in xrange(1,m):
+for j in range(1,m):
     Hplt[0,j] = (H[0,j-1]+H[0,j]) * 0.5
-    for i in xrange(1,n):
+    for i in range(1,n):
         Hplt[i,j] = (H[i-1,j-1]+H[i-1,j]+H[i,j-1]+H[i,j]) * 0.25
     Hplt[n,j] = (H[n-1,j-1]+H[n-1,j]) * 0.5
 
 Hplt[0,m] = H[0,m-1]
-for i in xrange(1,n):
+for i in range(1,n):
     Hplt[i,m] = (H[i-1,m-1]+H[i,m-1]) * 0.5
 Hplt[n,m] = H[n-1,m-1]
     
-for i in xrange(len(Hplt)):
+for i in range(len(Hplt)):
     file_out.write("\n")
-    for j in xrange(len(Hplt[i])):
+    for j in range(len(Hplt[i])):
         file_out.write('%f %f %f\n' % (phi_edge[j],theta_edge[i],Hplt[i,j]))
     
         

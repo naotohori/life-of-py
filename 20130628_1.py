@@ -13,7 +13,7 @@ import sys
 from math import hypot, atan2
 
 if len(sys.argv) != 2:
-    print 'Usage: SCRIPT [file]'
+    print('Usage: SCRIPT [file]')
     sys.exit(2)
 
 pdb = PdbFile(sys.argv[1])
@@ -34,9 +34,9 @@ for atom in chains[1].residues[200].atoms:
         N = atom.xyz
 
 # 動かす前        
-print "動かす前"
-print "Q:",Q.get_as_tuple()
-print "N:",N.get_as_tuple()
+print("動かす前")
+print("Q:",Q.get_as_tuple())
+print("N:",N.get_as_tuple())
 
 ##########################################################
 #Ste7(189-471)の重心(CAのみで計算）が原点に重なるように並進
@@ -50,7 +50,7 @@ for (i,r) in enumerate(chains[1].residues):
                 n_com += 1
 
 if n_com != 283:
-    print "ERROR: n_com = ",n_com
+    print("ERROR: n_com = ",n_com)
     sys.exit(2)
 
 com /= n_com
@@ -62,9 +62,9 @@ for c in chains:
         for a in r.atoms:
             a.xyz.transform(trans_com.mtx)
             
-print "重心を原点へ"
-print "Q:",Q.get_as_tuple()
-print "N:",N.get_as_tuple()
+print("重心を原点へ")
+print("Q:",Q.get_as_tuple())
+print("N:",N.get_as_tuple())
 
 
 ##########################################################
@@ -94,9 +94,9 @@ for c in chains:
         for a in r.atoms:
             a.xyz.transform(rotateQ.mtx)
 #ここまでで、QがZ軸上にのった
-print "QをZ軸上へ"
-print "Q:",Q.get_as_tuple()
-print "N:",N.get_as_tuple()
+print("QをZ軸上へ")
+print("Q:",Q.get_as_tuple())
+print("N:",N.get_as_tuple())
 
 
 ##########################################################
@@ -114,9 +114,9 @@ for c in chains:
             a.xyz.transform(rotateN.mtx)
 #DEBUG print "N",N.get_as_tuple()
 #ここまでで、NをX軸上へ
-print "NをX軸上へ"
-print "Q:",Q.get_as_tuple()
-print "N:",N.get_as_tuple()
+print("NをX軸上へ")
+print("Q:",Q.get_as_tuple())
+print("N:",N.get_as_tuple())
 
 pdb_out = PdbFile("20130628.pdb")
 pdb_out.open_to_write()

@@ -11,7 +11,7 @@ from copy import copy
 
 if __name__ == '__main__':
     if len(sys.argv) < 4:
-        print 'Usage: % SCRIPT [DCD1] [DCD2] ([DCD3] ...) [output DCD]'
+        print('Usage: % SCRIPT [DCD1] [DCD2] ([DCD3] ...) [output DCD]')
         sys.exit(2)
         
     # Number of input DCD files
@@ -23,7 +23,7 @@ if __name__ == '__main__':
     
     # Count the total frame number
     num_frame = 1
-    for i in xrange(1,num_dcd) :
+    for i in range(1,num_dcd) :
         f_in = DcdFile(sys.argv[i])
         f_in.open_to_read()
         f_in.read_header()
@@ -46,17 +46,17 @@ if __name__ == '__main__':
     header.nstep = num_step
     f_out.set_header(header)
     f_out.write_header()
-    print sys.argv[1], f_in.get_header().nset
+    print(sys.argv[1], f_in.get_header().nset)
     while f_in.has_more_data() :
         f_out.write_onestep(f_in.read_onestep())
     f_in.close()
     
-    for i in xrange(2,num_dcd+1) :
+    for i in range(2,num_dcd+1) :
         f_in = DcdFile(sys.argv[i])
         f_in.open_to_read()
         f_in.read_header()
         #f_in.skip_onestep()  # skip the first step
-        print sys.argv[i], f_in.get_header().nset
+        print(sys.argv[i], f_in.get_header().nset)
         while f_in.has_more_data() :
             f_out.write_onestep(f_in.read_onestep())
         f_in.close()

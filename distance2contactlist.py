@@ -5,7 +5,7 @@ import math
 import sys
 
 if len(sys.argv) != 5:
-    print 'SCRIPT [CG pdb] [pairdist.dat] [Rc] [output prefix]'
+    print('SCRIPT [CG pdb] [pairdist.dat] [Rc] [output prefix]')
     sys.exit(2)
 
 d_cut = float(sys.argv[3])
@@ -21,7 +21,7 @@ for l in open(sys.argv[1],'r'):
     xyz_com.append((x,y,z))
 
 num_nt = len(xyz_com)
-print "num_nt: ",num_nt
+print("num_nt: ",num_nt)
 
 dat = np.zeros((num_nt+1, num_nt+1))
 

@@ -6,7 +6,7 @@ from cafysis.file_io.dcd import DcdFile, DcdHeader
 import sys
 
 if len(sys.argv) != 3:
-    print 'Usage: SCRIPT [pdb] [dcd]'
+    print('Usage: SCRIPT [pdb] [dcd]')
     sys.exit(2)
 
 pdb = PdbFile(sys.argv[1])

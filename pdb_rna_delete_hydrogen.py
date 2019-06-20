@@ -5,10 +5,10 @@ import sys
 
 sys.argv
 if len(sys.argv) != 3:
-    print 
-    print 'This script deletes hydrogen atoms from PDB file.'
-    print 'Usage: % SCRIPT [PDB file] [output PDB file]'
-    print 
+    print() 
+    print('This script deletes hydrogen atoms from PDB file.')
+    print('Usage: % SCRIPT [PDB file] [output PDB file]')
+    print() 
     sys.exit(2)
 
 filename_pdb = sys.argv[1]

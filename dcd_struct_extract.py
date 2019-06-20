@@ -9,9 +9,9 @@ import copy
 from cafysis.file_io.dcd import DcdFile
 
 if len(sys.argv) < 5:
-    print 
-    print 'Usage: % SCRIPT [input DCD] [output DCD] [[(mp begin) (mp end)] ....]'
-    print 
+    print() 
+    print('Usage: % SCRIPT [input DCD] [output DCD] [[(mp begin) (mp end)] ....]')
+    print() 
     sys.exit(2)
     
 # input
@@ -28,8 +28,8 @@ for arg in sys.argv[3:] :
     n *= -1
 
 if n == -1:
-    print 
-    print 'Usage: % SCRIPT [input DCD] [output DCD] [[(mp begin) (mp end)] ....]'
+    print() 
+    print('Usage: % SCRIPT [input DCD] [output DCD] [[(mp begin) (mp end)] ....]')
     sys.exit(2)
     
 f_dcd_in.open_to_read()
@@ -55,7 +55,7 @@ while f_dcd_in.has_more_data() :
     data_out = []
     for id_pair in id_pairs :
         if id_pair[1] > nmp_in + 1:
-            print 'Error: id_pair[1] > nmp_in + 1'
+            print('Error: id_pair[1] > nmp_in + 1')
             sys.exit(2)
         data_out.extend(data[id_pair[0]-1 : id_pair[1]])
     ##debug

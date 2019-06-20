@@ -7,7 +7,7 @@ from CalcRMSD import calcrmsd
 from cafysis.file_io.dcd import DcdFile
 
 if len(sys.argv) != 4:
-    print 'Usage: % SCRIPT [input DCD] [#frame to skip] [output prefix]'
+    print('Usage: % SCRIPT [input DCD] [#frame to skip] [output prefix]')
     sys.exit(2)
 
 nskip = int(sys.argv[2])
@@ -33,7 +33,7 @@ while dcd.has_more_data():
 
 dcd.close()
 
-print len(dist_array)
+print(len(dist_array))
 
 #z = scipy.cluster.hierarchy.ward(dist)  # This does not work for some reason 
 z = scipy.cluster.hierarchy.linkage(dist_array, method='ward', metric='euclidean')

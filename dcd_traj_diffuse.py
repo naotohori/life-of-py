@@ -41,11 +41,11 @@ while dcd.has_more_data():
 dcd.close()
 
 if nstep != len(com):
-    print 'Error: nstep != len(com)'
+    print('Error: nstep != len(com)')
     sys.exit(2)
 Nmax = int(nstep / 2)
-print 'nstep: ',nstep
-print 'Nmax: ', Nmax
+print('nstep: ',nstep)
+print('Nmax: ', Nmax)
 
 
 msd = []
@@ -74,4 +74,4 @@ for i_orig in range(0, Nmax+1):
 
 for dt in range(1, Nmax+1):
     f_out.write('%i %f\n' % (dt, msd[dt]/float(n_add[dt])) )
-print n_add
+print(n_add)

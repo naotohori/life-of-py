@@ -7,7 +7,7 @@ import scipy.cluster.hierarchy
 from cafysis.file_io.drid import DridFile
 
 if len(sys.argv) != 5:
-    print 'Usage: SCRIPT [DRID file] [prefix] [cutoff] [nskip (to calculate frame id)]'
+    print('Usage: SCRIPT [DRID file] [prefix] [cutoff] [nskip (to calculate frame id)]')
     sys.exit(2)
 
 drid_filepath = sys.argv[1]
@@ -131,7 +131,7 @@ while drid.has_more_data():
 # Check this code correctly working
 for icls in range(ncls):
     if cls_num_node[icls] != fcls.tolist().count(icls+1):
-        print 'Error: cls_num_node[icls] != fcls.count(icls+1)'
+        print('Error: cls_num_node[icls] != fcls.count(icls+1)')
         sys.exit(2)
 
 for icls in range(ncls):

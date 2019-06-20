@@ -10,7 +10,7 @@ from cafysis.file_io.dcd import DcdFile
 from cafysis.file_io.pdb import PdbFile
 
 if len(sys.argv) != 5:
-    print 'Usage: % SCRIPT [PDB filename] [DCD filename] [out PDB filename] [out bfactor file]'
+    print('Usage: % SCRIPT [PDB filename] [DCD filename] [out PDB filename] [out bfactor file]')
     sys.exit(2)
     
 filename_pdb = sys.argv[1]
@@ -67,7 +67,7 @@ iatom = 0
 coef_pdb_bfactor = 10.0
 for chain in chains :
     for residue in chain.residues :
-        for i in xrange(len(residue.atoms)) :
+        for i in range(len(residue.atoms)) :
             bfactor = (bf[iatom,0]+bf[iatom,1]+bf[iatom,2])*8.0*math.pi*math.pi/3.0
             rmsf = math.sqrt(bf[iatom,0]+bf[iatom,1]+bf[iatom,2])
             residue.atoms[i].temp_factor = coef_pdb_bfactor * bfactor / bf_ave

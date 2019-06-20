@@ -10,7 +10,7 @@ from numpy import zeros, float64
 import sys
 
 if len(sys.argv) != 4:
-    print 'Usage: % SCRIPT [PDB filename] [DCD filename] [out DCD filename]'
+    print('Usage: % SCRIPT [PDB filename] [DCD filename] [out DCD filename]')
     sys.exit(2)
     
 filename_pdb = sys.argv[1]
@@ -51,7 +51,7 @@ while dcd.has_more_data() :
     data = dcd.read_onestep_np()
     rmsd = superimpose(ref, data.T) 
 
-    print k, rmsd
+    print(k, rmsd)
     out_dcd.write_onestep(data)
         
 dcd.close()

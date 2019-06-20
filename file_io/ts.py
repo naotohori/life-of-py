@@ -50,45 +50,45 @@ class TsHeader(object):
         self.e_thbond = None
         
     def show(self):
-        print 'step', self.step
-        print 'temp', self.temp
-        print 'label', self.label
+        print('step', self.step)
+        print('temp', self.temp)
+        print('label', self.label)
         
-        print 'rg', self.rg
-        print 'rmsd', self.rmsd
-        print 'q', self.q
+        print('rg', self.rg)
+        print('rmsd', self.rmsd)
+        print('q', self.q)
         
         #print 'mgo_kai', self.mgo_kai
         #print 'mgo_coef', self.mgo_coef
         #print 'mgo_q', self.mgo_q
         #print 'mgo_state', self.mgo_state
         
-        print 'e_tot', self.e_tot
-        print 'e_velo', self.e_velo
-        print 'e_local', self.e_local
-        print 'e_go', self.e_go
-        print 'e_morse', self.e_morse
-        print 'e_repul', self.e_repul
-        print 'e_dna_solv', self.e_dna_solv
-        print 'e_dna_base', self.e_dna_base
-        print 'e_ele', self.e_ele
-        print 'e_ion_hyd', self.e_ion_hyd
-        print 'e_hp', self.e_hp
-        print 'e_lip_tail', self.e_lip_tail
-        print 'e_lip_int', self.e_lip_int
-        print 'e_lip_solv', self.e_lip_solv
-        print 'e_box', self.e_box
-        print 'e_cap', self.e_cap
-        print 'e_bridge', self.e_bridge
-        print 'e_pull', self.e_pull
-        print 'e_anch', self.e_anch
-        print 'e_rest1d', self.e_rest1d
-        print 'e_implig', self.e_implig
-        print 'e_window', self.e_window
-        print 'e_stack', self.e_stack
-        print 'e_hbond', self.e_hbond
-        print 'e_tstack', self.e_tstack
-        print 'e_thbond', self.e_thbond
+        print('e_tot', self.e_tot)
+        print('e_velo', self.e_velo)
+        print('e_local', self.e_local)
+        print('e_go', self.e_go)
+        print('e_morse', self.e_morse)
+        print('e_repul', self.e_repul)
+        print('e_dna_solv', self.e_dna_solv)
+        print('e_dna_base', self.e_dna_base)
+        print('e_ele', self.e_ele)
+        print('e_ion_hyd', self.e_ion_hyd)
+        print('e_hp', self.e_hp)
+        print('e_lip_tail', self.e_lip_tail)
+        print('e_lip_int', self.e_lip_int)
+        print('e_lip_solv', self.e_lip_solv)
+        print('e_box', self.e_box)
+        print('e_cap', self.e_cap)
+        print('e_bridge', self.e_bridge)
+        print('e_pull', self.e_pull)
+        print('e_anch', self.e_anch)
+        print('e_rest1d', self.e_rest1d)
+        print('e_implig', self.e_implig)
+        print('e_window', self.e_window)
+        print('e_stack', self.e_stack)
+        print('e_hbond', self.e_hbond)
+        print('e_tstack', self.e_tstack)
+        print('e_thbond', self.e_thbond)
                 
 class TsFile(object):
     def __init__(self, filename) :
@@ -122,7 +122,7 @@ class TsFile(object):
         self._file.seek(0)
         
         # skip 5 lines
-        for i in xrange(5):
+        for i in range(5):
             self.header_lines.append( self._file.readline() )
             
         # read header
@@ -160,7 +160,7 @@ class TsFile(object):
             
         # skip 9 lines
         self._file.seek(0)
-        for i in xrange(9):
+        for i in range(9):
             self._file.readline()
 
     def write_header(self):
@@ -189,12 +189,12 @@ class TsFile(object):
         if self.flg_u_u:
             #for i in xrange(self.num_unit+1):
             #for i in xrange(self.num_unit):  # There is no "#all" line
-            for i in xrange(nlines):
+            for i in range(nlines):
                 l = self._file.readline()
                 lines.append(l)
                 ts_list.append(l.split()[1:])
 
-            for i in xrange(self.num_unit*(self.num_unit-1)/2):
+            for i in range(self.num_unit*(self.num_unit-1)/2):
                 l = self._file.readline()
                 lines.append(l)
                 ts_list.append(l.split()[1:])
@@ -204,7 +204,7 @@ class TsFile(object):
             #    l = self._file.readline()
             #    lines.append(l)
             #    ts_list.append(l.split())
-            for i in xrange(nlines):
+            for i in range(nlines):
                 l = self._file.readline()
                 lines.append(l)
                 ts_list.append(l.split()[1:])
@@ -216,11 +216,11 @@ class TsFile(object):
             self._file.write(l)
     
     def skip_onestep(self):
-        for i in xrange(self.num_unit +2):
+        for i in range(self.num_unit +2):
             self._file.readline()
      
     def skip(self, num):
-        for i in xrange((self.num_unit +2)*num):
+        for i in range((self.num_unit +2)*num):
             self._file.readline()
        
     #def write_onestep(self, coord_matrix):

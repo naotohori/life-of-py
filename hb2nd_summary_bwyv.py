@@ -15,7 +15,7 @@ sim_done = set()
 
 import sys
 if len(sys.argv) != 3:
-    print 'Usage: SCRIPT [input file (hb2nd.out)] [output dir (hb2nd/)]'
+    print('Usage: SCRIPT [input file (hb2nd.out)] [output dir (hb2nd/)]')
     sys.exit(2)
 
 filepath_inp = sys.argv[1]
@@ -34,7 +34,7 @@ for l in open(filepath_inp,'r'):
     sim = (cM, frc)
     sim_done.add(sim)
 
-    if n_ratio.has_key(sim):
+    if sim in n_ratio:
         n_ratio[sim] = n_ratio[sim] + 1
         for i in range(8):  
             x = float(l[i+3])

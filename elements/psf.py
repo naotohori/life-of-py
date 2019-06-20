@@ -18,10 +18,10 @@ class Atom(object):
         self.unused = 0
     
     def show(self):
-        print (self.atom_id, self.seg_name, 
+        print((self.atom_id, self.seg_name, 
                self.res_id, self.res_name,
                self.atom_name, self.atom_type,
-               self.charge, self.mass, self.unused)
+               self.charge, self.mass, self.unused))
 
 class Psf(object):
     '''
@@ -48,9 +48,9 @@ class Psf(object):
     def show(self):
         for atom in self.atoms :
             atom.show()
-        print self.bonds
-        print self.angles
-        print self.dihedrals
-        print self.impropers
-        print self.crossterms
+        print(self.bonds)
+        print(self.angles)
+        print(self.dihedrals)
+        print(self.impropers)
+        print(self.crossterms)
         

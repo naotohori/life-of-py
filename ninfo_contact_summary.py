@@ -30,8 +30,8 @@ nunit = ninfo.max_unit
 
 # Count the number of contacts or basepairs
 data = {} 
-for i in xrange(1,nunit+1) :
-    for j in xrange(i, nunit+1) :
+for i in range(1,nunit+1) :
+    for j in range(i, nunit+1) :
         n_con = len(ninfo.get_contacts_by_unit(i, j))
         n_bp  = len(ninfo.get_basepairs_by_unit(i, j))
         data[(i,j)] = (n_con, n_bp)
@@ -41,36 +41,36 @@ for i in xrange(1,nunit+1) :
 ### contact
 # First line
 f_out.write("#contact")
-for j in xrange(1, nunit+1) :
+for j in range(1, nunit+1) :
     f_out.write(",%i" % j)
 f_out.write("\n")
 
 # Data
-for i in xrange(1, nunit+1) :
+for i in range(1, nunit+1) :
     f_out.write("%i" % i)
-    for j in xrange(1, nunit+1) :
+    for j in range(1, nunit+1) :
         f_out.write(",%i" % data[(i,j)][0] )
     f_out.write("\n")
     
 ### basepair
 # First line
 f_out.write("\n\n#basepair")
-for j in xrange(1, nunit+1) :
+for j in range(1, nunit+1) :
     f_out.write(",%i" % j)
 f_out.write("\n")
 
 # Data
-for i in xrange(1, nunit+1) :
+for i in range(1, nunit+1) :
     f_out.write("%i" % i)
-    for j in xrange(1, nunit+1) :
+    for j in range(1, nunit+1) :
         f_out.write(",%i" % data[(i,j)][1] )
     f_out.write("\n")
 f_out.close()    
 
 ####### Output for list
 if flg_out_list :
-    for i in xrange(1, nunit+1) :
-        for j in xrange(i, nunit+1) :
+    for i in range(1, nunit+1) :
+        for j in range(i, nunit+1) :
             f_out_list.write("%5i %5i %10i %10i\n" % ((i,j) + data[(i,j)]) )
         f_out_list.write('#--------------------------------\n')
     f_out_list.close()

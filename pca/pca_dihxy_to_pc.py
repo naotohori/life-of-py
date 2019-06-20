@@ -10,7 +10,7 @@ import os
 import numpy as np
 
 if len(sys.argv) < 5:
-    print 'Usage: % SCRIPT [input dcd] [ev file] [,ev file ....] [output average file] [output PC file]'
+    print('Usage: % SCRIPT [input dcd] [ev file] [,ev file ....] [output average file] [output PC file]')
     sys.exit(2)
     
 f_dihxy = open(sys.argv[1], 'rb')
@@ -21,7 +21,7 @@ f_ave = open(sys.argv[-2], 'w')
 # Read eigen values
 num_ev = len(sys.argv) - 4
 ev = []
-for i in xrange(num_ev) :
+for i in range(num_ev) :
     f_ev = open(sys.argv[i+2], 'r')
     ev_tmp = [] 
     for line in f_ev :
@@ -34,11 +34,11 @@ for i in xrange(num_ev) :
 num_dimension = len(ev[0])
 for v in ev :
     if len(v) != num_dimension :
-        print 'len(v) != num_dimension, %i' % num_dimension
+        print('len(v) != num_dimension, %i' % num_dimension)
         sys.exit(2)
 
 # Calculate average structure (data_ave)
-data_ave = [0.0 for i in xrange(num_dimension)]
+data_ave = [0.0 for i in range(num_dimension)]
 num_data = 0
 
 flg_more_data = True
@@ -61,7 +61,7 @@ while (flg_more_data):
         f_dihxy.seek(-4,os.SEEK_CUR)
         flg_more_data = True
 
-for i in xrange(len(data_ave)) :
+for i in range(len(data_ave)) :
     data_ave[i] /= float(num_data)
     f_ave.write('%12.5f\n' % data_ave[i])
 

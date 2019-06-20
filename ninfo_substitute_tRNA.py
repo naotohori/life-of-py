@@ -6,9 +6,9 @@ from copy import deepcopy
 import sys
 
 def show_usage() :
-    print 
-    print 'Usage: % SCRIPT [ninfo (all)] [ninfo (part)] [ninfo (output)] [[(unit ID) (starting imp)] ....]'
-    print 
+    print() 
+    print('Usage: % SCRIPT [ninfo (all)] [ninfo (part)] [ninfo (output)] [[(unit ID) (starting imp)] ....]')
+    print() 
     
 if len(sys.argv) < 5:
     show_usage()

@@ -60,41 +60,41 @@ class NinfoFile(object):
             if line[0:7] == 'bs-dihd':
                 lsp = line.split()
                 itr = iter(lsp)
-                itr.next() # 'bs-dihd'
-                ibs = int(itr.next())
+                next(itr) # 'bs-dihd'
+                ibs = int(next(itr))
                 for bs in ni.basestackDTs:
                     if bs.id == ibs:
                         if bs.dih1_id is None:
-                            bs.dih1_id = int(itr.next())
-                            bs.dih1_iunit1 = int(itr.next())
-                            bs.dih1_iunit2 = int(itr.next())
-                            bs.dih1_imp1 = int(itr.next()) 
-                            bs.dih1_imp2 = int(itr.next())
-                            bs.dih1_imp3 = int(itr.next())
-                            bs.dih1_imp4 = int(itr.next())
-                            bs.dih1_imp1un = int(itr.next()) 
-                            bs.dih1_imp2un = int(itr.next())
-                            bs.dih1_imp3un = int(itr.next())
-                            bs.dih1_imp4un = int(itr.next())
-                            bs.dih1_native = float(itr.next())
-                            bs.dih1_coef   = float(itr.next())
-                            bs.dih1_type = itr.next()
+                            bs.dih1_id = int(next(itr))
+                            bs.dih1_iunit1 = int(next(itr))
+                            bs.dih1_iunit2 = int(next(itr))
+                            bs.dih1_imp1 = int(next(itr)) 
+                            bs.dih1_imp2 = int(next(itr))
+                            bs.dih1_imp3 = int(next(itr))
+                            bs.dih1_imp4 = int(next(itr))
+                            bs.dih1_imp1un = int(next(itr)) 
+                            bs.dih1_imp2un = int(next(itr))
+                            bs.dih1_imp3un = int(next(itr))
+                            bs.dih1_imp4un = int(next(itr))
+                            bs.dih1_native = float(next(itr))
+                            bs.dih1_coef   = float(next(itr))
+                            bs.dih1_type = next(itr)
 
                         elif bs.dih2_id is None:
-                            bs.dih2_id = int(itr.next())
-                            bs.dih2_iunit1 = int(itr.next())
-                            bs.dih2_iunit2 = int(itr.next())
-                            bs.dih2_imp1 = int(itr.next()) 
-                            bs.dih2_imp2 = int(itr.next())
-                            bs.dih2_imp3 = int(itr.next())
-                            bs.dih2_imp4 = int(itr.next())
-                            bs.dih2_imp1un = int(itr.next()) 
-                            bs.dih2_imp2un = int(itr.next())
-                            bs.dih2_imp3un = int(itr.next())
-                            bs.dih2_imp4un = int(itr.next())
-                            bs.dih2_native = float(itr.next())
-                            bs.dih2_coef   = float(itr.next())
-                            bs.dih2_type = itr.next()
+                            bs.dih2_id = int(next(itr))
+                            bs.dih2_iunit1 = int(next(itr))
+                            bs.dih2_iunit2 = int(next(itr))
+                            bs.dih2_imp1 = int(next(itr)) 
+                            bs.dih2_imp2 = int(next(itr))
+                            bs.dih2_imp3 = int(next(itr))
+                            bs.dih2_imp4 = int(next(itr))
+                            bs.dih2_imp1un = int(next(itr)) 
+                            bs.dih2_imp2un = int(next(itr))
+                            bs.dih2_imp3un = int(next(itr))
+                            bs.dih2_imp4un = int(next(itr))
+                            bs.dih2_native = float(next(itr))
+                            bs.dih2_coef   = float(next(itr))
+                            bs.dih2_type = next(itr)
 
                         else:
                             print ('Error dih1 and dih2 are occupied')
@@ -118,35 +118,35 @@ class NinfoFile(object):
             if line[0:8] == 'tbs-angl':
                 lsp = line.split()
                 itr = iter(lsp)
-                itr.next() # 'tbs-angl'
-                ibs = int(itr.next())
+                next(itr) # 'tbs-angl'
+                ibs = int(next(itr))
                 for bs in ni.tertiarystackDTs:
                     if bs.id == ibs:
                         if bs.ang1_id is None:
-                            bs.ang1_id = int(itr.next())
-                            bs.ang1_iunit1 = int(itr.next())
-                            bs.ang1_iunit2 = int(itr.next())
-                            bs.ang1_imp1 = int(itr.next()) 
-                            bs.ang1_imp2 = int(itr.next())
-                            bs.ang1_imp3 = int(itr.next())
-                            bs.ang1_imp1un = int(itr.next()) 
-                            bs.ang1_imp2un = int(itr.next())
-                            bs.ang1_imp3un = int(itr.next())
-                            bs.ang1_native = float(itr.next())
-                            bs.ang1_coef   = float(itr.next())
+                            bs.ang1_id = int(next(itr))
+                            bs.ang1_iunit1 = int(next(itr))
+                            bs.ang1_iunit2 = int(next(itr))
+                            bs.ang1_imp1 = int(next(itr)) 
+                            bs.ang1_imp2 = int(next(itr))
+                            bs.ang1_imp3 = int(next(itr))
+                            bs.ang1_imp1un = int(next(itr)) 
+                            bs.ang1_imp2un = int(next(itr))
+                            bs.ang1_imp3un = int(next(itr))
+                            bs.ang1_native = float(next(itr))
+                            bs.ang1_coef   = float(next(itr))
 
                         elif bs.ang2_id is None:
-                            bs.ang2_id = int(itr.next())
-                            bs.ang2_iunit1 = int(itr.next())
-                            bs.ang2_iunit2 = int(itr.next())
-                            bs.ang2_imp1 = int(itr.next()) 
-                            bs.ang2_imp2 = int(itr.next())
-                            bs.ang2_imp3 = int(itr.next())
-                            bs.ang2_imp1un = int(itr.next()) 
-                            bs.ang2_imp2un = int(itr.next())
-                            bs.ang2_imp3un = int(itr.next())
-                            bs.ang2_native = float(itr.next())
-                            bs.ang2_coef   = float(itr.next())
+                            bs.ang2_id = int(next(itr))
+                            bs.ang2_iunit1 = int(next(itr))
+                            bs.ang2_iunit2 = int(next(itr))
+                            bs.ang2_imp1 = int(next(itr)) 
+                            bs.ang2_imp2 = int(next(itr))
+                            bs.ang2_imp3 = int(next(itr))
+                            bs.ang2_imp1un = int(next(itr)) 
+                            bs.ang2_imp2un = int(next(itr))
+                            bs.ang2_imp3un = int(next(itr))
+                            bs.ang2_native = float(next(itr))
+                            bs.ang2_coef   = float(next(itr))
 
                         else:
                             print ('Error ang1 and ang2 are occupied')
@@ -157,54 +157,54 @@ class NinfoFile(object):
             if line[0:8] == 'tbs-dihd':
                 lsp = line.split()
                 itr = iter(lsp)
-                itr.next() # 'tbs-dihd'
-                ibs = int(itr.next())
+                next(itr) # 'tbs-dihd'
+                ibs = int(next(itr))
                 for bs in ni.tertiarystackDTs:
                     if bs.id == ibs:
                         if bs.dih0_id is None:
-                            bs.dih0_id = int(itr.next())
-                            bs.dih0_iunit1 = int(itr.next())
-                            bs.dih0_iunit2 = int(itr.next())
-                            bs.dih0_imp1 = int(itr.next()) 
-                            bs.dih0_imp2 = int(itr.next())
-                            bs.dih0_imp3 = int(itr.next())
-                            bs.dih0_imp4 = int(itr.next())
-                            bs.dih0_imp1un = int(itr.next()) 
-                            bs.dih0_imp2un = int(itr.next())
-                            bs.dih0_imp3un = int(itr.next())
-                            bs.dih0_imp4un = int(itr.next())
-                            bs.dih0_native = float(itr.next())
-                            bs.dih0_coef   = float(itr.next())
+                            bs.dih0_id = int(next(itr))
+                            bs.dih0_iunit1 = int(next(itr))
+                            bs.dih0_iunit2 = int(next(itr))
+                            bs.dih0_imp1 = int(next(itr)) 
+                            bs.dih0_imp2 = int(next(itr))
+                            bs.dih0_imp3 = int(next(itr))
+                            bs.dih0_imp4 = int(next(itr))
+                            bs.dih0_imp1un = int(next(itr)) 
+                            bs.dih0_imp2un = int(next(itr))
+                            bs.dih0_imp3un = int(next(itr))
+                            bs.dih0_imp4un = int(next(itr))
+                            bs.dih0_native = float(next(itr))
+                            bs.dih0_coef   = float(next(itr))
 
                         elif bs.dih1_id is None:
-                            bs.dih1_id = int(itr.next())
-                            bs.dih1_iunit1 = int(itr.next())
-                            bs.dih1_iunit2 = int(itr.next())
-                            bs.dih1_imp1 = int(itr.next()) 
-                            bs.dih1_imp2 = int(itr.next())
-                            bs.dih1_imp3 = int(itr.next())
-                            bs.dih1_imp4 = int(itr.next())
-                            bs.dih1_imp1un = int(itr.next()) 
-                            bs.dih1_imp2un = int(itr.next())
-                            bs.dih1_imp3un = int(itr.next())
-                            bs.dih1_imp4un = int(itr.next())
-                            bs.dih1_native = float(itr.next())
-                            bs.dih1_coef   = float(itr.next())
+                            bs.dih1_id = int(next(itr))
+                            bs.dih1_iunit1 = int(next(itr))
+                            bs.dih1_iunit2 = int(next(itr))
+                            bs.dih1_imp1 = int(next(itr)) 
+                            bs.dih1_imp2 = int(next(itr))
+                            bs.dih1_imp3 = int(next(itr))
+                            bs.dih1_imp4 = int(next(itr))
+                            bs.dih1_imp1un = int(next(itr)) 
+                            bs.dih1_imp2un = int(next(itr))
+                            bs.dih1_imp3un = int(next(itr))
+                            bs.dih1_imp4un = int(next(itr))
+                            bs.dih1_native = float(next(itr))
+                            bs.dih1_coef   = float(next(itr))
 
                         elif bs.dih2_id is None:
-                            bs.dih2_id = int(itr.next())
-                            bs.dih2_iunit1 = int(itr.next())
-                            bs.dih2_iunit2 = int(itr.next())
-                            bs.dih2_imp1 = int(itr.next()) 
-                            bs.dih2_imp2 = int(itr.next())
-                            bs.dih2_imp3 = int(itr.next())
-                            bs.dih2_imp4 = int(itr.next())
-                            bs.dih2_imp1un = int(itr.next()) 
-                            bs.dih2_imp2un = int(itr.next())
-                            bs.dih2_imp3un = int(itr.next())
-                            bs.dih2_imp4un = int(itr.next())
-                            bs.dih2_native = float(itr.next())
-                            bs.dih2_coef   = float(itr.next())
+                            bs.dih2_id = int(next(itr))
+                            bs.dih2_iunit1 = int(next(itr))
+                            bs.dih2_iunit2 = int(next(itr))
+                            bs.dih2_imp1 = int(next(itr)) 
+                            bs.dih2_imp2 = int(next(itr))
+                            bs.dih2_imp3 = int(next(itr))
+                            bs.dih2_imp4 = int(next(itr))
+                            bs.dih2_imp1un = int(next(itr)) 
+                            bs.dih2_imp2un = int(next(itr))
+                            bs.dih2_imp3un = int(next(itr))
+                            bs.dih2_imp4un = int(next(itr))
+                            bs.dih2_native = float(next(itr))
+                            bs.dih2_coef   = float(next(itr))
 
                         else:
                             print ('Error dih1 and dih2 are occupied')
@@ -228,35 +228,35 @@ class NinfoFile(object):
             if line[0:7] == 'hb-angl':
                 lsp = line.split()
                 itr = iter(lsp)
-                itr.next() # 'hb-angl'
-                ihb = int(itr.next())
+                next(itr) # 'hb-angl'
+                ihb = int(next(itr))
                 for hb in ni.hbondDTs:
                     if hb.id == ihb:
                         if hb.ang1_id is None:
-                            hb.ang1_id = int(itr.next())
-                            hb.ang1_iunit1 = int(itr.next())
-                            hb.ang1_iunit2 = int(itr.next())
-                            hb.ang1_imp1 = int(itr.next()) 
-                            hb.ang1_imp2 = int(itr.next())
-                            hb.ang1_imp3 = int(itr.next())
-                            hb.ang1_imp1un = int(itr.next()) 
-                            hb.ang1_imp2un = int(itr.next())
-                            hb.ang1_imp3un = int(itr.next())
-                            hb.ang1_native = float(itr.next())
-                            hb.ang1_coef   = float(itr.next())
+                            hb.ang1_id = int(next(itr))
+                            hb.ang1_iunit1 = int(next(itr))
+                            hb.ang1_iunit2 = int(next(itr))
+                            hb.ang1_imp1 = int(next(itr)) 
+                            hb.ang1_imp2 = int(next(itr))
+                            hb.ang1_imp3 = int(next(itr))
+                            hb.ang1_imp1un = int(next(itr)) 
+                            hb.ang1_imp2un = int(next(itr))
+                            hb.ang1_imp3un = int(next(itr))
+                            hb.ang1_native = float(next(itr))
+                            hb.ang1_coef   = float(next(itr))
 
                         elif hb.ang2_id is None:
-                            hb.ang2_id = int(itr.next())
-                            hb.ang2_iunit1 = int(itr.next())
-                            hb.ang2_iunit2 = int(itr.next())
-                            hb.ang2_imp1 = int(itr.next()) 
-                            hb.ang2_imp2 = int(itr.next())
-                            hb.ang2_imp3 = int(itr.next())
-                            hb.ang2_imp1un = int(itr.next()) 
-                            hb.ang2_imp2un = int(itr.next())
-                            hb.ang2_imp3un = int(itr.next())
-                            hb.ang2_native = float(itr.next())
-                            hb.ang2_coef   = float(itr.next())
+                            hb.ang2_id = int(next(itr))
+                            hb.ang2_iunit1 = int(next(itr))
+                            hb.ang2_iunit2 = int(next(itr))
+                            hb.ang2_imp1 = int(next(itr)) 
+                            hb.ang2_imp2 = int(next(itr))
+                            hb.ang2_imp3 = int(next(itr))
+                            hb.ang2_imp1un = int(next(itr)) 
+                            hb.ang2_imp2un = int(next(itr))
+                            hb.ang2_imp3un = int(next(itr))
+                            hb.ang2_native = float(next(itr))
+                            hb.ang2_coef   = float(next(itr))
 
                         else:
                             print ('Error ang1 and ang2 are occupied')
@@ -267,54 +267,54 @@ class NinfoFile(object):
             if line[0:7] == 'hb-dihd':
                 lsp = line.split()
                 itr = iter(lsp)
-                itr.next() # 'hb-dihd'
-                ihb = int(itr.next())
+                next(itr) # 'hb-dihd'
+                ihb = int(next(itr))
                 for hb in ni.hbondDTs:
                     if hb.id == ihb:
                         if hb.dih0_id is None:
-                            hb.dih0_id = int(itr.next())
-                            hb.dih0_iunit1 = int(itr.next())
-                            hb.dih0_iunit2 = int(itr.next())
-                            hb.dih0_imp1 = int(itr.next()) 
-                            hb.dih0_imp2 = int(itr.next())
-                            hb.dih0_imp3 = int(itr.next())
-                            hb.dih0_imp4 = int(itr.next())
-                            hb.dih0_imp1un = int(itr.next()) 
-                            hb.dih0_imp2un = int(itr.next())
-                            hb.dih0_imp3un = int(itr.next())
-                            hb.dih0_imp4un = int(itr.next())
-                            hb.dih0_native = float(itr.next())
-                            hb.dih0_coef   = float(itr.next())
+                            hb.dih0_id = int(next(itr))
+                            hb.dih0_iunit1 = int(next(itr))
+                            hb.dih0_iunit2 = int(next(itr))
+                            hb.dih0_imp1 = int(next(itr)) 
+                            hb.dih0_imp2 = int(next(itr))
+                            hb.dih0_imp3 = int(next(itr))
+                            hb.dih0_imp4 = int(next(itr))
+                            hb.dih0_imp1un = int(next(itr)) 
+                            hb.dih0_imp2un = int(next(itr))
+                            hb.dih0_imp3un = int(next(itr))
+                            hb.dih0_imp4un = int(next(itr))
+                            hb.dih0_native = float(next(itr))
+                            hb.dih0_coef   = float(next(itr))
 
                         elif hb.dih1_id is None:
-                            hb.dih1_id = int(itr.next())
-                            hb.dih1_iunit1 = int(itr.next())
-                            hb.dih1_iunit2 = int(itr.next())
-                            hb.dih1_imp1 = int(itr.next()) 
-                            hb.dih1_imp2 = int(itr.next())
-                            hb.dih1_imp3 = int(itr.next())
-                            hb.dih1_imp4 = int(itr.next())
-                            hb.dih1_imp1un = int(itr.next()) 
-                            hb.dih1_imp2un = int(itr.next())
-                            hb.dih1_imp3un = int(itr.next())
-                            hb.dih1_imp4un = int(itr.next())
-                            hb.dih1_native = float(itr.next())
-                            hb.dih1_coef   = float(itr.next())
+                            hb.dih1_id = int(next(itr))
+                            hb.dih1_iunit1 = int(next(itr))
+                            hb.dih1_iunit2 = int(next(itr))
+                            hb.dih1_imp1 = int(next(itr)) 
+                            hb.dih1_imp2 = int(next(itr))
+                            hb.dih1_imp3 = int(next(itr))
+                            hb.dih1_imp4 = int(next(itr))
+                            hb.dih1_imp1un = int(next(itr)) 
+                            hb.dih1_imp2un = int(next(itr))
+                            hb.dih1_imp3un = int(next(itr))
+                            hb.dih1_imp4un = int(next(itr))
+                            hb.dih1_native = float(next(itr))
+                            hb.dih1_coef   = float(next(itr))
 
                         elif hb.dih2_id is None:
-                            hb.dih2_id = int(itr.next())
-                            hb.dih2_iunit1 = int(itr.next())
-                            hb.dih2_iunit2 = int(itr.next())
-                            hb.dih2_imp1 = int(itr.next()) 
-                            hb.dih2_imp2 = int(itr.next())
-                            hb.dih2_imp3 = int(itr.next())
-                            hb.dih2_imp4 = int(itr.next())
-                            hb.dih2_imp1un = int(itr.next()) 
-                            hb.dih2_imp2un = int(itr.next())
-                            hb.dih2_imp3un = int(itr.next())
-                            hb.dih2_imp4un = int(itr.next())
-                            hb.dih2_native = float(itr.next())
-                            hb.dih2_coef   = float(itr.next())
+                            hb.dih2_id = int(next(itr))
+                            hb.dih2_iunit1 = int(next(itr))
+                            hb.dih2_iunit2 = int(next(itr))
+                            hb.dih2_imp1 = int(next(itr)) 
+                            hb.dih2_imp2 = int(next(itr))
+                            hb.dih2_imp3 = int(next(itr))
+                            hb.dih2_imp4 = int(next(itr))
+                            hb.dih2_imp1un = int(next(itr)) 
+                            hb.dih2_imp2un = int(next(itr))
+                            hb.dih2_imp3un = int(next(itr))
+                            hb.dih2_imp4un = int(next(itr))
+                            hb.dih2_native = float(next(itr))
+                            hb.dih2_coef   = float(next(itr))
 
                         else:
                             print ('Error dih0 and dih1 and dih2 are occupied')
@@ -364,8 +364,8 @@ class NinfoFile(object):
         if len(ni.contacts) > 0:
             self._file.write('<<<< native contact\n')
             self._file.write('** total_contact = %i\n'%(len(ni.contacts),))
-            for i in xrange(1, num_unit+1) :
-                for j in xrange(i, num_unit+1) :
+            for i in range(1, num_unit+1) :
+                for j in range(i, num_unit+1) :
                     subset = ni.get_contacts_by_unit(i,j)
                     if len(subset) == 0:
                         continue
@@ -381,8 +381,8 @@ class NinfoFile(object):
         if len(ni.LJs) > 0:
             self._file.write('<<<< LJ\n')
             self._file.write('** total_LJ = %i\n'%(len(ni.LJs),))
-            for i in xrange(1, num_unit+1) :
-                for j in xrange(i, num_unit+1) :
+            for i in range(1, num_unit+1) :
+                for j in range(i, num_unit+1) :
                     subset = ni.get_LJs_by_unit(i,j)
                     if len(subset) == 0:
                         continue
@@ -398,8 +398,8 @@ class NinfoFile(object):
         if len(ni.basepairs) > 0:
             self._file.write('<<<< native basepair\n')
             self._file.write('** total_contact = %i\n'%(len(ni.basepairs),))
-            for i in xrange(1, num_unit+1) :
-                for j in xrange(i, num_unit+1) :
+            for i in range(1, num_unit+1) :
+                for j in range(i, num_unit+1) :
                     subset = ni.get_basepairs_by_unit(i,j)
                     if len(subset) == 0:
                         continue

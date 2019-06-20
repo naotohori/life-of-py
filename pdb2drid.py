@@ -13,7 +13,7 @@ from cafysis.lib_f2py import py_drid
 import numpy as np
 
 if len(sys.argv) != 4:
-    print 'Usage: % SCRIPT [input PDB] [mask file] [output DRID]'
+    print('Usage: % SCRIPT [input PDB] [mask file] [output DRID]')
     sys.exit(2)
 
 pdb = PdbFile(sys.argv[1])

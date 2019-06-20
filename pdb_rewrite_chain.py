@@ -4,9 +4,9 @@ import os
 import sys
 
 if len(sys.argv) != 4:
-    print 
-    print 'Usage: % SCRIPT [PDB file] [char]  [output PDB file]'
-    print 
+    print() 
+    print('Usage: % SCRIPT [PDB file] [char]  [output PDB file]')
+    print() 
     sys.exit(2)
 
 filename_pdb = sys.argv[1]

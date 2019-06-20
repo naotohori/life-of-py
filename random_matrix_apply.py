@@ -6,7 +6,7 @@ import glob
 import re
 
 if len(sys.argv) != 4:
-    print 'Usage: % SCRIPT [pdb file] [matrix DIR] [output prefix]'
+    print('Usage: % SCRIPT [pdb file] [matrix DIR] [output prefix]')
     sys.exit(2)
 
 filename_pdb = sys.argv[1]

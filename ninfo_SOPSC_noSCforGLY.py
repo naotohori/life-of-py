@@ -25,7 +25,7 @@ from cafysis.elements.ninfo import NinfoSet, Fene, LJ
 from cafysis.para.BetancourtThirumalai import BTmatrix
 
 if len(sys.argv) != 3:
-    print 'Usage: SCRIPT [input PDB] [output ninfo]'
+    print('Usage: SCRIPT [input PDB] [output ninfo]')
     sys.exit(2)
 
 p = PdbFile(sys.argv[1])
@@ -48,13 +48,13 @@ for ic, c in enumerate(chains):
         for a in r.atoms:
             if a.res_name.strip() == 'GLY':
                 if num_a != 1:
-                    print 'Error: num_a != 1'
-                    print a.name, a.res_name, a.res_seq
+                    print('Error: num_a != 1')
+                    print(a.name, a.res_name, a.res_seq)
                     sys.exit(2)
             else:
                 if num_a != 2:
-                    print 'Error: num_a != 2'
-                    print a.name, a.res_name, a.res_seq
+                    print('Error: num_a != 2')
+                    print(a.name, a.res_name, a.res_seq)
                     sys.exit(2)
 
             if a.name.strip() == 'B':
@@ -62,8 +62,8 @@ for ic, c in enumerate(chains):
             elif a.name.strip() == 'S':
                 a_SC = a
             else:
-                print 'Error: unknown particle type'
-                print a.name, a.res_name, a.res_seq
+                print('Error: unknown particle type')
+                print(a.name, a.res_name, a.res_seq)
                 sys.exit(2)
 
         ## bond between B(i-1) and B(i)
@@ -79,7 +79,7 @@ for ic, c in enumerate(chains):
         ## bond between B(i) and S(i)
         if num_a == 2:
             if a_SC is None:
-                print 'Error: a_SC is None'
+                print('Error: a_SC is None')
                 sys.exit(2)
             ni = Fene(id=None,iunit1=ic+1,iunit2=ic+1, imp1=a_BB.serial, imp2=a_SC.serial,
                      imp1un=a_BB.serial,imp2un=a_SC.serial,
@@ -128,7 +128,7 @@ for ia1 in range(num_atom):
                     elif (a2.res_name, a1.res_name) in BTmatrix:
                         BTeps = BTmatrix[(a2.res_name, a1.res_name)]
                     else:
-                        print 'Erorr: either a1.res_name=%s or a2.res_name=%s is wrong' % (a1.res_name, a2.res_name)
+                        print('Erorr: either a1.res_name=%s or a2.res_name=%s is wrong' % (a1.res_name, a2.res_name))
                         sys.exit(2)
 
                     eps = COEF_S_S * abs(BTeps - 0.7)
@@ -152,7 +152,7 @@ for ia1 in range(num_atom):
                             factor=None, correct_mgo=None, type_str=None)
                     ns.LJs.append(ni)
         else:
-            print "Error: either name1=%s or name2=%s is unknown" % (name1,name2)
+            print("Error: either name1=%s or name2=%s is unknown" % (name1,name2))
             sys.exit(2)
 
 nf = NinfoFile(sys.argv[-1])

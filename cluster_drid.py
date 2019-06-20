@@ -9,7 +9,7 @@ from cafysis.file_io.drid import DridFile
 import math
 
 if len(sys.argv) != 4:
-    print 'Usage: % SCRIPT [input DRID] [#frame to skip] [output prefix]'
+    print('Usage: % SCRIPT [input DRID] [#frame to skip] [output prefix]')
     sys.exit(2)
 
 nskip = int(sys.argv[2])

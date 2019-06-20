@@ -26,7 +26,7 @@ import copy
 MAXD = 50.0
 
 if len(sys.argv) != 9:
-    print 'Usage: SCRIPT [input DCD] [input PDB] [ID domain begin] [ID domain end] [ID for fit begin] [ID for fit end] [Box size] [output DCD]'
+    print('Usage: SCRIPT [input DCD] [input PDB] [ID domain begin] [ID domain end] [ID for fit begin] [ID for fit end] [Box size] [output DCD]')
     sys.exit(2)
 
 ID_DOM_INI = int(sys.argv[3]) - 1  # 重心を求める際に必要
@@ -132,7 +132,7 @@ while dcd.has_more_data() :
     max_xyz, min_xyz, L = find_max_min_PBC(data[ID_DOM_INI_FIT:ID_DOM_END_FIT+1])
 
     if L[0] > BOXSIZE or L[1] > BOXSIZE or L[2] > BOXSIZE:
-        print ('Warning: (1) L exceeds BOXSIZE at frame %i' % iframe)
+        print(('Warning: (1) L exceeds BOXSIZE at frame %i' % iframe))
 
     mtx_move = mtx_crd_transform()
     #mtx_move.reset()
@@ -157,7 +157,7 @@ while dcd.has_more_data() :
     max_xyz, min_xyz, L = find_max_min_PBC(data[ID_DOM_INI:ID_DOM_END+1])
 
     if L[0] > BOXSIZE or L[1] > BOXSIZE or L[2] > BOXSIZE:
-        print ('Warning: (2) L exceeds BOXSIZE at frame %i' % iframe)
+        print(('Warning: (2) L exceeds BOXSIZE at frame %i' % iframe))
 
     move = [0.0, 0.0, 0.0]
     if max_xyz[0] > 0.5*L[0]:

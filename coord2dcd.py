@@ -11,8 +11,8 @@ from cafysis.file_io.psf import PsfFile
 from cafysis.elements.psf import Atom, Psf
 
 if not len(sys.argv) in (4,5):
-    print 'Usage: % SCRIPT [input Coord] [#atom] [output DCD]'
-    print '  or : % SCRIPT [input Coord] [#atom] [output DCD] [output PSF]'
+    print('Usage: % SCRIPT [input Coord] [#atom] [output DCD]')
+    print('  or : % SCRIPT [input Coord] [#atom] [output DCD] [output PSF]')
     sys.exit(2)
 
 filepath_crd = sys.argv[1]
@@ -25,7 +25,7 @@ if len(sys.argv) == 5:
     # Generate PSF data
     psfdata = Psf()
     ires = 1
-    for i in xrange(1, nmp+1):
+    for i in range(1, nmp+1):
         a = Atom()
         a.atom_id = i
         a.seg_name = 'R'
@@ -44,7 +44,7 @@ if len(sys.argv) == 5:
         a.res_name = 'R'
         psfdata.atoms.append(a)
 
-    for i in xrange(2, nmp+1):
+    for i in range(2, nmp+1):
         if i%3 == 1: #S
             psfdata.bonds.append((i-1,i))
         elif i%3 == 2: #B

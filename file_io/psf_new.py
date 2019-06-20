@@ -62,7 +62,7 @@ class PsfFile(object):
         while header :
             if header.find('!NATOM') != -1 :
                 n = int(header.split()[0])
-                for i in xrange(n) :
+                for i in range(n) :
                     line = self._file.readline()
                     psf.atoms.append(line2atom(line))
             if header.find('!NBOND') != -1 :
@@ -70,7 +70,7 @@ class PsfFile(object):
                 i = 0
                 while i < n :
                     a = [int(x) for x in self._file.readline().split()]
-                    for j in xrange(0, len(a), 2) :
+                    for j in range(0, len(a), 2) :
                         psf.bonds.append((a[j],a[j+1]))
                     i += len(a) / 2
             if header.find('!NTHETA') != -1 :
@@ -78,7 +78,7 @@ class PsfFile(object):
                 i = 0
                 while i < n :
                     a = [int(x) for x in self._file.readline().split()]
-                    for j in xrange(0, len(a), 3) :
+                    for j in range(0, len(a), 3) :
                         psf.angles.append((a[j],a[j+1],a[j+2]))
                     i += len(a) / 3
             if header.find('!NPHI') != -1 :
@@ -86,7 +86,7 @@ class PsfFile(object):
                 i = 0
                 while i < n :
                     a = [int(x) for x in self._file.readline().split()]
-                    for j in xrange(0, len(a), 4) :
+                    for j in range(0, len(a), 4) :
                         psf.dihedrals.append((a[j],a[j+1],a[j+2],a[j+3]))
                     i += len(a) / 4
             if header.find('!NIMPHI') != -1 :
@@ -94,7 +94,7 @@ class PsfFile(object):
                 i = 0
                 while i < n :
                     a = [int(x) for x in self._file.readline().split()]
-                    for j in xrange(0, len(a), 4) :
+                    for j in range(0, len(a), 4) :
                         psf.impropers.append((a[j],a[j+1],a[j+2],a[j+3]))
                     i += len(a) / 4
             if header.find('!NCRTERM') != -1 :
@@ -102,7 +102,7 @@ class PsfFile(object):
                 i = 0
                 while i < n :
                     a = [int(x) for x in self._file.readline().split()]
-                    for j in xrange(0, len(a), 4) :
+                    for j in range(0, len(a), 4) :
                         psf.crossterms.append((a[j],a[j+1],a[j+2],a[j+3]))
                     i += len(a) / 4
             header = self._file.readline()
@@ -116,31 +116,31 @@ class PsfFile(object):
                 self._file.write(atom2line(atom) + '\n')
         if psf.n_bond() > 0 :
             self._file.write('%8i !NBOND\n' % psf.n_bond())
-            for i in xrange(0, psf.n_bond()) :
+            for i in range(0, psf.n_bond()) :
                 self._file.write('%8i%8i' % psf.bonds[i])
                 if (i+1)%4==0 or i==psf.n_bond()-1 :
                     self._file.write('\n')
         if psf.n_angle() > 0 :
             self._file.write('%8i !NTHETA\n' % psf.n_angle())
-            for i in xrange(0, psf.n_angle()) :
+            for i in range(0, psf.n_angle()) :
                 self._file.write('%8i%8i%8i' % psf.angles[i])
                 if (i+1)%3==0 or i==psf.n_angle()-1 :
                     self._file.write('\n')
         if psf.n_dihedral() > 0 :
             self._file.write('%8i !NPHI\n' % psf.n_dihedral())
-            for i in xrange(0, psf.n_dihedral()) :
+            for i in range(0, psf.n_dihedral()) :
                 self._file.write('%8i%8i%8i' % psf.dihedrals[i])
                 if (i+1)%2==0 or i==psf.n_dihedral()-1 :
                     self._file.write('\n')
         if psf.n_improper() > 0 :
             self._file.write('%8i !NIMPHI\n' % psf.n_improper())
-            for i in xrange(0, psf.n_improper()) :
+            for i in range(0, psf.n_improper()) :
                 self._file.write('%8i%8i%8i' % psf.impropers[i])
                 if (i+1)%2==0 or i==psf.n_improper()-1 :
                     self._file.write('\n')
         if psf.n_crossterm() > 0 :
             self._file.write('%8i !NCRTERM\n' % psf.n_crossterm())
-            for i in xrange(0, psf.n_crossterm()) :
+            for i in range(0, psf.n_crossterm()) :
                 self._file.write('%8i%8i%8i' % psf.crossterms[i])
                 if (i+1)%2==0 or i==psf.n_crossterm()-1 :
                     self._file.write('\n')
@@ -149,8 +149,8 @@ if __name__ == '__main__':
     import sys
     
     if len(sys.argv) != 3:
-        print 'This is debug modeg mode of PsfFile class'
-        print 'Usage: SCRIPT [input psf file] [output psf file]'
+        print('This is debug modeg mode of PsfFile class')
+        print('Usage: SCRIPT [input psf file] [output psf file]')
         sys.exit(2)
     
     in_file = PsfFile(sys.argv[1])    

@@ -11,7 +11,7 @@ from cafysis.file_io.pdb import PdbFile
 
 
 if len(sys.argv) != 5:
-    print ' Usage: % SCRIPT [input DCD] [average PDB] [input eigen vector] [output] '
+    print(' Usage: % SCRIPT [input DCD] [average PDB] [input eigen vector] [output] ')
     sys.exit(2)
     
 dcd = DcdFile(sys.argv[1])
@@ -27,13 +27,13 @@ f_pdb.close()
 ave = []
 for c in chains:
     imp = 0
-    for i in xrange(c.num_atom()) :
+    for i in range(c.num_atom()) :
         imp += 1
         ave.append(c.get_atom(i).xyz.x)
         ave.append(c.get_atom(i).xyz.y)
         ave.append(c.get_atom(i).xyz.z)
 if len(ave) != 3*nmp :
-    print 'Error: len(ave) != 3*nmp'
+    print('Error: len(ave) != 3*nmp')
     sys.exit(2)
 
 # reading pca eigenvector
@@ -44,9 +44,9 @@ for line in f_pca:
         continue
     ev.append(float(line))
 f_pca.close()
-print ev
+print(ev)
 if len(ev) != 3*nmp :
-    print 'Error: len(ev) != 3*nmp'
+    print('Error: len(ev) != 3*nmp')
     sys.exit(2)
 
 # loop for DCD
@@ -56,9 +56,9 @@ while dcd.has_more_data() :
     data = dcd.read_onestep()
     nframe += 1
     if nframe % 1000 == 0:
-        print nframe
+        print(nframe)
     coord = 0.0
-    for i in xrange(nmp) :
+    for i in range(nmp) :
         coord += ( (data[i][0] - ave[3*i+0]) * ev[3*i+0] 
                  + (data[i][1] - ave[3*i+1]) * ev[3*i+1] 
                  + (data[i][2] - ave[3*i+2]) * ev[3*i+2] )

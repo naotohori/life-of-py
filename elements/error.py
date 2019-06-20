@@ -10,6 +10,6 @@ class MyError(Exception) :
         self._title = title
         
     def show(self):
-        print 'class:', self._class
-        print 'function:', self._func
-        print 'matter:', self._title
+        print('class:', self._class)
+        print('function:', self._func)
+        print('matter:', self._title)

@@ -39,11 +39,11 @@ def matrix_transform_make(a,b,c,x,y,z,filename) :
          
 if __name__ == "__main__" :
     if len(sys.argv) != 8:
-        print ''
-        print 'This script makes a homogeneous transformation matrix,'
-        print 'angles of which is defined by Z-X-Z Euler angles.'
-        print ''
-        print 'Usage: % SCRIPT [alpha] [beta] [gamma] [x] [y] [z] [output]'
+        print('')
+        print('This script makes a homogeneous transformation matrix,')
+        print('angles of which is defined by Z-X-Z Euler angles.')
+        print('')
+        print('Usage: % SCRIPT [alpha] [beta] [gamma] [x] [y] [z] [output]')
         sys.exit(2)
 
     a = float(sys.argv[1])

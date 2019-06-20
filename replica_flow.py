@@ -4,7 +4,7 @@ import sys
 import os
 
 if len(sys.argv) < 4:
-    print 'Usage: SCRIPT [#replica] [rep file1] [[rep file2] [rep file3] ...] [output]'
+    print('Usage: SCRIPT [#replica] [rep file1] [[rep file2] [rep file3] ...] [output]')
     sys.exit(2)
 
 filenames = sys.argv[2:len(sys.argv)-1]
@@ -13,7 +13,7 @@ path_out = sys.argv[-1]
 if not os.path.isfile(path_out):
     f_out = open(path_out, 'w')
 else:
-    print 'Error: the output file exsits. Please delete it first.'
+    print('Error: the output file exsits. Please delete it first.')
     sys.exit(2)
 #f_out = open(sys.argv[-1], 'x')  # For python 3. The if statement won't be needed.
 
@@ -57,7 +57,7 @@ for ifile, filename in enumerate(filenames):
             break
 
         ## The step column will be labels[0] which won't be used.
-        labels = map(int, l.split())
+        labels = list(map(int, l.split()))
         steps += 1
 
         if steps == 1:

@@ -3,12 +3,12 @@
 import sys
 
 if len(sys.argv) != 6:
-    print ' Usage: % SCRIPT [file] [data column (1,2,3,...)] [bin most left] [bin most right] [bin width]'
+    print(' Usage: % SCRIPT [file] [data column (1,2,3,...)] [bin most left] [bin most right] [bin width]')
     sys.exit(2)
 
 for i,arg in enumerate(sys.argv):
-    print '#%i %s' % (i,arg)
-print ''
+    print('#%i %s' % (i,arg))
+print('')
 
 f = sys.argv[1]
 data_col = int(sys.argv[2])
@@ -35,10 +35,10 @@ h,b = histogram(data,b)
 dens,b = histogram(data,b,density=True)
 
 for (i,h_x) in enumerate(h):
-    print (b[i]+b[i+1])*0.5, h_x, dens[i], b[i],b[i+1]
+    print((b[i]+b[i+1])*0.5, h_x, dens[i], b[i],b[i+1])
 # print average
-print ''
-print ''
-print '#average= %f' % (sum(data)/len(data),)
+print('')
+print('')
+print('#average= %f' % (sum(data)/len(data),))
 
     

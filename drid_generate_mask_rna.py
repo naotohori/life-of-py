@@ -9,7 +9,7 @@ import sys
 import numpy as np
 
 if len(sys.argv) != 3:
-    print 'Usage: SCRIPT [# mp] [output]'
+    print('Usage: SCRIPT [# mp] [output]')
     sys.exit(2)
 
 nmp = int(sys.argv[1])
@@ -42,7 +42,7 @@ for imp in range(1, nmp+1):
         mark( imp + 1 )
 
     else:
-        print 'it should not occur....'
+        print('it should not occur....')
         sys.exit(2)
 
 for imp in range(1, nmp+1):

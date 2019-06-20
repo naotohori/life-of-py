@@ -17,9 +17,9 @@ import os
 import glob
 
 if len(sys.argv) != 5:
-    print ('Usage: SCRIPT [HB file (bwyv_forEne2.hb)] [dir_search]'
+    print(('Usage: SCRIPT [HB file (bwyv_forEne2.hb)] [dir_search]'
                         +' [filename con (hbcon2_-1.47.out)]'
-                        +' [filename hb2nd (hb2nd_-1.47.out)]')
+                        +' [filename hb2nd (hb2nd_-1.47.out)]'))
     sys.exit(2)
 
 filepath_hb = sys.argv[1]
@@ -45,7 +45,7 @@ for d in dirs:
     rnd = d_sp[-1]
     type = d.split('/')[-3][0:2]
     if type not in ('pN','cM'):
-        print 'Error: not pN nor cM'
+        print('Error: not pN nor cM')
         sys.exit(2)
     simulations.append((type,cM,frc,rnd))
 

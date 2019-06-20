@@ -8,7 +8,7 @@ import math
 from numpy import histogram
 
 if len(sys.argv) != 3:
-    print 'Usage: SCRIPT [input data] [output prefix]'
+    print('Usage: SCRIPT [input data] [output prefix]')
     sys.exit(2)
     
 file_in = open(sys.argv[1],'r')
@@ -17,7 +17,7 @@ file_pfx = sys.argv[2]
 COL_THETA = 2 - 1
 
 #theta_bins = [x*10.0 for x in xrange(0,19)] # 10度
-theta_bins = [x*5.0 for x in xrange(0,37)] #  5度
+theta_bins = [x*5.0 for x in range(0,37)] #  5度
 #phi_bins = [x*15.0 for x in xrange(-12,13)] # 15度
 
 

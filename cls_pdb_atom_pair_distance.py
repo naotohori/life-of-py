@@ -22,7 +22,7 @@ f_pdb.close
 f_out = open(sys.argv[4], 'w')
 
 if len(chains1) != len(chains2) :
-    print ("Error: len(chains1)(=%i)  !=  len(chains2)(=%i)" %(len(chains1), len(chains2)))
+    print(("Error: len(chains1)(=%i)  !=  len(chains2)(=%i)" %(len(chains1), len(chains2))))
     sys.exit(2)
 # !!! current version is for only single chain !!!
 if len(chains1) != 1 or len(chains2) != 1:

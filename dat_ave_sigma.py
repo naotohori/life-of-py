@@ -13,8 +13,8 @@ COLUM_DIST = 4 - 1
 
 if __name__ == '__main__':
     if not len(sys.argv) in (4,5):
-        print 'Usage: % SCRIPT [GLOB query ("" needed)] [#step to be ignored] [output]'
-        print '  or : % SCRIPT [GLOB query ("" needed)] [#step to be ignored] [final step] [output]'
+        print('Usage: % SCRIPT [GLOB query ("" needed)] [#step to be ignored] [output]')
+        print('  or : % SCRIPT [GLOB query ("" needed)] [#step to be ignored] [final step] [output]')
         sys.exit(2)
 
     files = glob.glob(sys.argv[1])
@@ -50,7 +50,7 @@ if __name__ == '__main__':
         f_in.close()
 
         if num != (step - step_ignore +1):
-            print ('Warning: number step is %i in %s' % (num, filepath))
+            print(('Warning: number step is %i in %s' % (num, filepath)))
         if num == 0:
             continue
             

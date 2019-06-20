@@ -8,9 +8,9 @@ import sys
 from cafysis.file_io.ninfo import NinfoFile, NinfoSet
 
 def show_usage() :
-    print ''
-    print ' usage: ninfo_split.py [ninfo file] [prefix (can be dir)]'
-    print ''
+    print('')
+    print(' usage: ninfo_split.py [ninfo file] [prefix (can be dir)]')
+    print('')
     
 if len(sys.argv) != 3:
     show_usage()
@@ -25,10 +25,10 @@ f_ninfo.close()
 out_prefix = sys.argv[2]
 ninfo.update_info()
 nUnit = ninfo.max_unit
-print nUnit 
+print(nUnit) 
 ninfo_out = {}
-for i in xrange(1,nUnit+1) :
-    for j in xrange(i,nUnit+1) :
+for i in range(1,nUnit+1) :
+    for j in range(i,nUnit+1) :
         ninfo_out[(i,j)] = NinfoSet()
         
 for bd in ninfo.bondlengths :
@@ -49,8 +49,8 @@ for bp in ninfo.basepairs:
 for bs in ninfo.basestacks :
     ninfo_out[(bs.iunit1, bs.iunit2)].basestacks.append(bs)
     
-for i in xrange(1,nUnit+1) :
-    for j in xrange(i, nUnit+1) :
+for i in range(1,nUnit+1) :
+    for j in range(i, nUnit+1) :
         if (len(ninfo_out[(i,j)].bondlengths) != 0 or len(ninfo_out[(i,j)].bondangles) != 0  or
             len(ninfo_out[(i,j)].dihedrals) != 0   or len(ninfo_out[(i,j)].contacts) != 0    or
             len(ninfo_out[(i,j)].basepairs) != 0    or len(ninfo_out[(i,j)].basestacks) != 0 ):

@@ -11,7 +11,7 @@ import re
 
 if __name__ == '__main__':
     if len(sys.argv) != 4:
-        print 'Usage: SCRIPT [input DIR] [prefix] [output file]'
+        print('Usage: SCRIPT [input DIR] [prefix] [output file]')
         sys.exit(2)
         
     files = glob.glob(sys.argv[1] + '/*.ninfo')
@@ -37,13 +37,13 @@ if __name__ == '__main__':
             if reobj2:
                 others.add(reobj2.group(1))
             else:
-                print 'Error reobj2 is None'
+                print('Error reobj2 is None')
                 sys.exit(2)
             
     file_out = open(sys.argv[3],'w')
     n = 0
-    for i in xrange(1,max_unitnum+1):
-        for j in xrange(i,max_unitnum+1):
+    for i in range(1,max_unitnum+1):
+        for j in range(i,max_unitnum+1):
             if (i,j) in pairs:
                 n += 1
                 file_out.write('NINFO(%i/%i) %i\n' % (i,j,n))

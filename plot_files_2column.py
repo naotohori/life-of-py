@@ -8,5 +8,5 @@ Created on 2011/12/15
 if __name__ == '__main__':
     import sys
     if len(sys.argv) != 5:
-        print 'Usage: % SCRIPT [files] [figure raw] [figure column] ['
+        print('Usage: % SCRIPT [files] [figure raw] [figure column] [')
         

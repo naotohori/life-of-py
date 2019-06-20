@@ -6,7 +6,7 @@ import sys
 import math
 
 if len(sys.argv) != 3:
-    print 'Usage: % SCRIPT [input DRID] [output pairwise]'
+    print('Usage: % SCRIPT [input DRID] [output pairwise]')
     sys.exit(2)
 
 f_out = open(sys.argv[-1],'w')

@@ -24,8 +24,8 @@ if len(sys.argv) == 5:
 elif len(sys.argv) == 4:
     flg_final = False
 else:
-    print 'Usage: SCRIPT [HB file (bwyv.hb)] [output file] [step_ignore]'
-    print ' or  : SCRIPT [HB file (bwyv.hb)] [output file] [step_ignore] [step_final]'
+    print('Usage: SCRIPT [HB file (bwyv.hb)] [output file] [step_ignore]')
+    print(' or  : SCRIPT [HB file (bwyv.hb)] [output file] [step_ignore] [step_final]')
     sys.exit(2)
 
 filepath_hb = sys.argv[1]
@@ -94,7 +94,7 @@ for sim in simulations:
                 break
 
         if num == 0:
-            print ('Warning: %s has no data.' % (datafile,))
+            print(('Warning: %s has no data.' % (datafile,)))
         else:
             ratio = 100.0 * float(n_con) / float(num)
             f_out.write('%s %s %s %5i %6.3f\n' % (cM,frc,rnd,idx,ratio))

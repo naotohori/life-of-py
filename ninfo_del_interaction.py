@@ -7,9 +7,9 @@ from file_ninfo import NinfoFile
 from ninfo import NinfoSet
 
 if len(sys.argv) != 4:
-    print 
-    print 'Usage: % SCRIPT [NINFO file] [command file]  [output NINFO file]'
-    print 
+    print() 
+    print('Usage: % SCRIPT [NINFO file] [command file]  [output NINFO file]')
+    print() 
     sys.exit(2)
 
 # Input & file opening
