@@ -1,10 +1,13 @@
 class ARNA(object):
+    # Bond length
     BL_SP = 3.8157
     BL_PS = 4.6010
     BL_SA = 4.8515
     BL_SU = 4.2733
     BL_SG = 4.9659
     BL_SC = 4.2738
+
+    # Bond angle
     BA_PSP =  82.735
     BA_SPS =  87.410
     BA_PSA =  97.569
@@ -15,8 +18,12 @@ class ARNA(object):
     BA_USP = 112.661
     BA_GSP = 109.721
     BA_CSP = 112.615
+
+    # Dihedral (for stacking)
     DIH_PSPS = -148.215
     DIH_SPSP =  175.975
+
+    # Stacking distance
     ST_AA = 4.1806530
     ST_AC = 3.8260185
     ST_AG = 4.4255305
@@ -33,15 +40,21 @@ class ARNA(object):
     ST_UC = 4.2679180
     ST_UG = 4.9977560
     ST_UU = 4.2453650
+
+    # Hydrogen bonding distance
     HB_AU = 5.8815
     HB_GC = 5.6550
     HB_GU = 5.9234
+
+    # Hydrogen bonding angle
     HBA_SAU = 156.320
     HBA_SUA = 143.910
     HBA_SGC = 161.746
     HBA_SCG = 142.306
     HBA_SGU = 166.449969063
     HBA_SUG = 117.708449432
+
+    # Hydrogen bonding dihedral
     HBD_SAUS = 71.958
     HBD_SGCS = 79.653
     HBD_SGUS = 123.008309037
