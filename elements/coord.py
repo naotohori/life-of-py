@@ -68,7 +68,7 @@ class Coord(object) :
         rt.z = self.z - other.z
         return rt
         
-    def __div__(self, n):
+    def __truediv__(self, n):
         '''重心を求める際などに使う'''
         self.x /= n
         self.y /= n
