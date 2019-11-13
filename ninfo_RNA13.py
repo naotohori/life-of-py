@@ -181,31 +181,37 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    if (args.seq is None and args.pdb is None):
+    if args.pdb is not None:
+        #pdb = PdbFile(sys.argv[1])
+        args.pdb.open_to_read()
+        chains = args.pdb.read_all()
+        args.pdb.close()
+        
+        #seq = 'UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU'
+        #n_nt = len(seq)
+        #n_mp = 3 * n_nt - 1
+        
+        #if len(chains) > 1:
+        #    print('Error: currently more than one chain can not be processed.')
+        #    sys.exit(2)
+        
+        chain = chains[0]
+        n_nt = chain.num_res()
+        
+        seq = []
+        for r in chain.residues:
+            # "RA " ---> "A"
+            seq.append(r.atoms[0].res_name.strip()[1])
+
+    elif args.seq is not None:
+        seq = args.seq
+        n_nt = len(seq)
+
+    else:
         print ('Either seq or pdb is needed')
         sys.exit(2)
 
-    #pdb = PdbFile(sys.argv[1])
-    args.pdb.open_to_read()
-    chains = args.pdb.read_all()
-    args.pdb.close()
-    
-    #seq = 'UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU'
-    #n_nt = len(seq)
-    #n_mp = 3 * n_nt - 1
-    
-    #if len(chains) > 1:
-    #    print('Error: currently more than one chain can not be processed.')
-    #    sys.exit(2)
-    
-    chain = chains[0]
-    n_nt = chain.num_res()
     print('#nt: ', n_nt)
-    
-    seq = []
-    for r in chain.residues:
-        # "RA " ---> "A"
-        seq.append(r.atoms[0].res_name.strip()[1])
     print('Sequence:')
     print(seq)
     
@@ -316,128 +322,129 @@ if __name__ == "__main__":
         ns.basestackDTs.append(bs)
     
     
-    ##############
-    ## H-bond   ##
-    ##############
-    hblist = []
-    for l in args.hbfile:
-        if l.find('#') != -1:
-            continue
-        lsp = l.split()
-    
-        ## Check
-        if lsp[0] == 'CAN':
-            if lsp[2] != 'B' or lsp[4] != 'B':
-                print('Error: Canonical base pair should be by B and B')
+    if args.hbfile is not None:
+        ##############
+        ## H-bond   ##
+        ##############
+        hblist = []
+        for l in args.hbfile:
+            if l.find('#') != -1:
+                continue
+            lsp = l.split()
+        
+            ## Check
+            if lsp[0] == 'CAN':
+                if lsp[2] != 'B' or lsp[4] != 'B':
+                    print('Error: Canonical base pair should be by B and B')
+                    sys.exit(2)
+            elif lsp[0] == 'NON':
+                pass
+            else:
+                print('Error: unknown H-bond type')
                 sys.exit(2)
-        elif lsp[0] == 'NON':
-            pass
-        else:
-            print('Error: unknown H-bond type')
-            sys.exit(2)
-    
-        hblist.append((lsp[0],int(lsp[1]),lsp[2],int(lsp[3]),lsp[4],int(lsp[5])))
-    
-    for c in hblist:
-        nt_1 = c[1]
-        mp_1 = c[2]
-        nt_2 = c[3]
-        mp_2 = c[4]
-        nHB  = c[5]
-    
-        # For both CAN and NON, 
-        if mp_1 == 'S':
-            imp_1 = 2 + 3 * (nt_1 - 1) - 1  # S
-            imp_3 = 2 + 3 * (nt_1 - 1) + 1  # P
-            imp_5 = 2 + 3 * (nt_1 - 1) + 2  # S
-        elif mp_1 == 'B':
-            imp_1 = 2 + 3 * (nt_1 - 1)      # B
-            imp_3 = 2 + 3 * (nt_1 - 1) - 1  # S
-            imp_5 = 2 + 3 * (nt_1 - 1) + 1  # P
-        elif mp_1 == 'P':
-            imp_1 = 2 + 3 * (nt_1 - 1) - 2  # P
-            imp_3 = 2 + 3 * (nt_1 - 1) - 1  # S
-            imp_5 = 2 + 3 * (nt_1 - 1) + 1  # P
-        if mp_2 == 'S':
-            imp_2 = 2 + 3 * (nt_2 - 1) - 1  # S
-            imp_4 = 2 + 3 * (nt_2 - 1) + 1  # P
-            imp_6 = 2 + 3 * (nt_2 - 1) + 2  # S
-        elif mp_2 == 'B':
-            imp_2 = 2 + 3 * (nt_2 - 1)      # B
-            imp_4 = 2 + 3 * (nt_2 - 1) - 1  # S
-            imp_6 = 2 + 3 * (nt_2 - 1) + 1  # P
-        elif mp_2 == 'P':
-            imp_2 = 2 + 3 * (nt_2 - 1) - 2  # P
-            imp_4 = 2 + 3 * (nt_2 - 1) - 1  # S
-            imp_6 = 2 + 3 * (nt_2 - 1) + 1  # P
-    
-        if c[0] == 'CAN':  ## Canonical base pairs (A-form RNA)
-            (dist_native, ang1_native, ang2_native, 
-             dih0_native, dih1_native, dih2_native, nHB) = hb_ARNA_native(nt_1, nt_2)
-    
-        elif c[0] == 'NON':  ## Other hydrogen bonds (including non-canonical basepairs)
-            xyz1 = chain.get_atom( imp_1 - 1 ).xyz
-            xyz2 = chain.get_atom( imp_2 - 1 ).xyz
-            xyz3 = chain.get_atom( imp_3 - 1 ).xyz
-            xyz4 = chain.get_atom( imp_4 - 1 ).xyz
-            xyz5 = chain.get_atom( imp_5 - 1 ).xyz
-            xyz6 = chain.get_atom( imp_6 - 1 ).xyz
-    
-            v12 = xyz1 - xyz2
-            v13 = xyz1 - xyz3
-            v53 = xyz5 - xyz3
-            v42 = xyz4 - xyz2
-            v46 = xyz4 - xyz6
         
-            d1212 = v12.dot(v12)
-            dist_native = math.sqrt( d1212 )
+            hblist.append((lsp[0],int(lsp[1]),lsp[2],int(lsp[3]),lsp[4],int(lsp[5])))
         
-            cos_theta = v13.dot(v12) / math.sqrt(v13.dot(v13) * d1212)
-            ang1_native = math.acos(cos_theta) / math.pi * 180.0
+        for c in hblist:
+            nt_1 = c[1]
+            mp_1 = c[2]
+            nt_2 = c[3]
+            mp_2 = c[4]
+            nHB  = c[5]
         
-            cos_theta = v12.dot(v42) / math.sqrt(v42.dot(v42) * d1212)
-            ang2_native = math.acos(cos_theta) / math.pi * 180.0
+            # For both CAN and NON, 
+            if mp_1 == 'S':
+                imp_1 = 2 + 3 * (nt_1 - 1) - 1  # S
+                imp_3 = 2 + 3 * (nt_1 - 1) + 1  # P
+                imp_5 = 2 + 3 * (nt_1 - 1) + 2  # S
+            elif mp_1 == 'B':
+                imp_1 = 2 + 3 * (nt_1 - 1)      # B
+                imp_3 = 2 + 3 * (nt_1 - 1) - 1  # S
+                imp_5 = 2 + 3 * (nt_1 - 1) + 1  # P
+            elif mp_1 == 'P':
+                imp_1 = 2 + 3 * (nt_1 - 1) - 2  # P
+                imp_3 = 2 + 3 * (nt_1 - 1) - 1  # S
+                imp_5 = 2 + 3 * (nt_1 - 1) + 1  # P
+            if mp_2 == 'S':
+                imp_2 = 2 + 3 * (nt_2 - 1) - 1  # S
+                imp_4 = 2 + 3 * (nt_2 - 1) + 1  # P
+                imp_6 = 2 + 3 * (nt_2 - 1) + 2  # S
+            elif mp_2 == 'B':
+                imp_2 = 2 + 3 * (nt_2 - 1)      # B
+                imp_4 = 2 + 3 * (nt_2 - 1) - 1  # S
+                imp_6 = 2 + 3 * (nt_2 - 1) + 1  # P
+            elif mp_2 == 'P':
+                imp_2 = 2 + 3 * (nt_2 - 1) - 2  # P
+                imp_4 = 2 + 3 * (nt_2 - 1) - 1  # S
+                imp_6 = 2 + 3 * (nt_2 - 1) + 1  # P
         
-            c4212 = v42.cross(v12)
-            c1213 = v12.cross(v13)
-            dih = math.atan2( v42.dot(c1213) * math.sqrt( v12.dot(v12)), c4212.dot(c1213))
-            dih0_native = dih / math.pi * 180.0
-    
-            m = v53.cross(v13)
-            n = c1213 * -1
-            dih = math.atan2( v53.dot(n) * math.sqrt( v13.dot(v13)), m.dot(n))
-            dih1_native = dih / math.pi * 180.0
-    
-            m = c4212 * -1
-            n = v42.cross(v46)
-            dih = math.atan2( v12.dot(n) * math.sqrt( v42.dot(v42)), m.dot(n))
-            dih2_native = dih / math.pi * 180.0
-    
-        hb = HBondDT(iunit1=1,iunit2=1,imp1=imp_1,imp2=imp_2,imp1un=imp_1,imp2un=imp_2,
-                     native=dist_native, factor=DT13.HB_U0*nHB, correct_mgo=1.0,coef=DT13.HB_DIST,
-    
-                     ang1_imp1=imp_3, ang1_imp2=imp_1, ang1_imp3=imp_2, ang1_iunit1=1,ang1_iunit2=1,
-                     ang1_imp1un=imp_3, ang1_imp2un=imp_1, ang1_imp3un=imp_2, 
-                     ang1_native=ang1_native, ang1_coef=DT13.HB_ANGL,
-    
-                     ang2_imp1=imp_4, ang2_imp2=imp_2, ang2_imp3=imp_1, ang2_iunit1=1,ang2_iunit2=1,
-                     ang2_imp1un=imp_4, ang2_imp2un=imp_2, ang2_imp3un=imp_1, 
-                     ang2_native=ang2_native, ang2_coef=DT13.HB_ANGL,
-    
-                     dih0_imp1=imp_3, dih0_imp2=imp_1, dih0_imp3=imp_2, dih0_imp4=imp_4,dih0_iunit1=1,dih0_iunit2=1,
-                     dih0_imp1un=imp_3, dih0_imp2un=imp_1, dih0_imp3un=imp_2, dih0_imp4un=imp_4,
-                     dih0_native=dih0_native,dih0_coef=DT13.HB_DIH_HBOND,
-    
-                     dih1_imp1=imp_2, dih1_imp2=imp_1, dih1_imp3=imp_3, dih1_imp4=imp_5,dih1_iunit1=1,dih1_iunit2=1,
-                     dih1_imp1un=imp_2, dih1_imp2un=imp_1, dih1_imp3un=imp_3, dih1_imp4un=imp_5,
-                     dih1_native=dih1_native,dih1_coef=DT13.HB_DIH_CHAIN,
-    
-                     dih2_imp1=imp_1, dih2_imp2=imp_2, dih2_imp3=imp_4, dih2_imp4=imp_6,dih2_iunit1=1,dih2_iunit2=1,
-                     dih2_imp1un=imp_1, dih2_imp2un=imp_2, dih2_imp3un=imp_4, dih2_imp4un=imp_6,
-                     dih2_native=dih2_native,dih2_coef=DT13.HB_DIH_CHAIN,
-                     )
-    
-        ns.hbondDTs.append(hb)
+            if c[0] == 'CAN':  ## Canonical base pairs (A-form RNA)
+                (dist_native, ang1_native, ang2_native, 
+                 dih0_native, dih1_native, dih2_native, nHB) = hb_ARNA_native(nt_1, nt_2)
+        
+            elif c[0] == 'NON':  ## Other hydrogen bonds (including non-canonical basepairs)
+                xyz1 = chain.get_atom( imp_1 - 1 ).xyz
+                xyz2 = chain.get_atom( imp_2 - 1 ).xyz
+                xyz3 = chain.get_atom( imp_3 - 1 ).xyz
+                xyz4 = chain.get_atom( imp_4 - 1 ).xyz
+                xyz5 = chain.get_atom( imp_5 - 1 ).xyz
+                xyz6 = chain.get_atom( imp_6 - 1 ).xyz
+        
+                v12 = xyz1 - xyz2
+                v13 = xyz1 - xyz3
+                v53 = xyz5 - xyz3
+                v42 = xyz4 - xyz2
+                v46 = xyz4 - xyz6
+            
+                d1212 = v12.dot(v12)
+                dist_native = math.sqrt( d1212 )
+            
+                cos_theta = v13.dot(v12) / math.sqrt(v13.dot(v13) * d1212)
+                ang1_native = math.acos(cos_theta) / math.pi * 180.0
+            
+                cos_theta = v12.dot(v42) / math.sqrt(v42.dot(v42) * d1212)
+                ang2_native = math.acos(cos_theta) / math.pi * 180.0
+            
+                c4212 = v42.cross(v12)
+                c1213 = v12.cross(v13)
+                dih = math.atan2( v42.dot(c1213) * math.sqrt( v12.dot(v12)), c4212.dot(c1213))
+                dih0_native = dih / math.pi * 180.0
+        
+                m = v53.cross(v13)
+                n = c1213 * -1
+                dih = math.atan2( v53.dot(n) * math.sqrt( v13.dot(v13)), m.dot(n))
+                dih1_native = dih / math.pi * 180.0
+        
+                m = c4212 * -1
+                n = v42.cross(v46)
+                dih = math.atan2( v12.dot(n) * math.sqrt( v42.dot(v42)), m.dot(n))
+                dih2_native = dih / math.pi * 180.0
+        
+            hb = HBondDT(iunit1=1,iunit2=1,imp1=imp_1,imp2=imp_2,imp1un=imp_1,imp2un=imp_2,
+                         native=dist_native, factor=DT13.HB_U0*nHB, correct_mgo=1.0,coef=DT13.HB_DIST,
+        
+                         ang1_imp1=imp_3, ang1_imp2=imp_1, ang1_imp3=imp_2, ang1_iunit1=1,ang1_iunit2=1,
+                         ang1_imp1un=imp_3, ang1_imp2un=imp_1, ang1_imp3un=imp_2, 
+                         ang1_native=ang1_native, ang1_coef=DT13.HB_ANGL,
+        
+                         ang2_imp1=imp_4, ang2_imp2=imp_2, ang2_imp3=imp_1, ang2_iunit1=1,ang2_iunit2=1,
+                         ang2_imp1un=imp_4, ang2_imp2un=imp_2, ang2_imp3un=imp_1, 
+                         ang2_native=ang2_native, ang2_coef=DT13.HB_ANGL,
+        
+                         dih0_imp1=imp_3, dih0_imp2=imp_1, dih0_imp3=imp_2, dih0_imp4=imp_4,dih0_iunit1=1,dih0_iunit2=1,
+                         dih0_imp1un=imp_3, dih0_imp2un=imp_1, dih0_imp3un=imp_2, dih0_imp4un=imp_4,
+                         dih0_native=dih0_native,dih0_coef=DT13.HB_DIH_HBOND,
+        
+                         dih1_imp1=imp_2, dih1_imp2=imp_1, dih1_imp3=imp_3, dih1_imp4=imp_5,dih1_iunit1=1,dih1_iunit2=1,
+                         dih1_imp1un=imp_2, dih1_imp2un=imp_1, dih1_imp3un=imp_3, dih1_imp4un=imp_5,
+                         dih1_native=dih1_native,dih1_coef=DT13.HB_DIH_CHAIN,
+        
+                         dih2_imp1=imp_1, dih2_imp2=imp_2, dih2_imp3=imp_4, dih2_imp4=imp_6,dih2_iunit1=1,dih2_iunit2=1,
+                         dih2_imp1un=imp_1, dih2_imp2un=imp_2, dih2_imp3un=imp_4, dih2_imp4un=imp_6,
+                         dih2_native=dih2_native,dih2_coef=DT13.HB_DIH_CHAIN,
+                         )
+        
+            ns.hbondDTs.append(hb)
     
     #nf = NinfoFile('ninfo_RNA13_pdb.ninfo')
     nf = NinfoFile(args.outfile)
