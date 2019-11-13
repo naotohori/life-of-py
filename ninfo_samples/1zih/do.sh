@@ -6,4 +6,4 @@ pdb_aa2cg.py 1zih_1.pdb 1zih.cg.pdb
 
 # Edit 1zih.cg.pdb to add residue 0 and 13
 
-ninfo_RNA13_pdb.py 1zih.cg.pdb 1zih.hb.list 1zih.ninfo
+ninfo_RNA13_pdb.py --pdb 1zih.cg.pdb --hbfile 1zih.hb.list 1zih.ninfo
