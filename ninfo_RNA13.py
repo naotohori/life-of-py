@@ -11,10 +11,11 @@ from cafysis.para.rnaDT13 import DT13
 from cafysis.elements.ninfo import NinfoSet, BondLength, BondAngle, BaseStackDT, HBondDT
 
 
-##############
-## Bond     ##
-##############
+#######################################
+## Functions to return native values ##
+#######################################
 
+################ Bond
 def bl_native(i):
     if seq[i-1] == 'A':
         native = ARNA.BL_SA
@@ -30,11 +31,7 @@ def bl_native(i):
         type_str = 'SC'
     return native, type_str
 
-
-##############
-## Angle    ##
-##############
-
+################ Angle
 def ba_BSP_native(i):
     if seq[i-1] == 'A':
         native = ARNA.BA_ASP
@@ -64,9 +61,7 @@ def ba_PSB_native(i):
         type_str = 'PSC'
     return native, type_str
 
-##############
-## Stack    ##
-##############
+################ Stack
 def bs_native(i,j):
     if seq[i-1] == 'A':
         if seq[j-1] == 'A':
@@ -122,9 +117,7 @@ def bs_native(i,j):
             type_str = 'C-C'
     return native, type_str
 
-##############
-## H-bond   ##
-##############
+################ H-bond
 def hb_ARNA_native(i,j):
     if seq[i-1] == 'A' and seq[j-1] == 'U':
         dist = ARNA.HB_AU
@@ -165,19 +158,28 @@ def hb_ARNA_native(i,j):
 
 
 ################################################################################
+##                                  Main                                      ##
+################################################################################
 if __name__ == "__main__":
 
+    ###########################################
+    ## Define the Parser and check errors    ##
+    ###########################################
     parser = argparse.ArgumentParser(
              description='Structural conversion from TIS model to All-atomistic model',
              formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     
+    parser.add_argument('outfile', default='ninfo.out', help='output filename')
+
     parser.add_argument('--seq', help='Sequence')
 
     parser.add_argument('--pdb', type=PdbFile, help='PDB file')
 
     parser.add_argument('--hbfile', type=argparse.FileType('r'), help='HB list file')
 
-    parser.add_argument('outfile', default='ninfo.out', help='output filename')
+    parser.add_argument('--circ', action="store_true", help='Flag for circRNA')
+    
+    parser.add_argument('--end5', default='S', help="5'-end P or S")
 
     args = parser.parse_args()
 
@@ -186,14 +188,6 @@ if __name__ == "__main__":
         args.pdb.open_to_read()
         chains = args.pdb.read_all()
         args.pdb.close()
-        
-        #seq = 'UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU'
-        #n_nt = len(seq)
-        #n_mp = 3 * n_nt - 1
-        
-        #if len(chains) > 1:
-        #    print('Error: currently more than one chain can not be processed.')
-        #    sys.exit(2)
         
         chain = chains[0]
         n_nt = chain.num_res()
@@ -211,10 +205,34 @@ if __name__ == "__main__":
         print ('Either seq or pdb is needed')
         sys.exit(2)
 
+    if args.circ:
+        if args.end5 == 'S':
+            print ('end5 option is ignored for circRNA')
+            args.end5 = 'P'
+
+    if args.end5 == 'P':
+        offset_end5 = 1
+    elif args.end5 == 'S':
+        offset_end5 = 0
+    else:
+        print ('end5 option has to be Either S or P')
+        sys.exit(2)
+
+    ###########################
+    ## Print the setting     ##
+    ###########################
     print('#nt: ', n_nt)
     print('Sequence:')
     print(seq)
+    if args.circ:
+        print ('This is a circRNA. (--end5 option will be ignored)')
+    else:
+        print("This is a linear RNA with the 5'-end starting with %s" % (args.end5,))
     
+
+    ################################################
+    ## This is the main object to be constructed  ##
+    ################################################
     ns = NinfoSet()
     
 
@@ -222,15 +240,25 @@ if __name__ == "__main__":
     ## Bond     ##
     ##############
     # for the first nt
+    if args.end5 == 'P':
+        # P - S
+        bl = BondLength(iunit1=1, iunit2=1,
+                        imp1=0+offset_end5, imp2=1+offset_end5, 
+                        imp1un=0+offset_end5, imp2un=1+offset_end5,
+                        native=ARNA.BL_PS, factor=1.0, correct_mgo=1.0, coef=DT13.BL_PS, type_str='PS')
+        ns.bondlengths.append(bl)
+
     # S - B
     native, type_str = bl_native(1)
-    bl = BondLength(iunit1=1,iunit2=1,imp1=1,imp2=2,imp1un=1,imp2un=2,
-                    native=native,factor=1.0,correct_mgo=1.0,coef=DT13.BL_SB,type_str=type_str)
+    bl = BondLength(iunit1=1, iunit2=1,
+                    imp1=1+offset_end5, imp2=2+offset_end5, 
+                    imp1un=1+offset_end5, imp2un=2+offset_end5,
+                    native=native, factor=1.0, correct_mgo=1.0, coef=DT13.BL_SB, type_str=type_str)
     ns.bondlengths.append(bl)
     
     # for the second through last nt
     for i in range(2,n_nt+1):
-        imp_P = 3 * (i-1)
+        imp_P = 3 * (i-1) + offset_end5
         imp_S0 = imp_P - 2
         imp_S = imp_P + 1
         imp_B = imp_S + 1
@@ -249,38 +277,34 @@ if __name__ == "__main__":
         bl = BondLength(iunit1=1,iunit2=1,imp1=imp_S,imp2=imp_B,imp1un=imp_S,imp2un=imp_B,
                         native=native,factor=1.0,correct_mgo=1.0,coef=DT13.BL_SB,type_str=type_str)
         ns.bondlengths.append(bl)
+
+    ## circRNA: connect the 5' and 3' ends
+    if args.circ:
+        imp_S0 = 3*n_nt - 1 # S of 3'-end
+        imp_P  = 1          # New phosphate between 3'-end and 5'-end
+
+        # S0 - P  (S of 3'-end to P of 5'-end)
+        bl = BondLength(iunit1=1,iunit2=1,imp1=imp_S0,imp2=imp_P,imp1un=imp_S0,imp2un=imp_P,
+                        native=ARNA.BL_SP,factor=1.0,correct_mgo=1.0,coef=DT13.BL_SP,type_str='SP')
+        ns.bondlengths.append(bl)
+    
     
     ##############
     ## Angle    ##
     ##############
-    # for the second nt
-    # B0 - S0 - P
-    native, type_str = ba_BSP_native(1)
-    ba = BondAngle(iunit1=1,iunit2=1,imp1=2,imp2=1,imp3=3,imp1un=2,imp2un=1,imp3un=3,
-                    native=native,factor=1.0,correct_mgo=1.0,coef=DT13.BA_BSP,type_str=type_str)
-    ns.bondangles.append(ba)
-    # S0 - P - S
-    ba = BondAngle(iunit1=1,iunit2=1,imp1=1,imp2=3,imp3=4,imp1un=1,imp2un=3,imp3un=4,
-                    native=ARNA.BA_SPS,factor=1.0,correct_mgo=1.0,coef=DT13.BA_SPS,type_str='SPS')
-    ns.bondangles.append(ba)
-    # P - S - B
-    native, type_str = ba_PSB_native(2)
-    ba = BondAngle(iunit1=1,iunit2=1,imp1=3,imp2=4,imp3=5,imp1un=3,imp2un=4,imp3un=5,
-                    native=native,factor=1.0,correct_mgo=1.0,coef=DT13.BA_PSB,type_str=type_str)
-    ns.bondangles.append(ba)
-    
-    # for the third through last nt
-    for i in range(3,n_nt+1):
-        imp_P = 3 * (i-1)
+    # for the second through last nt
+    for i in range(2,n_nt+1):
+        imp_P  = 3*(i-1) + offset_end5
         imp_P0 = imp_P - 3
         imp_S0 = imp_P - 2
         imp_B0 = imp_P - 1
-        imp_S = imp_P + 1
-        imp_B = imp_S + 1
-        # P0 - S0 - P
-        ba = BondAngle(iunit1=1,iunit2=1,imp1=imp_P0,imp2=imp_S0,imp3=imp_P,imp1un=imp_P0,imp2un=imp_S0,imp3un=imp_P,
-                        native=ARNA.BA_PSP,factor=1.0,correct_mgo=1.0,coef=DT13.BA_PSP,type_str='PSP')
-        ns.bondangles.append(ba)
+        imp_S  = imp_P + 1
+        imp_B  = imp_S + 1
+        if i > 2 or args.end5 == 'P':
+            # P0 - S0 - P
+            ba = BondAngle(iunit1=1,iunit2=1,imp1=imp_P0,imp2=imp_S0,imp3=imp_P,imp1un=imp_P0,imp2un=imp_S0,imp3un=imp_P,
+                         native=ARNA.BA_PSP,factor=1.0,correct_mgo=1.0,coef=DT13.BA_PSP,type_str='PSP')
+            ns.bondangles.append(ba)
         # B0 - S0 - P
         native, type_str = ba_BSP_native(i-1)
         ba = BondAngle(iunit1=1,iunit2=1,imp1=imp_B0,imp2=imp_S0,imp3=imp_P,imp1un=imp_B0,imp2un=imp_S0,imp3un=imp_P,
@@ -295,13 +319,38 @@ if __name__ == "__main__":
         ba = BondAngle(iunit1=1,iunit2=1,imp1=imp_P,imp2=imp_S,imp3=imp_B,imp1un=imp_P,imp2un=imp_S,imp3un=imp_B,
                         native=native,factor=1.0,correct_mgo=1.0,coef=DT13.BA_PSB,type_str=type_str)
         ns.bondangles.append(ba)
+
+    # circRNA
+    if args.circ:
+        imp_P  = 3*n_nt - 2
+        imp_S  = 3*n_nt - 1       
+        imp_B  = 3*n_nt
+        imp_P1 = 1
+        imp_S1 = 2
+        # P - S - P1
+        ba = BondAngle(iunit1=1,iunit2=1,imp1=imp_P,imp2=imp_S,imp3=imp_P1,imp1un=imp_P,imp2un=imp_S,imp3un=imp_P1,
+                        native=ARNA.BA_PSP,factor=1.0,correct_mgo=1.0,coef=DT13.BA_PSP,type_str='PSP')
+        ns.bondangles.append(ba)
+        # B - S - P1
+        native, type_str = ba_BSP_native(n_nt)
+        ba = BondAngle(iunit1=1,iunit2=1,imp1=imp_B,imp2=imp_S,imp3=imp_P1,imp1un=imp_B,imp2un=imp_S,imp3un=imp_P1,
+                        native=native,factor=1.0,correct_mgo=1.0,coef=DT13.BA_BSP,type_str=type_str)
+        ns.bondangles.append(ba)
+        # S - P1 - S1
+        ba = BondAngle(iunit1=1,iunit2=1,imp1=imp_S,imp2=imp_P1,imp3=imp_S1,imp1un=imp_S,imp2un=imp_P1,imp3un=imp_S1,
+                        native=ARNA.BA_SPS,factor=1.0,correct_mgo=1.0,coef=DT13.BA_SPS,type_str='SPS')
+        ns.bondangles.append(ba)
+
     
     ##############
     ## Stack    ##
     ##############
     # for the second through one before last nt
-    for i in range(3,n_nt):
-        imp_P2 = 3 * (i-1)
+    nt_start = 3
+    if args.end5 == 'P':
+        nt_start = 2
+    for i in range(nt_start,n_nt):
+        imp_P2 = 3*(i-1) + offset_end5
         imp_P1 = imp_P2 - 3
         imp_S1 = imp_P2 - 2
         imp_B1 = imp_P2 - 1
@@ -309,7 +358,6 @@ if __name__ == "__main__":
         imp_B2 = imp_P2 + 2
         imp_P3 = imp_P2 + 3
     
-        # dist
         native, type_str = bs_native(i-1,i)
         bs = BaseStackDT(iunit1=1,iunit2=1,imp1=imp_B1,imp2=imp_B2,imp1un=imp_B1,imp2un=imp_B2,
                            native=native, factor=0.0,correct_mgo=1.0,coef=DT13.ST_DIST,type_str=type_str,
@@ -321,11 +369,52 @@ if __name__ == "__main__":
                            dih2_native=ARNA.DIH_SPSP,dih2_coef=DT13.ST_DIH,dih2_type_str='SPSP')
         ns.basestackDTs.append(bs)
     
+    # circRNA
+    if args.circ:
+        # (n_nt - 1) : (n_nt)
+        imp_P1 = 3*n_nt - 5
+        imp_S1 = 3*n_nt - 4
+        imp_B1 = 3*n_nt - 3
+        imp_P2 = 3*n_nt - 2
+        imp_S2 = 3*n_nt - 1
+        imp_B2 = 3*n_nt
+        imp_P3 = 1
+        native, type_str = bs_native(n_nt-1,n_nt)
+        bs = BaseStackDT(iunit1=1,iunit2=1,imp1=imp_B1,imp2=imp_B2,imp1un=imp_B1,imp2un=imp_B2,
+                           native=native, factor=0.0,correct_mgo=1.0,coef=DT13.ST_DIST,type_str=type_str,
+                           dih1_imp1=imp_P1, dih1_imp2=imp_S1, dih1_imp3=imp_P2, dih1_imp4=imp_S2,dih1_iunit1=1,dih1_iunit2=1,
+                           dih1_imp1un=imp_P1, dih1_imp2un=imp_S1, dih1_imp3un=imp_P2, dih1_imp4un=imp_S2,
+                           dih1_native=ARNA.DIH_PSPS,dih1_coef=DT13.ST_DIH,dih1_type_str='PSPS',
+                           dih2_imp1=imp_S1, dih2_imp2=imp_P2, dih2_imp3=imp_S2, dih2_imp4=imp_P3,dih2_iunit1=1,dih2_iunit2=1,
+                           dih2_imp1un=imp_S1, dih2_imp2un=imp_P2, dih2_imp3un=imp_S2, dih2_imp4un=imp_P3,
+                           dih2_native=ARNA.DIH_SPSP,dih2_coef=DT13.ST_DIH,dih2_type_str='SPSP')
+        ns.basestackDTs.append(bs)
+
+        # (n_nt) : (1)
+        imp_P1 = 3*n_nt - 2
+        imp_S1 = 3*n_nt - 1
+        imp_B1 = 3*n_nt
+        imp_P2 = 1
+        imp_S2 = 2
+        imp_B2 = 3
+        imp_P3 = 4
+        native, type_str = bs_native(n_nt,1)
+        bs = BaseStackDT(iunit1=1,iunit2=1,imp1=imp_B1,imp2=imp_B2,imp1un=imp_B1,imp2un=imp_B2,
+                           native=native, factor=0.0,correct_mgo=1.0,coef=DT13.ST_DIST,type_str=type_str,
+                           dih1_imp1=imp_P1, dih1_imp2=imp_S1, dih1_imp3=imp_P2, dih1_imp4=imp_S2,dih1_iunit1=1,dih1_iunit2=1,
+                           dih1_imp1un=imp_P1, dih1_imp2un=imp_S1, dih1_imp3un=imp_P2, dih1_imp4un=imp_S2,
+                           dih1_native=ARNA.DIH_PSPS,dih1_coef=DT13.ST_DIH,dih1_type_str='PSPS',
+                           dih2_imp1=imp_S1, dih2_imp2=imp_P2, dih2_imp3=imp_S2, dih2_imp4=imp_P3,dih2_iunit1=1,dih2_iunit2=1,
+                           dih2_imp1un=imp_S1, dih2_imp2un=imp_P2, dih2_imp3un=imp_S2, dih2_imp4un=imp_P3,
+                           dih2_native=ARNA.DIH_SPSP,dih2_coef=DT13.ST_DIH,dih2_type_str='SPSP')
+        ns.basestackDTs.append(bs)
+
+
     
+    ##############
+    ## H-bond   ##
+    ##############
     if args.hbfile is not None:
-        ##############
-        ## H-bond   ##
-        ##############
         hblist = []
         for l in args.hbfile:
             if l.find('#') != -1:
@@ -354,29 +443,29 @@ if __name__ == "__main__":
         
             # For both CAN and NON, 
             if mp_1 == 'S':
-                imp_1 = 2 + 3 * (nt_1 - 1) - 1  # S
-                imp_3 = 2 + 3 * (nt_1 - 1) + 1  # P
-                imp_5 = 2 + 3 * (nt_1 - 1) + 2  # S
+                imp_1 = 2 + 3 * (nt_1 - 1) - 1 + offset_end5 # S
+                imp_3 = 2 + 3 * (nt_1 - 1) + 1 + offset_end5 # P
+                imp_5 = 2 + 3 * (nt_1 - 1) + 2 + offset_end5 # S
             elif mp_1 == 'B':
-                imp_1 = 2 + 3 * (nt_1 - 1)      # B
-                imp_3 = 2 + 3 * (nt_1 - 1) - 1  # S
-                imp_5 = 2 + 3 * (nt_1 - 1) + 1  # P
+                imp_1 = 2 + 3 * (nt_1 - 1)     + offset_end5 # B
+                imp_3 = 2 + 3 * (nt_1 - 1) - 1 + offset_end5 # S
+                imp_5 = 2 + 3 * (nt_1 - 1) + 1 + offset_end5 # P
             elif mp_1 == 'P':
-                imp_1 = 2 + 3 * (nt_1 - 1) - 2  # P
-                imp_3 = 2 + 3 * (nt_1 - 1) - 1  # S
-                imp_5 = 2 + 3 * (nt_1 - 1) + 1  # P
+                imp_1 = 2 + 3 * (nt_1 - 1) - 2 + offset_end5 # P
+                imp_3 = 2 + 3 * (nt_1 - 1) - 1 + offset_end5 # S
+                imp_5 = 2 + 3 * (nt_1 - 1) + 1 + offset_end5 # P
             if mp_2 == 'S':
-                imp_2 = 2 + 3 * (nt_2 - 1) - 1  # S
-                imp_4 = 2 + 3 * (nt_2 - 1) + 1  # P
-                imp_6 = 2 + 3 * (nt_2 - 1) + 2  # S
+                imp_2 = 2 + 3 * (nt_2 - 1) - 1 + offset_end5 # S
+                imp_4 = 2 + 3 * (nt_2 - 1) + 1 + offset_end5 # P
+                imp_6 = 2 + 3 * (nt_2 - 1) + 2 + offset_end5 # S
             elif mp_2 == 'B':
-                imp_2 = 2 + 3 * (nt_2 - 1)      # B
-                imp_4 = 2 + 3 * (nt_2 - 1) - 1  # S
-                imp_6 = 2 + 3 * (nt_2 - 1) + 1  # P
+                imp_2 = 2 + 3 * (nt_2 - 1)     + offset_end5 # B
+                imp_4 = 2 + 3 * (nt_2 - 1) - 1 + offset_end5 # S
+                imp_6 = 2 + 3 * (nt_2 - 1) + 1 + offset_end5 # P
             elif mp_2 == 'P':
-                imp_2 = 2 + 3 * (nt_2 - 1) - 2  # P
-                imp_4 = 2 + 3 * (nt_2 - 1) - 1  # S
-                imp_6 = 2 + 3 * (nt_2 - 1) + 1  # P
+                imp_2 = 2 + 3 * (nt_2 - 1) - 2 + offset_end5 # P
+                imp_4 = 2 + 3 * (nt_2 - 1) - 1 + offset_end5 # S
+                imp_6 = 2 + 3 * (nt_2 - 1) + 1 + offset_end5 # P
         
             if c[0] == 'CAN':  ## Canonical base pairs (A-form RNA)
                 (dist_native, ang1_native, ang2_native, 
@@ -446,7 +535,6 @@ if __name__ == "__main__":
         
             ns.hbondDTs.append(hb)
     
-    #nf = NinfoFile('ninfo_RNA13_pdb.ninfo')
     nf = NinfoFile(args.outfile)
     nf.open_to_write()
     nf.write_all(ns)
