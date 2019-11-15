@@ -181,6 +181,8 @@ if __name__ == "__main__":
     
     parser.add_argument('--end5', default='S', help="5'-end P or S")
 
+    parser.add_argument('--exvfile', type=argparse.FileType('w'), help='output exv pair file')
+
     args = parser.parse_args()
 
     if args.pdb is not None:
@@ -224,10 +226,14 @@ if __name__ == "__main__":
     print('#nt: ', n_nt)
     print('Sequence:')
     print(seq)
+
     if args.circ:
         print ('This is a circRNA. (--end5 option will be ignored)')
     else:
         print("This is a linear RNA with the 5'-end starting with %s" % (args.end5,))
+
+    if args.exvfile:
+        print('A file for exv pair list will be generated.')
     
 
     ################################################
@@ -535,8 +541,63 @@ if __name__ == "__main__":
         
             ns.hbondDTs.append(hb)
     
+
+    ###########################
+    ## Generate ninfo file   ##
+    ###########################
     nf = NinfoFile(args.outfile)
     nf.open_to_write()
     nf.write_all(ns)
     nf.close()
     
+
+    ###################################
+    ## Generate exv file (optional)  ##
+    ###################################
+    if args.exvfile:
+        n_sep_nlocal_P = 3
+        n_sep_nlocal_S = 3
+        n_sep_nlocal_B = 2
+
+        if args.end5 == 'P':
+            nmp = 3 * n_nt
+        else:
+            nmp = 3 * n_nt - 1
+
+        imp_plus_sep = {}  # An array to store (imp + n_sep_nlocal_X).
+                           # X depends on the type of imp.
+        for imp in range(1, nmp+1):
+            itype = imp % 3
+
+            if args.end5 == 'P':
+                if itype == 0: # B
+                    imp_plus_sep[imp] = imp + n_sep_nlocal_B
+                elif itype == 1: # P
+                    imp_plus_sep[imp] = imp + n_sep_nlocal_P
+                else: # S
+                    imp_plus_sep[imp] = imp + n_sep_nlocal_S
+            else:
+                if itype == 0: # P
+                    imp_plus_sep[imp] = imp + n_sep_nlocal_P
+                elif itype == 1: # S
+                    imp_plus_sep[imp] = imp + n_sep_nlocal_S
+                else: # B
+                    imp_plus_sep[imp] = imp + n_sep_nlocal_B
+
+        nexv = 0
+        for imp in range(1, nmp):
+
+            for jmp in range(imp, nmp+1):
+
+                if args.circ:
+                    if imp_plus_sep[imp] <= jmp and imp_plus_sep[jmp] <= imp + nmp:
+                        args.exvfile.write('%i %i\n' % (imp, jmp))
+                        nexv += 1
+                else:
+                    if imp_plus_sep[imp] <= jmp:
+                        args.exvfile.write('%i %i\n' % (imp, jmp))
+                        nexv += 1
+
+        print ('#exv: %i' % (nexv,))
+        args.exvfile.close()
+
