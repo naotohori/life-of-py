@@ -166,14 +166,15 @@ if __name__ == "__main__":
     ## Define the Parser and check errors    ##
     ###########################################
     parser = argparse.ArgumentParser(
-             description='Structural conversion from TIS model to All-atomistic model',
+             description='Construct a topology file for TIS model simulations',
              formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     
     parser.add_argument('outfile', default='ninfo.out', help='output filename')
 
-    parser.add_argument('--seq', help='Sequence')
-
-    parser.add_argument('--pdb', type=PdbFile, help='PDB file')
+    group_seq = parser.add_mutually_exclusive_group(required=True)
+    group_seq.add_argument('--pdb', type=PdbFile, help='PDB file')
+    group_seq.add_argument('--seq', help='Sequence')
+    group_seq.add_argument('--seqfile', type=argparse.FileType('r'), help='Sequence FASTA file')
 
     parser.add_argument('--hbfile', type=argparse.FileType('r'), help='HB list file')
 
@@ -203,8 +204,16 @@ if __name__ == "__main__":
         seq = args.seq
         n_nt = len(seq)
 
+    elif args.seqfile is not None:
+        seq = ''
+        for l in args.seqfile:
+            if l[0] == '>' or l[0] == '#' or l[0] == ';':
+                continue
+            seq += l.strip()
+        n_nt = len(seq)
+
     else:
-        print ('Either seq or pdb is needed')
+        print ('Error: this error should be detected by mutually_exclusive_group of the parser')
         sys.exit(2)
 
     if args.circ:
