@@ -307,54 +307,58 @@ if __name__ == "__main__":
     ##############
     ## Angle    ##
     ##############
-    # for the second through last nt
-    for i in range(2,n_nt+1):
-        imp_P  = 3*(i-1) + offset_end5
-        imp_P0 = imp_P - 3
-        imp_S0 = imp_P - 2
-        imp_B0 = imp_P - 1
+    for i in range(1, n_nt+1):
+        imp_P  = 3*(i-1) + offset_end5   # This can be 0 if i == 1 and end5 == 'S'
         imp_S  = imp_P + 1
-        imp_B  = imp_S + 1
-        if i > 2 or args.end5 == 'P':
-            # P0 - S0 - P
-            ba = BondAngle(iunit1=1,iunit2=1,imp1=imp_P0,imp2=imp_S0,imp3=imp_P,imp1un=imp_P0,imp2un=imp_S0,imp3un=imp_P,
-                         native=ARNA.BA_PSP,factor=1.0,correct_mgo=1.0,coef=DT13.BA_PSP,type_str='PSP')
-            ns.bondangles.append(ba)
-        # B0 - S0 - P
-        native, type_str = ba_BSP_native(i-1)
-        ba = BondAngle(iunit1=1,iunit2=1,imp1=imp_B0,imp2=imp_S0,imp3=imp_P,imp1un=imp_B0,imp2un=imp_S0,imp3un=imp_P,
-                        native=native,factor=1.0,correct_mgo=1.0,coef=DT13.BA_BSP,type_str=type_str)
-        ns.bondangles.append(ba)
-        # S0 - P - S
-        ba = BondAngle(iunit1=1,iunit2=1,imp1=imp_S0,imp2=imp_P,imp3=imp_S,imp1un=imp_S0,imp2un=imp_P,imp3un=imp_S,
-                        native=ARNA.BA_SPS,factor=1.0,correct_mgo=1.0,coef=DT13.BA_SPS,type_str='SPS')
-        ns.bondangles.append(ba)
-        # P - S - B
-        native, type_str = ba_PSB_native(i)
-        ba = BondAngle(iunit1=1,iunit2=1,imp1=imp_P,imp2=imp_S,imp3=imp_B,imp1un=imp_P,imp2un=imp_S,imp3un=imp_B,
-                        native=native,factor=1.0,correct_mgo=1.0,coef=DT13.BA_PSB,type_str=type_str)
-        ns.bondangles.append(ba)
+        imp_B  = imp_P + 2
+        imp_P1 = imp_P + 3
+        imp_S1 = imp_P + 4
 
-    # circRNA
-    if args.circ:
-        imp_P  = 3*n_nt - 2
-        imp_S  = 3*n_nt - 1       
-        imp_B  = 3*n_nt
-        imp_P1 = 1
-        imp_S1 = 2
-        # P - S - P1
-        ba = BondAngle(iunit1=1,iunit2=1,imp1=imp_P,imp2=imp_S,imp3=imp_P1,imp1un=imp_P,imp2un=imp_S,imp3un=imp_P1,
-                        native=ARNA.BA_PSP,factor=1.0,correct_mgo=1.0,coef=DT13.BA_PSP,type_str='PSP')
-        ns.bondangles.append(ba)
-        # B - S - P1
-        native, type_str = ba_BSP_native(n_nt)
-        ba = BondAngle(iunit1=1,iunit2=1,imp1=imp_B,imp2=imp_S,imp3=imp_P1,imp1un=imp_B,imp2un=imp_S,imp3un=imp_P1,
-                        native=native,factor=1.0,correct_mgo=1.0,coef=DT13.BA_BSP,type_str=type_str)
-        ns.bondangles.append(ba)
-        # S - P1 - S1
-        ba = BondAngle(iunit1=1,iunit2=1,imp1=imp_S,imp2=imp_P1,imp3=imp_S1,imp1un=imp_S,imp2un=imp_P1,imp3un=imp_S1,
-                        native=ARNA.BA_SPS,factor=1.0,correct_mgo=1.0,coef=DT13.BA_SPS,type_str='SPS')
-        ns.bondangles.append(ba)
+        if i == n_nt and args.circ:
+            imp_P1 = 1
+            imp_S1 = 2
+
+        """ P - S - B
+        1st nucleotide: Only when there is P
+        2nd through last: Always 
+        """
+        if (i > 1) or (i == 1 and args.end5 == 'P'):
+            native, type_str = ba_PSB_native(i)
+            ba = BondAngle(iunit1=1, iunit2=1, imp1=imp_P, imp2=imp_S, imp3=imp_B, 
+                           imp1un=imp_P, imp2un=imp_S, imp3un=imp_B, 
+                           native=native, factor=1.0, correct_mgo=1.0, 
+                           coef=DT13.BA_PSB, type_str=type_str)
+            ns.bondangles.append(ba)
+
+        """ P - S - P1
+        1st nucleotide: Only when there is P
+        2nd through 2nd last: Always 
+        Last nucleotide: Only when circular
+        """
+        if (i > 1 and i < n_nt) or (i == 1 and args.end5 == 'P') or (i == n_nt and args.circ):
+            ba = BondAngle(iunit1=1, iunit2=1, imp1=imp_P, imp2=imp_S, imp3=imp_P1, 
+                           imp1un=imp_P, imp2un=imp_S, imp3un=imp_P1, 
+                           native=ARNA.BA_PSP, factor=1.0, correct_mgo=1.0, 
+                           coef=DT13.BA_PSP, type_str='PSP')
+            ns.bondangles.append(ba)
+
+        """ B - S - P1, S - P1 - S1
+        1st through 2nd last: Always 
+        Last nucleotide: Only when circular
+        """
+        if (i < n_nt) or (i == n_nt and args.circ):
+            native, type_str = ba_BSP_native(i)
+            ba = BondAngle(iunit1=1, iunit2=1, imp1=imp_B, imp2=imp_S, imp3=imp_P1,
+                           imp1un=imp_B, imp2un=imp_S, imp3un=imp_P1,
+                           native=native,factor=1.0, correct_mgo=1.0,
+                           coef=DT13.BA_BSP, type_str=type_str)
+            ns.bondangles.append(ba)
+
+            ba = BondAngle(iunit1=1, iunit2=1, imp1=imp_S, imp2=imp_P1, imp3=imp_S1,
+                           imp1un=imp_S, imp2un=imp_P1, imp3un=imp_S1,
+                           native=ARNA.BA_SPS, factor=1.0, correct_mgo=1.0,
+                           coef=DT13.BA_SPS, type_str='SPS')
+            ns.bondangles.append(ba)
 
     
     ##############
