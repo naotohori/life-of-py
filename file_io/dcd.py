@@ -27,7 +27,7 @@ class DcdHeader(object):
         print('format', self.format)
         if self.title is not None:
             for line in self.title :
-                print(line)
+                print(line.decode('utf-8'))
         print('nset', self.nset)
         print('istart', self.istart)
         print('nstep_save', self.nstep_save)
@@ -75,9 +75,9 @@ class DcdFile :
         # title block 
         b = self._pick_data()
         size = len(b)
-        nline = (size - 4) / 80
+        nline = (size - 4) // 80
         bdata = struct.unpack(('i' + '80s' * nline), b)
-        if bdata[1].find('Git commit') != -1 or bdata[2].find('CafeMol') != -1:
+        if bdata[1].decode("utf-8").find('Git commit') != -1 or bdata[2].decode("utf-8").find('CafeMol') != -1:
             self._header.format = 'cafemol'
         else:
             self._header.format = 'charmm'
@@ -94,7 +94,7 @@ class DcdFile :
             b = self._pick_data()
             bdata = struct.unpack('4siii5iifi9i', b)
             #bdata = struct.unpack('4siii5iid9i',b)
-            if bdata[0] != 'CORD' :
+            if bdata[0].decode("utf-8") != 'CORD' :
                 raise MyError('DcdFile', 'read_header', '%s is not coordinate file' % (self._filename,))
             self._header.nset = bdata[1]
             self._header.istart = bdata[2]
@@ -137,7 +137,7 @@ class DcdFile :
             # title block (number of line can be changed)
             b = self._pick_data()
             size = len(b)
-            nline = (size - 4) / 80
+            nline = (size - 4) // 80
             bdata = struct.unpack(('i' + '80s' * nline), b)
             self._header.title = []
             for i in range(nline):
@@ -156,10 +156,26 @@ class DcdFile :
         
         self._file.seek(0)
         
+        if self._header.nset is None:
+            self._header.nset = 0
+        if self._header.istart is None:
+            self._header.istart = 0
+        if self._header.nstep_save is None:
+            self._header.nstep_save = 0
+        if self._header.nstep is None:
+            self._header.nstep = 0
+        if self._header.nunit_real is None:
+            self._header.nunit_real = 0
+        if self._header.delta is None:
+            self._header.delta = 0.0
+        if self._header.tempk is None:
+            self._header.tempk = 0.0
+        if self._header.lunit2mp is None:
+            self._header.lunit2mp = []
         #first block
         form = '4siii5iifi9i'
         binary = struct.pack(form,
-                             'CORD',
+                             b'CORD',
                              self._header.nset,
                              self._header.istart,
                              self._header.nstep_save,
@@ -177,13 +193,13 @@ class DcdFile :
                              self._header.title[1])
         
         import re
-        re_null = re.compile('\0')
+        re_null = re.compile(b'\0')
         
-        p = struct.pack('80s', str(self._header.tempk))
-        binary += re_null.sub(' ', p)
+        p = struct.pack('80s', bytes('%f' % self._header.tempk, 'utf-8'))
+        binary += re_null.sub(b' ', p)
         for i in range(self._header.nunit_real) :
-            p = struct.pack('80s', str(self._header.lunit2mp[i]))
-            binary += re_null.sub(' ', p)
+            p = struct.pack('80s', bytes('%i' % self._header.lunit2mp[i], 'utf-8'))
+            binary += re_null.sub(b' ', p)
             
         form = 'i' + '80s' * (3 + self._header.nunit_real)
         self._put_data(binary, struct.calcsize(form))
@@ -278,23 +294,34 @@ class DcdFile :
         except:
             raise EOFError('EOF in a middle of dcd.skip_onestep().')
 
+    ''' This will throw EOFError exception if there are not enough frames.'''
     def skip(self, num):
         for i in range(num):
             self.skip_onestep()
-       
+
+    ''' This does NOT throw EOFError exception if there are not enough frames.'''
+    ''' Instead, this function will return the number of frames skipped successfully.'''
+    def skip_as_many_as_possible_upto(self, num):
+        for i in range(num):
+            try:
+                self.skip_onestep()
+            except EOFError:
+                return i
+        return num
+            
     def write_onestep(self, coord_matrix):
         # for X
-        binary = ''
+        binary = b''
         for xyz in coord_matrix :
             binary += struct.pack('f', xyz[0])
         self._put_data(binary, 4 * self._header.nmp_real)
         # for Y
-        binary = ''
+        binary = b''
         for xyz in coord_matrix :
             binary += struct.pack('f', xyz[1])
         self._put_data(binary, 4 * self._header.nmp_real)
         # for Z
-        binary = ''
+        binary = b''
         for xyz in coord_matrix :
             binary += struct.pack('f', xyz[2])
         self._put_data(binary, 4 * self._header.nmp_real)

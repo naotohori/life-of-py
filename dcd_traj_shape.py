@@ -28,7 +28,7 @@ import numpy as np
 import math
 
 if len(sys.argv) != 2:
-    print('Usage: SCRIPT [PDB]')
+    print('Usage: SCRIPT [dcd]')
     print('')
     print('Returns: %5i %6.3f %6.3f %6.3f % (N, Rg, D, S)')
     print('    N  = number of particles (atoms)')

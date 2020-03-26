@@ -8,7 +8,7 @@ Created on 2014/06/17
 import sys
 from cafysis.file_io.dcd import DcdFile
 
-def count(path):
+def count_frame(path):
 
     dcd = DcdFile(path)
     dcd.open_to_read()
@@ -38,4 +38,4 @@ if __name__ == "__main__":
         print ('Usage: SCRIPT [dcd file]')
         sys.exit(2)
 
-    print(('# frames = %i' % (count(sys.argv[1]))))
+    print(('# frames = %i' % (count_frame(sys.argv[1]))))
