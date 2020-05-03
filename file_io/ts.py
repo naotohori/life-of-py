@@ -101,10 +101,10 @@ class TsFile(object):
         self.num_unit = 0
         
     def open_to_read(self):
-        self._file = open(self._filename, 'rb')
+        self._file = open(self._filename, 'r')
         
     def open_to_write(self):
-        self._file = open(self._filename, 'wb')
+        self._file = open(self._filename, 'w')
         
     def close(self):
         self._file.close()
@@ -336,5 +336,5 @@ class TsFile(object):
             elif str == 'thbond':
                 th.e_thbond = i
             else:
-                raise MyError('','','')
+                raise MyError('ts.py','_head_str2col','str=%s' % (str,))
         return th
