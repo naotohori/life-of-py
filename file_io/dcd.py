@@ -77,9 +77,12 @@ class DcdFile :
         size = len(b)
         nline = (size - 4) // 80
         bdata = struct.unpack(('i' + '80s' * nline), b)
-        if bdata[1].decode("utf-8").find('Git commit') != -1 or bdata[2].decode("utf-8").find('CafeMol') != -1:
-            self._header.format = 'cafemol'
-        else:
+        try:
+            if bdata[1].decode("utf-8").find('Git commit') != -1 or bdata[2].decode("utf-8").find('CafeMol') != -1:
+                self._header.format = 'cafemol'
+            else:
+                self._header.format = 'charmm'
+        except:
             self._header.format = 'charmm'
             
 
@@ -296,7 +299,7 @@ class DcdFile :
 
     ''' This will throw EOFError exception if there are not enough frames.'''
     def skip(self, num):
-        for i in range(num):
+        for _ in range(num):
             self.skip_onestep()
 
     ''' This does NOT throw EOFError exception if there are not enough frames.'''
@@ -334,7 +337,27 @@ class DcdFile :
         else :
             self._file.seek(-4, os.SEEK_CUR)
             return True
-    
+
+    def count_frame(self):
+        self.set_mark()
+
+        if self._seek_data is None:
+            self.read_header()
+
+        self.rewind()
+        
+        n = 0
+        while self.has_more_data():
+            try:
+                self.skip_onestep()
+            except EOFError:
+                break
+            n += 1
+        
+        self.go_mark()
+
+        return n
+
     def rewind(self):
         self._file.seek( self._seek_data, os.SEEK_SET)
 
