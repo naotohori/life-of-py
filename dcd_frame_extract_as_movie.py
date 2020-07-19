@@ -98,7 +98,7 @@ frame_num = frame_end - args.frame_begin + 1
 i_orig = args.frame_begin
 
 # read and write
-for i in range(frame_num) :
+for iframe in range(frame_num) :
     if not dcd.has_more_data() :
         print('The number of frames is invalid.')
         print('Header information:')
@@ -107,7 +107,7 @@ for i in range(frame_num) :
         movie.close()
         sys.exit(2)
         
-    if i % args.frame_stride != 0 :
+    if iframe % args.frame_stride != 0 :
         dcd.skip(1)
         i_orig += 1
         continue
@@ -132,7 +132,7 @@ for i in range(frame_num) :
                 a.xyz.put_as_list(struct[iatom])
                 iatom += 1
 
-    movie.modelID = i + args.id_offset
+    movie.modelID = iframe + args.id_offset
     movie.set_remark('ORIGINAL_FILE %s' % (args.dcd,))
     movie.set_remark('ORIGINAL_FRAME %i' % (i_orig,))
     movie.write_all(chains)
