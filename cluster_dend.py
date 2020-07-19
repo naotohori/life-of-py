@@ -35,6 +35,7 @@ scipy.cluster.hierarchy.dendrogram(z, p=p, truncate_mode='lastp',
                                 no_labels=flg_no_label,
                                 show_leaf_counts=True)
 plt.savefig(prefix+'.cls.dend_%i.ps' % p)
+plt.savefig(prefix+'.cls.dend_%i.png' % p)
 plt.figure()
 plt.clf()
 
