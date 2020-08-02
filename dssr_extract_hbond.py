@@ -135,8 +135,9 @@ for ibp in range(nbp):
 
     if len(bpinfo_bp) > 3:
         print("Error: len(bpinfo_bp) > 3")
-    if len(bpinfo_name) > 7:
-        print("Error: len(bpinfo_name) > 7")
+    if len(bpinfo_name) > 8:
+        print("Error: len(bpinfo_name) > 8")
+        ''' "~Sheared", "Platform" '''
     if len(bpinfo_Saenger) > 9:
         print("Error: len(bpinfo_Saenger) > 9")
     if len(bpinfo_LW) > 3:
@@ -157,7 +158,7 @@ for ibp in range(nbp):
 
     f_out.write('  %i  ' % nHB)
     f_out.write(' %3s' % bpinfo_bp)
-    f_out.write(' %7s' % bpinfo_name)
+    f_out.write(' %8s' % bpinfo_name)
     f_out.write(' %9s' % bpinfo_Saenger)
     f_out.write(' %3s' % bpinfo_LW)
     f_out.write(' %4s' % bpinfo_DSSR)
@@ -191,7 +192,13 @@ for ibp in range(nbp):
     """ Write common field (ATOMS) to the both files """
 
     for detail in details.split(','):
-        r = re.search(r'([^\(\[]*)[^-]*-([^\(\[]*)', detail)
+        '''
+        Note:
+        The connector can be either "-" or "*"
+        e.g.,
+        H-bonds[4]: "N2(amino)-O4(carbonyl)[3.33],N3*O4(carbonyl)[3.23],O2'(hydroxyl)-O5'[2.84],O2'(hydroxyl)-O4'[3.12]"
+        '''
+        r = re.search(r'([^\(\[]*)[^-]*[-\*]([^\(\[]*)', detail)
         f_out.write(' %s %s' % (r.group(1), r.group(2)))
         write_both(' %s %s' % (r.group(1), r.group(2)))
 
