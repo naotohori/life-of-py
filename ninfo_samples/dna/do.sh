@@ -1,0 +1,1 @@
+../../ninfo_DNA18.py --hbfile ssdna_hairpin3.hb.list --seq GGGATACTTTTGTATCCG ssdna_hairpin3.ninfo
