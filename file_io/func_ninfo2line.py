@@ -162,7 +162,9 @@ def basestackDTdist2line(bs):
     s += ' %6i %6i' % (bs.iunit1, bs.iunit2)
     s += ' %6i %6i' % (bs.imp1, bs.imp2)
     s += ' %6i %6i' % (bs.imp1un, bs.imp2un)
-    s += ' %11.4f' % (bs.factor,)
+    s += ' %8.4f' % (bs.h,)
+    s += ' %8.4f' % (bs.s,)
+    s += ' %6.2f' % (bs.Tm,)
     s += ' %11.4f' % (bs.native,)
     s += ' %11.4f' % (bs.coef,)
     s += ' ' + bs.type

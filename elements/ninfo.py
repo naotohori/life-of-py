@@ -155,6 +155,7 @@ class BaseStackDT(Ninfo):
     _counter_dih = 0
     def __init__(self,id=None,id_dih1=None,id_dih2=None,
                  iunit1=None,iunit2=None, imp1=None,imp2=None,imp1un=None,imp2un=None,
+                 h=None, s=None, Tm=None,
                  native=None,factor=None,correct_mgo=None,coef=None,type_str=None,
                  dih1_imp1=None, dih1_imp2=None, dih1_imp3=None, dih1_imp4=None,dih1_iunit1=None,dih1_iunit2=None,
                  dih1_imp1un=None, dih1_imp2un=None, dih1_imp3un=None, dih1_imp4un=None,
@@ -175,6 +176,9 @@ class BaseStackDT(Ninfo):
 
         Ninfo.__init__(self,id=id,iunit1=iunit1,iunit2=iunit2, imp1=imp1,imp2=imp2,imp1un=imp1un,imp2un=imp2un,
                        native=native,factor=factor,correct_mgo=correct_mgo,coef=coef,type_str=type_str)
+        self.h = h
+        self.s = s
+        self.Tm = Tm
         self.dih1_id = id_dih1
         self.dih1_iunit1 = dih1_iunit1
         self.dih1_iunit2 = dih1_iunit2
