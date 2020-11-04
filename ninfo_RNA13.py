@@ -46,6 +46,7 @@ def ba_BSP_native(i):
         native = ARNA.BA_CSP
         type_str = 'CSP'
     return native, type_str
+
 def ba_PSB_native(i):
     if seq[i-1] == 'A':
         native = ARNA.BA_PSA
@@ -378,8 +379,10 @@ if __name__ == "__main__":
         imp_P3 = imp_P2 + 3
     
         native, type_str = bs_native(i-1,i)
+        h, s, Tm = DT13.ST_U0[ type_str[0]+type_str[2] ]
         bs = BaseStackDT(iunit1=1,iunit2=1,imp1=imp_B1,imp2=imp_B2,imp1un=imp_B1,imp2un=imp_B2,
                            native=native, factor=0.0,correct_mgo=1.0,coef=DT13.ST_DIST,type_str=type_str,
+                           h=h, s=s, Tm=Tm,
                            dih1_imp1=imp_P1, dih1_imp2=imp_S1, dih1_imp3=imp_P2, dih1_imp4=imp_S2,dih1_iunit1=1,dih1_iunit2=1,
                            dih1_imp1un=imp_P1, dih1_imp2un=imp_S1, dih1_imp3un=imp_P2, dih1_imp4un=imp_S2,
                            dih1_native=ARNA.DIH_PSPS,dih1_coef=DT13.ST_DIH,dih1_type_str='PSPS',
@@ -399,8 +402,10 @@ if __name__ == "__main__":
         imp_B2 = 3*n_nt
         imp_P3 = 1
         native, type_str = bs_native(n_nt-1,n_nt)
+        h, s, Tm = DT13.ST_U0[ type_str[0]+type_str[2] ]
         bs = BaseStackDT(iunit1=1,iunit2=1,imp1=imp_B1,imp2=imp_B2,imp1un=imp_B1,imp2un=imp_B2,
                            native=native, factor=0.0,correct_mgo=1.0,coef=DT13.ST_DIST,type_str=type_str,
+                           h=h, s=s, Tm=Tm,
                            dih1_imp1=imp_P1, dih1_imp2=imp_S1, dih1_imp3=imp_P2, dih1_imp4=imp_S2,dih1_iunit1=1,dih1_iunit2=1,
                            dih1_imp1un=imp_P1, dih1_imp2un=imp_S1, dih1_imp3un=imp_P2, dih1_imp4un=imp_S2,
                            dih1_native=ARNA.DIH_PSPS,dih1_coef=DT13.ST_DIH,dih1_type_str='PSPS',
@@ -418,8 +423,10 @@ if __name__ == "__main__":
         imp_B2 = 3
         imp_P3 = 4
         native, type_str = bs_native(n_nt,1)
+        h, s, Tm = DT13.ST_U0[ type_str[0]+type_str[2] ]
         bs = BaseStackDT(iunit1=1,iunit2=1,imp1=imp_B1,imp2=imp_B2,imp1un=imp_B1,imp2un=imp_B2,
                            native=native, factor=0.0,correct_mgo=1.0,coef=DT13.ST_DIST,type_str=type_str,
+                           h=h, s=s, Tm=Tm,
                            dih1_imp1=imp_P1, dih1_imp2=imp_S1, dih1_imp3=imp_P2, dih1_imp4=imp_S2,dih1_iunit1=1,dih1_iunit2=1,
                            dih1_imp1un=imp_P1, dih1_imp2un=imp_S1, dih1_imp3un=imp_P2, dih1_imp4un=imp_S2,
                            dih1_native=ARNA.DIH_PSPS,dih1_coef=DT13.ST_DIH,dih1_type_str='PSPS',

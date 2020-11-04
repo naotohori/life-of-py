@@ -502,10 +502,12 @@ if __name__ == "__main__":
             imp_S2 = 3*n_nt - 1
             imp_B2 = 3*n_nt
             imp_P3 = 1
-            native, type_str = bs_native(iseq, n_nt-1,n_nt)
+            native, type_str = bs_native(iseq, n_nt-1, n_nt)
+            h, s, Tm = DT13.ST_U0[ type_str[0]+type_str[2] ]
             bs = BaseStackDT(iunit1=iunit, iunit2=iunit,
                              imp1=nmp_pre+imp_B1, imp2=nmp_pre+imp_B2, imp1un=nmp_pre+imp_B1, imp2un=nmp_pre+imp_B2,
                              native=native, factor=0.0,correct_mgo=1.0,coef=CHT18.ST_DIST,type_str=type_str,
+                             h=h, s=s, Tm=Tm,
                              dih1_imp1=nmp_pre+imp_P1, dih1_imp2=nmp_pre+imp_S1, dih1_imp3=nmp_pre+imp_P2, dih1_imp4=nmp_pre+imp_S2,
                              dih1_iunit1=iunit, dih1_iunit2=iunit,
                              dih1_imp1un=imp_P1, dih1_imp2un=imp_S1, dih1_imp3un=imp_P2, dih1_imp4un=imp_S2,
@@ -525,9 +527,11 @@ if __name__ == "__main__":
             imp_B2 = 3
             imp_P3 = 4
             native, type_str = bs_native(iseq, n_nt,1)
+            h, s, Tm = DT13.ST_U0[ type_str[0]+type_str[2] ]
             bs = BaseStackDT(iunit1=iunit, iunit2=iunit,
                              imp1=nmp_pre+imp_B1, imp2=nmp_pre+imp_B2, imp1un=nmp_pre+imp_B1, imp2un=nmp_pre+imp_B2,
                              native=native, factor=0.0, correct_mgo=1.0, coef=CHT18.ST_DIST, type_str=type_str,
+                             h=h, s=s, Tm=Tm,
                              dih1_imp1=nmp_pre+imp_P1, dih1_imp2=nmp_pre+imp_S1, dih1_imp3=nmp_pre+imp_P2, dih1_imp4=nmp_pre+imp_S2,
                              dih1_iunit1=iunit,dih1_iunit2=iunit,
                              dih1_imp1un=imp_P1, dih1_imp2un=imp_S1, dih1_imp3un=imp_P2, dih1_imp4un=imp_S2,

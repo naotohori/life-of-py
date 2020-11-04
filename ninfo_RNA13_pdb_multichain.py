@@ -252,10 +252,12 @@ for ic,c in enumerate(chains):
     
         # dist
         native, type_str = bs_native(ic,i-1,ic,i)
+        h, s, Tm = DT13.ST_U0[ type_str[0]+type_str[2] ]
         bs = BaseStackDT(iunit1=ic+1,iunit2=ic+1, 
                          imp1=pre_mp+imp_B1,imp2=pre_mp+imp_B2,
                          imp1un=imp_B1,imp2un=imp_B2,
                          native=native, factor=0.0,correct_mgo=1.0,coef=DT13.ST_DIST,type_str=type_str,
+                         h=h, s=s, Tm=Tm,
                          dih1_imp1=pre_mp+imp_P1, dih1_imp2=pre_mp+imp_S1, dih1_imp3=pre_mp+imp_P2, dih1_imp4=pre_mp+imp_S2,
                          dih1_iunit1=ic+1,dih1_iunit2=ic+1,
                          dih1_imp1un=imp_P1, dih1_imp2un=imp_S1, dih1_imp3un=imp_P2, dih1_imp4un=imp_S2,
