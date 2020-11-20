@@ -21,6 +21,11 @@ if __name__ == '__main__':
     nframe_skip = int(sys.argv[2])
     nframe_end = int(sys.argv[3])
     E_CUTOFF = float(sys.argv[4])
+    print("# calculated by ts_calc_cv.py")
+    print("# Search query: {:s}".format(sys.argv[1]))
+    print("# nframe_skip: {:d}".format(nframe_skip))
+    print("# nframe_end: {:d}".format(nframe_end))
+    print("# E_CUTOFF: {:f}".format(E_CUTOFF))
 
     Ts = []
     e_sq = {}
@@ -61,5 +66,5 @@ if __name__ == '__main__':
 
     for T in sorted(Ts):
         fn = float(n[T])
-        print(T, ((e_sq[T]/fn - (e[T]/fn)**2) / (BOLTZC*T*T)), n[T])
+        print('{:6.2f} {:8.3f} {:12d}'.format(T, ((e_sq[T]/fn - (e[T]/fn)**2) / (BOLTZC*T*T)), n[T]))
 
