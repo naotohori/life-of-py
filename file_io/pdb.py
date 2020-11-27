@@ -9,12 +9,22 @@ from cafysis.elements.error import MyError
 from cafysis.elements.pdb import Atom, Chain, Residue
 
 class PdbFile(object) :
-    def __init__(self, filename):
+    def __init__(self, filename, openmode=None, flg_HETATM=False):
         self._filename = filename
         self._status = 'Closed'
-        self.flg_HETATM = False
+        self.flg_HETATM = flg_HETATM
         self.modelID = None
         self.remark = None
+
+        if openmode is not None:
+            if openmode == 'r':
+                self.open_to_read()
+            elif openmode == 'w':
+                self.open_to_write()
+            else:
+                print("openmode has to be either 'r' or 'w'")
+                raise MyError('PdbFile', '__init__', "openmode has to be either 'r' or 'w'")
+
         
     def open_to_read(self):
         if self._status != 'Closed' :
@@ -65,6 +75,11 @@ class PdbFile(object) :
         if len(c.residues) != 0:
             chains.append(c)
         
+        return chains
+
+    def read_all_and_close(self):
+        chains = self.read_all()
+        self.close()
         return chains
     
     def write_remark(self,char):
