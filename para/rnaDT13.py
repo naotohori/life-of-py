@@ -46,3 +46,8 @@ class DT13(object):
     HB_DIH_HBOND = 0.15
     HB_DIH_CHAIN = 0.15
     HB_U0 = -2.434
+
+    # U_EV
+    n_sep_nlocal_P = 3
+    n_sep_nlocal_S = 3
+    n_sep_nlocal_B = 2

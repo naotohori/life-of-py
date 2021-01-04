@@ -46,6 +46,12 @@ class NHT19(object):
     HB_DIH_CHAIN = 0.15
     HB_U0 = -2.7
     #hb_cutoff_dist = 2.0
+    NNHB_NT_SEP = 5
+
+    # U_EV
+    n_sep_nlocal_P = 4
+    n_sep_nlocal_S = 4
+    n_sep_nlocal_B = 2
 
 #<<<< NHT19_exv_param
 #**      R      epsilon

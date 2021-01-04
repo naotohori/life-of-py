@@ -56,6 +56,12 @@ class DT15(object):
     HB_DIH_CHAIN = 0.15
     HB_U0 = -2.93168175
     #hb_cutoff_dist = 2.0
+    NNHB_NT_SEP = 5
+
+    # U_EV
+    n_sep_nlocal_P = 3
+    n_sep_nlocal_S = 3
+    n_sep_nlocal_B = 2
 
 #<<<< DT15_exv_param 
 #**    R    epsilon
