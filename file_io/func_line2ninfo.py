@@ -154,28 +154,58 @@ def line2basestack(line) :
     return info
 
 
-def line2basestackDT(line) :
-    it = iter(line.split())
-    num = len(line.split())
-    if num != 12 :
-        raise MyError("func_line2ninfo", "line2basestackDT", "")
-    if next(it) != 'bs-dist':
-        raise MyError("func_line2ninfo", "line2basestackDT", "This line is not bs-dist")
-    info = BaseStackDT()
-    info.id = int(next(it))
-    info.iunit1 = int(next(it))
-    info.iunit2 = int(next(it))
-    info.imp1 = int(next(it))
-    info.imp2 = int(next(it))
-    info.imp1un = int(next(it))
-    info.imp2un = int(next(it))
-    info.factor = float(next(it))
-    info.native = float(next(it))
-    info.coef = float(next(it))
-    info.type = next(it)
-    info.dih1_id = None
-    info.dih2_id = None
-    return info
+def line2basestackDT(line, fmt=2) :
+
+    if fmt == 1:
+        it = iter(line.split())
+        num = len(line.split())
+        if num != 12 :
+            raise MyError("func_line2ninfo", "line2basestackDT", "")
+        if next(it) != 'bs-dist':
+            raise MyError("func_line2ninfo", "line2basestackDT", "This line is not bs-dist")
+        info = BaseStackDT()
+        info.id = int(next(it))
+        info.iunit1 = int(next(it))
+        info.iunit2 = int(next(it))
+        info.imp1 = int(next(it))
+        info.imp2 = int(next(it))
+        info.imp1un = int(next(it))
+        info.imp2un = int(next(it))
+        info.factor = float(next(it))
+        info.native = float(next(it))
+        info.coef = float(next(it))
+        info.type = next(it)
+        info.dih1_id = None
+        info.dih2_id = None
+        return info
+
+    elif fmt == 2:
+        it = iter(line.split())
+        num = len(line.split())
+        if num != 14 :
+            raise MyError("func_line2ninfo", "line2basestackDT", "num!=14")
+        if next(it) != 'bs-dist':
+            raise MyError("func_line2ninfo", "line2basestackDT", "This line is not bs-dist")
+        info = BaseStackDT()
+        info.id = int(next(it))
+        info.iunit1 = int(next(it))
+        info.iunit2 = int(next(it))
+        info.imp1 = int(next(it))
+        info.imp2 = int(next(it))
+        info.imp1un = int(next(it))
+        info.imp2un = int(next(it))
+        info.h = float(next(it))
+        info.s = float(next(it))
+        info.Tm = float(next(it))
+        info.native = float(next(it))
+        info.coef = float(next(it))
+        info.type = next(it)
+        info.dih1_id = None
+        info.dih2_id = None
+        return info
+
+    else:
+        raise MyError("func_line2ninfo", "line2basestackDT", "unknown fmt")
 
 
 def line2tertiarystackDT(line) :
@@ -210,7 +240,7 @@ def line2tertiarystackDT(line) :
 def line2hbondDT(line) :
     it = iter(line.split())
     num = len(line.split())
-    if num < 14 :
+    if num < 11 :
         raise MyError("func_line2ninfo", "line2hbondDT", "")
     if next(it) != 'hb-dist':
         raise MyError("func_line2ninfo", "line2hbondDT", "This line is not hb-dist")
@@ -225,18 +255,22 @@ def line2hbondDT(line) :
     info.factor = float(next(it))
     info.native = float(next(it))
     info.coef = float(next(it))
-    info.sectert = next(it)
-    info.nHB = int(next(it))
-    info.atoms1 = []
-    info.atoms2 = []
-    try:
-        while (True):
-            a = next(it)
-            info.atoms1.append(a)
-            a = next(it)
-            info.atoms2.append(a)
-    except:
-        pass
+    if num > 11:
+        info.sectert = next(it)
+        info.nHB = int(next(it))
+        info.atoms1 = []
+        info.atoms2 = []
+        try:
+            while (True):
+                a = next(it)
+                info.atoms1.append(a)
+                a = next(it)
+                info.atoms2.append(a)
+        except:
+            pass
+    else:
+        info.sectert = None
+        info.nHB = None
 
     info.ang1_id = None
     info.ang2_id = None
