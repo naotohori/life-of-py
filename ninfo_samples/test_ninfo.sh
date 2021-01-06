@@ -9,3 +9,9 @@ cd circU10
 diff -q circU10.ninfo circU10.ninfo_test
 rm circU10.ninfo_test
 cd ..
+
+cd bwyv19
+../../ninfo_RNA.py --model NHT19 --pdb 1l2x.cg.pdb --hbfile bwyv.hb.dat --tstfile bwyv.tst.dat --end5 P --end3 P --nnhb 3 --exvfile bwyv19.exv.dat_test bwyv19.ninfo_test
+diff -q bwyv19.ninfo bwyv19.ninfo_test
+rm bwyv19.ninfo_test bwyv19.exv.dat_test
+cd ..

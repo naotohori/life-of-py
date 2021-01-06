@@ -1,0 +1,26 @@
+CAN     3 B 18 B 3   N3 N1 O2 N2 N4 O6
+CAN     4 B 17 B 3   N1 N3 N2 O2 O6 N4
+NON     4 B 20 B 1   N2 N3
+NON     4 S 20 B 1   O2' N1
+CAN     5 B 16 B 3   N3 N1 O2 N2 N4 O6
+NON     5 B 20 S 1   O2 O2'
+CAN     6 B 15 B 3   N1 N3 N2 O2 O6 N4
+NON     6 S 21 P 1   O2' OP1
+CAN     7 B 14 B 3   N1 N3 N2 O2 O6 N4
+NON     7 B 24 B 2   N2 N1 N3 N6
+NON     7 S 24 B 1   O2' N6
+NON     8 B 12 B 2   N4 N7 N3 O6
+NON     8 B 25 B 1   O2 N6
+NON     8 B 26 B 1   O2 N4
+CAN    10 B 28 B 3   N3 N1 O2 N2 N4 O6
+CAN    11 B 27 B 3   N3 N1 O2 N2 N4 O6
+CAN    12 B 26 B 3   N1 N3 N2 O2 O6 N4
+NON    14 S 25 B 1   O2' N1
+NON    14 B 25 B 1   O2 N6
+NON    15 S 23 B 1   O2' N1
+NON    15 B 23 B 1   O2 N6
+NON    16 B 21 P 1   N2 OP2
+NON    16 S 21 B 2   O2' N7 O3' N6
+NON    17 S 20 S 1   O2' O3'
+NON    17 B 20 S 1   O2 O2'
+NON    16 S 22 B 1   O2' N4
