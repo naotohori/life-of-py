@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-''' Under develoment 
+'''
 Currently support:
     DT13 from PDB, circ
     NHT19 from PDB
@@ -215,7 +215,7 @@ if __name__ == "__main__":
     parser.add_argument('--end5', default='S', help="5'-end P or S")
     parser.add_argument('--end3', default='B', help="3'-end P, S or B")
 
-    parser.add_argument('--nnhb', type=int, default=0, help='Treatment of non-native HB interactions: 0:nothing, 1:NNHB if CAN does not exist, 2:NNHB if CAN or NON do not exist.')
+    parser.add_argument('--nnhb', type=int, default=0, help='Treatment of non-native HB interactions: 0:nothing, 1:NNHB if CAN does not exist, 2:NNHB if CAN or NON do not exist between the bases, 3:NNHB if CAN or NON do not exist between the nucleotides involving one of the bases.')
 
     parser.add_argument('--exvfile', type=argparse.FileType('w'), help='output exv pair file')
 
@@ -279,13 +279,14 @@ if __name__ == "__main__":
         print ('end3 option has to be Either P, S, or B')
         sys.exit(2)
 
-    if args.nnhb not in (0,1,2):
+    if args.nnhb not in (0,1,2,3):
         print ('Error: --nnhb must be either of ')
         print ('        0: No non-native HB (NNHB).')
         print ('        1: Include NNHBs where no CAN (canonical base pair) interaction exists between the nucleoties.')
-        print ('        2: Include NNHBs where neither CAN or NON (non-canonical HB) interaction exist between the nucleoties.')
+        print ('        2: Include NNHBs where neither CAN or NON (non-canonical HB) interaction exist between the bases')
+        print ('        3: Include NNHBs where neither CAN or NON (non-canonical HB) interaction exist between the nucleoties involving one of the bases.')
         print ('')
-        print ('        The standard selection is, 1 for DT15, 2 for NHT19.')
+        print ('        The standard selection is 1 for DT15, and 3 for NHT19.')
         print ('')
         sys.exit(2)
 
@@ -565,7 +566,7 @@ if __name__ == "__main__":
 
     #### Non-native HB
     nnlist = []
-    if args.nnhb in (1,2):
+    if args.nnhb in (1,2,3):
 
         if args.circ:
             print("Error: The combination of NN and circRNA is not implemented yet.")
@@ -632,6 +633,14 @@ if __name__ == "__main__":
 
                     elif args.nnhb == 2:
                         if (c[0] == 'CAN' or c[0] == 'NON') and c[1] == nt1 and c[3] == nt2 and c[2] == 'B' and c[4] == 'B':
+                            flg_exist = True
+                            break
+
+                    elif args.nnhb == 3:
+                        if (c[0] == 'CAN' or c[0] == 'NON') and c[1] == nt1 and c[3] == nt2 and c[2] == 'B' and c[4] == 'B':
+                            flg_exist = True
+                            break
+                        if (c[0] == 'NON') and c[1] == nt1 and c[3] == nt2 and (c[2] == 'B' or c[4] == 'B'):
                             flg_exist = True
                             break
 
