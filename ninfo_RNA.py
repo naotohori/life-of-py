@@ -7,6 +7,7 @@ Currently support:
 
 To do:
     NHT19 + circ
+    CHT18(DNA)
 '''
 
 import sys
@@ -574,25 +575,11 @@ if __name__ == "__main__":
 
         else:
             '''
-            Linear RNA: 
-                if the 5'-end starts with S:
-                    the first (nt=1) and the last (nt=n_nt) can not have h-bonds
-                if the 5'-end starts with P:
-                    only the last (nt=n_nt) can not have h-bonds.
+            HB interactions between bases need Ps in the downstream.
             '''
-            if args.end5 == 'S':
-                nt1_begin = 2
-                nt1_end = n_nt - model.NNHB_NT_SEP - 1
-                nt2_end = n_nt - 1
-
-            elif args.end5 == 'P':
-                nt1_begin = 1
-                nt1_end = n_nt - model.NNHB_NT_SEP - 1
-                nt2_end = n_nt - 1
-
-            else:
-                print("Error: this should not happen. 27832")
-                sys.exit(2)
+            nt1_begin = 1
+            nt1_end = n_nt - model.NNHB_NT_SEP - 1
+            nt2_end = n_nt - 1
 
         for nt1 in range(nt1_begin, nt1_end+1):
             for nt2 in range(nt1 + model.NNHB_NT_SEP, nt2_end + 1):
