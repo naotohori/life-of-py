@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-import math
 import numpy as np
 
 def torsion(p1, p2, p3, p4, flg_degree=False, flg_360=False):
@@ -16,16 +15,20 @@ def torsion(p1, p2, p3, p4, flg_degree=False, flg_360=False):
     n = np.cross(v32, v34)
 
     if np.dot(v12,n) >= 0.0: # 0 < phi < 180
-        phi =   math.acos( np.dot(m,n) / math.sqrt(np.dot(m,m)*np.dot(n,n)) )
+        #phi =   math.acos( np.dot(m,n) / math.sqrt(np.dot(m,m)*np.dot(n,n)) )
+        phi =   np.arccos( np.dot(m,n) / (np.linalg.norm(m) * np.linalg.norm(n)))
 
     else: # -180 < phi < 0
-        phi = - math.acos( np.dot(m,n) / math.sqrt(np.dot(m,m)*np.dot(n,n)) )
+        #phi = - math.acos( np.dot(m,n) / math.sqrt(np.dot(m,m)*np.dot(n,n)) )
+        phi = - np.arccos( np.dot(m,n) / (np.linalg.norm(m) * np.linalg.norm(n)))
 
         if flg_360: # convert to (180 < phi < 360)
-            phi = 2 * math.pi + phi
+            #phi = 2 * math.pi + phi
+            phi = 2 * np.pi + phi
 
     if flg_degree:
-        return phi * 180.0 / math.pi
+        #return phi * 180.0 / math.pi
+        return phi * 180.0 / np.pi
     else:
         return phi
 
