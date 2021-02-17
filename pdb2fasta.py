@@ -18,11 +18,6 @@ chains = f_pdb.read_all()
 
 f_fasta = open(sys.argv[2],'w')
 
-if len(sys.argv) == 4 :
-    f_fasta.write('>%s|PDBID|CHAIN|SEQUENCE' % sys.argv[3] + '\n')
-else :
-    f_fasta.write('>%s|PDBID|CHAIN|SEQUENCE' % sys.argv[1][0:6] + '\n')
-    
 amino = {'ALA':'A', 'ASX':'B', 'CYS':'C', 'ASP':'D', 'GLU':'E', 'PHE':'F',
          'GLY':'G', 'HIS':'H', 'ILE':'I', 'LYS':'K', 'LEU':'L', 'MET':'M',
          'ASN':'N', 'PRO':'P', 'GLN':'Q', 'ARG':'R', 'SER':'S', 'THR':'T',
@@ -30,23 +25,36 @@ amino = {'ALA':'A', 'ASX':'B', 'CYS':'C', 'ASP':'D', 'GLU':'E', 'PHE':'F',
 rna = { '  A':'A', '  U':'U', '  G':'G', '  C':'C',
         ' RA':'A', ' RU':'U', ' RG':'G', ' RC':'C',
         'RA ':'A', 'RU ':'U', 'RG ':'G', 'RC ':'C' }
+dna = { ' DA':'A', ' DT':'T', ' DG':'G', ' DC':'C',
+        'DA ':'A', 'DT ':'T', 'DG ':'G', 'DC ':'C' }
 
-str = ''
-for c in chains :
+for ic, c in enumerate(chains):
+
+    if len(sys.argv) == 4 :
+        f_fasta.write('>%s|PDBID|%5i|SEQUENCE\n' % (sys.argv[3], ic+1))
+    else :
+        f_fasta.write('>%s|PDBID|%5i|SEQUENCE\n' % (sys.argv[1][0:6], ic+1))
+    
+    str = ''
+
     for r in c.residues :
         c3 = r.atoms[0].res_name
         if c3 in amino:
             c1 = amino[c3]
-        elif c3 in rna :
+        elif c3 in rna:
             c1 = rna[c3]
+        elif c3 in dna:
+            c1 = dna[c3]
         else:
             print('no data', c3)
             sys.exit(2)
         str += c1
         
-#print str
+    #print str
 
-lines = int (len(str) / 80)
-for i in range(lines) :
-    f_fasta.write(str[i*80:(i+1)*80] + '\n')
-f_fasta.write(str[lines*80:] + '\n')
+    lines = int (len(str) / 80)
+    for i in range(lines) :
+        f_fasta.write(str[i*80:(i+1)*80] + '\n')
+    f_fasta.write(str[lines*80:] + '\n')
+
+    f_fasta.write('\n')
