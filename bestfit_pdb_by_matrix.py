@@ -23,7 +23,7 @@ for chain in chains :
     for residue in chain.residues :
         num_atom += len(residue.atoms)
     
-file_mat = file(filename_mat,'r')
+file_mat = open(filename_mat,'r')
 mat_lines = file_mat.readlines()
 if mat_lines[0][0:7] != '#matrix' :
     print('Error: format of matrix file')
