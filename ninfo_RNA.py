@@ -217,6 +217,7 @@ if __name__ == "__main__":
     parser.add_argument('--end3', default='B', help="3'-end P, S or B")
 
     parser.add_argument('--nnhb', type=int, default=0, help='Treatment of non-native HB interactions: 0:nothing, 1:NNHB if CAN does not exist, 2:NNHB if CAN or NON do not exist between the bases, 3:NNHB if CAN or NON do not exist between the nucleotides involving one of the bases.')
+    parser.add_argument('--nnhb_exclude_file', type=argparse.FileType('r'), help='File that describes NNHB exclusion')
 
     parser.add_argument('--exvfile', type=argparse.FileType('w'), help='output exv pair file')
 
@@ -365,7 +366,7 @@ if __name__ == "__main__":
     ## circRNA: connect the 5' and 3' ends
     if args.circ:
         imp_S0 = 3*n_nt - 1 # S of 3'-end
-        imp_P  = 1          # New phosphate between 3'-end and 5'-end
+        imp_P  = 1          # P between 3'-end and 5'-end
 
         # S0 - P  (S of 3'-end to P of 5'-end)
         bl = BondLength(iunit1=1,iunit2=1,imp1=imp_S0,imp2=imp_P,imp1un=imp_S0,imp2un=imp_P,
@@ -390,7 +391,7 @@ if __name__ == "__main__":
 
             else:
                 """ 
-                If the last nucleotides does not have B, then angles containing P and S
+                If the last nucleotides does not have B, then angles formed by P and S
                 are already taken care in the previous (n_nt - 1), thus break the loop.
                 """
                 if args.end3 != 'B':
@@ -569,6 +570,35 @@ if __name__ == "__main__":
     nnlist = []
     if args.nnhb in (1,2,3):
 
+        nnhb_exclude_nts = set()
+        nnhb_exclude_pairs = set()
+        if args.nnhb_exclude_file is not None:
+
+            for l in args.nnhb_exclude_file:
+
+                if l.find('#') != -1:
+                    continue
+
+                lsp = l.strip().split()
+
+                if len(lsp) == 2:
+                    c1  = int(lsp[0])
+                    nt1 = int(lsp[1])
+
+                    nnhb_exclude_nts.add((c1, nt1))
+
+                elif len(lsp) == 4:
+                    c1  = int(lsp[0])
+                    nt1 = int(lsp[1])
+                    c2  = int(lsp[2])
+                    nt2 = int(lsp[3])
+        
+                    nnhb_exclude_nts.add((c1, nt1, c2, nt2))
+
+                else:
+                    print('Error: unknown format in nnhb_exclude_file:\n' + l)
+                    sys.exit(2)
+
         if args.circ:
             print("Error: The combination of NN and circRNA is not implemented yet.")
             sys.exit(2)
@@ -582,8 +612,15 @@ if __name__ == "__main__":
             nt2_end = n_nt - 1
 
         for nt1 in range(nt1_begin, nt1_end+1):
+
+            if (1,nt1) in nnhb_exclude_nts:
+                continue
+            
             for nt2 in range(nt1 + model.NNHB_NT_SEP, nt2_end + 1):
     
+                if (1,nt1,1,nt2) in nnhb_exclude_pairs:
+                    continue
+
                 if   seq[nt1-1] == 'G' and seq[nt2-1] == 'C':
                     atoms1 = ("N1", "N2", "O6")
                     atoms2 = ("N3", "O2", "N4")
