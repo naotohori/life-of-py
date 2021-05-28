@@ -47,7 +47,7 @@ dcd.skip(args.frame_skip)
 first = True
 while dcd.has_more_data() :
     data = dcd.read_onestep_np()
-        
+
     #print 'Start i loop'
     for i in range(args.offset+args.gap, nmp-args.gap, args.gap) :
 
@@ -64,7 +64,7 @@ while dcd.has_more_data() :
 
             cos_theta = np.dot(vi, vj)
 
-            n = (j-i) / args.gap 
+            n = (j-i) // args.gap 
             sum_cos_theta[n] += cos_theta
             num_n[n] += 1
             
@@ -74,7 +74,7 @@ unit_len = np.sqrt(unit_len_sq)
 
 ## Calculate average correlation
 cor = []
-for i in range(nmp/args.gap-1):
+for i in range(int(nmp/args.gap)-1):
     if num_n[i] == 0:
         cor.append(1.0)
     else:
@@ -109,7 +109,7 @@ f_out.write('# pcov (fitting quality): %f\n' % dev[0])
 f_out.write('#\n')
 f_out.write('#  n     x(=n*L)   <cos>   exp(-n*L/Lp)\n')
 
-for i in range(nmp/args.gap-1):
+for i in range(int(nmp/args.gap)-1):
     f_out.write('%5i %6.2f %7.4f %7.4f %12i\n' % (i, i*unit_len, cor[i], np.exp(-(i*unit_len)/para[0]), num_n[i]) )
 
 f_out.close()
