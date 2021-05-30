@@ -220,6 +220,7 @@ if __name__ == "__main__":
     parser.add_argument('--nnhb_exclude_file', type=argparse.FileType('r'), help='File that describes NNHB exclusion')
 
     parser.add_argument('--exvfile', type=argparse.FileType('w'), help='output exv pair file')
+    parser.add_argument('--psffile', type=argparse.FileType('w'), help='output PSF file')
 
     args = parser.parse_args()
 
@@ -308,6 +309,8 @@ if __name__ == "__main__":
     if args.exvfile:
         print('A file for exv pair list will be generated.')
     
+    if args.psffile:
+        print('A PSF file will be generated.')
 
     ################################################
     ## This is the main object to be constructed  ##
@@ -1080,7 +1083,7 @@ if __name__ == "__main__":
     ###################################
     ## Generate exv file (optional)  ##
     ###################################
-    if args.exvfile:
+    if args.exvfile is not None:
 
         if args.end5 == 'P':
             nmp = 3 * n_nt
@@ -1124,3 +1127,50 @@ if __name__ == "__main__":
         print ('#exv: %i' % (nexv,))
         args.exvfile.close()
 
+
+    ###################################
+    ## Generate PSF file (optional)  ##
+    ###################################
+    if args.psffile is not None:
+
+        if args.end5 == 'P':
+            nmp = 3 * n_nt
+        else:
+            nmp = 3 * n_nt - 1
+
+        imp_plus_sep = {}  # An array to store (imp + n_sep_nlocal_X).
+                           # X depends on the type of imp.
+        for imp in range(1, nmp+1):
+            itype = imp % 3
+
+            if args.end5 == 'P':
+                if itype == 0: # B
+                    imp_plus_sep[imp] = imp + model.n_sep_nlocal_B
+                elif itype == 1: # P
+                    imp_plus_sep[imp] = imp + model.n_sep_nlocal_P
+                else: # S
+                    imp_plus_sep[imp] = imp + model.n_sep_nlocal_S
+            else:
+                if itype == 0: # P
+                    imp_plus_sep[imp] = imp + model.n_sep_nlocal_P
+                elif itype == 1: # S
+                    imp_plus_sep[imp] = imp + model.n_sep_nlocal_S
+                else: # B
+                    imp_plus_sep[imp] = imp + model.n_sep_nlocal_B
+
+        nexv = 0
+        for imp in range(1, nmp):
+
+            for jmp in range(imp, nmp+1):
+
+                if args.circ:
+                    if imp_plus_sep[imp] <= jmp and imp_plus_sep[jmp] <= imp + nmp:
+                        args.exvfile.write('%i %i\n' % (imp, jmp))
+                        nexv += 1
+                else:
+                    if imp_plus_sep[imp] <= jmp:
+                        args.exvfile.write('%i %i\n' % (imp, jmp))
+                        nexv += 1
+
+        print ('#exv: %i' % (nexv,))
+        args.exvfile.close()
