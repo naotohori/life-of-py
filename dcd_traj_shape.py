@@ -90,6 +90,7 @@ def calc_shape(xyzs):
     
     return Rg, D, S
 
+print("#N: ", N)
 
 while dcd.has_more_data():
     data = dcd.read_onestep()
