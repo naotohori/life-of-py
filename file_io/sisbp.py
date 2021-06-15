@@ -13,8 +13,11 @@ class SisbpFile :
         self._filename = filename
         self._seek_data = None
         self._seek_mark = None
+
+        self._int_kind = None
+        self._real_kind = None
         self._kind_str = None
-        self._kind = None
+        self._step_byte = None
         
     def open_to_read(self):
         self._file = open(self._filename, 'rb')
@@ -36,41 +39,52 @@ class SisbpFile :
         self._file.seek(0)
 
         # Read kind
-        num = struct.unpack('i', self._file.read(4))[0]
-        if num == 2:
-            self._kind = 2
-            self._kind_str = 'h'
-        elif num == 4:
-            self._kind = 4
-            self._kind_str = 'i'
-        elif num == 8:
-            self._kind = 8
-            self._kind_str = 'q'
+        num1, num2 = struct.unpack('ii', self._file.read(8))
+        if num1 == 2:
+            self._int_kind = 2
+            int_kind_str = 'h'
+        elif num1 == 4:
+            self._int_kind = 4
+            int_kind_str = 'i'
+        elif num1 == 8:
+            self._int_kind = 8
+            int_kind_str = 'q'
         else:
-            raise MyError('SisbpFile', 'read_header', 'unknown kind type: '+'%i'%num)
+            raise MyError('SisbpFile', 'read_header', 'unknown int kind type: '+'%i'%num1)
 
+        if num2 == 4:
+            self._real_kind = 4
+            real_kind_str = 'f'
+        elif num2 == 8:
+            self._real_kind = 8
+            real_kind_str = 'd'
+        else:
+            raise MyError('SisbpFile', 'read_header', 'unknown real kind type: '+'%i'%num2)
+
+        self._step_byte = 2 * self._int_kind + self._real_kind
+        self._kind_str = int_kind_str + int_kind_str + real_kind_str
         self._seek_data = self._file.tell()
         
     def read_onestep(self):
 
         pairs = []
+        energies = []
 
         while True:
 
-            i = self._pick_data()
+            i, j, e = self._pick_data()
             if i == 0:
                 break
 
-            j = self._pick_data()
-
             pairs.append((i,j))
+            energies.append(e)
 
-        return pairs
+        return pairs, energies
 
     def skip_onestep(self):
         try:
             while(True):
-                if (self._pick_data() == 0):
+                if (self._pick_data()[0] == 0):
                     break
         except:
             raise EOFError('EOF in a middle of dcd.skip_onestep().')
@@ -92,11 +106,11 @@ class SisbpFile :
             
     def has_more_data(self):
         """return True or False"""
-        char = self._file.read(self._kind)
+        char = self._file.read(self._int_kind)
         if not char :
             return False
         else :
-            self._file.seek(-self._kind, os.SEEK_CUR)
+            self._file.seek(-self._int_kind, os.SEEK_CUR)
             return True
 
     def count_frame(self):
@@ -129,12 +143,12 @@ class SisbpFile :
         self._file.seek( self._seek_mark, os.SEEK_SET)
 
     def _pick_data(self):
-        return struct.unpack(self._kind_str, self._file.read(self._kind))[0]
+        return struct.unpack(self._kind_str, self._file.read(self._step_byte))
 
     def _read_at(self, num):
         self._file.seek(0)
         self.read_header()
         for i in range(num - 1) :
-            self.read_onestep()
+            self.skip_onestep()
         return self.read_onestep()
         
