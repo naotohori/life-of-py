@@ -78,6 +78,8 @@ if __name__ == "__main__":
 
     #''' XYZ format '''
     f = open(sys.argv[2], 'w')
+    f.write('%d\n' % N)
+    f.write('\n')
     for i in range(N):
         f.write('%s  %f %f %f\n' % (seq[i], xyz[i][0], xyz[i][1], xyz[i][2]))
     f.close()
