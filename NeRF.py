@@ -1,13 +1,16 @@
 #!/usr/bin/env python
 
 import numpy as np
+import math
 from torsion import torsion
 
 def NeRF(A, B, C, bond, angl, dihd):
 
-    D2 = np.array([bond * np.cos(angl), 
-                   bond * np.cos(dihd) * np.sin(angl), 
-                   bond * np.sin(dihd) * np.sin(angl)])
+    t = math.pi - angl
+
+    D2 = np.array([bond * np.cos(t),
+                   bond * np.cos(dihd) * np.sin(t),
+                   bond * np.sin(dihd) * np.sin(t)])
   
     AB = B - A
     BC = C - B
