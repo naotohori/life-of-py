@@ -41,11 +41,13 @@ def random_polymer(N, bond_length, bond_angle, Dexv):
     
             n_attempt += 1
             if n_attempt == 20:
-                # If 20 attempts do not work out, go 3 particles back
-                xyz.pop()
-                xyz.pop()
-                xyz.pop()
-                i -= 3
+                # If 20 attempts do not work out, go 10 particles back
+                for k in range(10):
+                    if len(xyz) > 0:
+                        xyz.pop()
+                        i -= 1
+                n_attempt = 0
+            #print(i, n_attempt)
 
     return xyz
 
