@@ -668,7 +668,11 @@ if __name__ == "__main__":
             chain2 = int(lsp[4])
             nt2 = int(lsp[5])
             site2 = lsp[6]
-            nhb = int(lsp[7])
+
+            if len(lsp) >= 8:
+                nhb = int(lsp[7])
+            else:
+                nhb = None
 
             atoms1 = []
             atoms2 = []
@@ -703,6 +707,37 @@ if __name__ == "__main__":
             elif chain1 == chain2 and nt1 > nt2:
                 nt1, nt2 = nt2, nt1
                 atoms1, atom2 = atom2, atoms1
+
+            if hb_type == 'CAN' and args.model == 'NHT19':
+                if len(atoms1) == 0 and len(atoms2) == 0:
+                    if   seq[chain1][nt1-1] == 'G' and seq[chain2][nt2-1] == 'C':
+                        atoms1 = ("N1", "N2", "O6")
+                        atoms2 = ("N3", "O2", "N4")
+                        nhb = 3
+                    elif seq[chain1][nt1-1] == 'C' and seq[chain2][nt2-1] == 'G':
+                        atoms1 = ("N3", "O2", "N4")
+                        atoms2 = ("N1", "N2", "O6")
+                        nhb = 3
+                    elif seq[chain1][nt1-1] == 'A' and seq[chain2][nt2-1] == 'U':
+                        atoms1 = ("N1", "N6")
+                        atoms2 = ("N3", "O4")
+                        nhb = 2
+                    elif seq[chain1][nt1-1] == 'U' and seq[chain2][nt2-1] == 'A':
+                        atoms1 = ("N3", "O4")
+                        atoms2 = ("N1", "N6")
+                        nhb = 2
+                    elif seq[chain1][nt1-1] == 'G' and seq[chain2][nt2-1] == 'U':
+                        atoms1 = ("N1", "O6")
+                        atoms2 = ("O2", "N3")
+                        nhb = 2
+                    elif seq[chain1][nt1-1] == 'U' and seq[chain2][nt2-1] == 'G':
+                        atoms1 = ("O2", "N3")
+                        atoms2 = ("N1", "O6")
+                        nhb = 2
+                    else:
+                        print('Error: unknown nucleotides pairs for CAN')
+                        print(lsp)
+                        sys.exit(2)
 
             hblist.append((hb_type, chain1, nt1, site1, chain2, nt2, site2, nhb, atoms1, atoms2))
 
