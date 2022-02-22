@@ -269,6 +269,7 @@ if __name__ == "__main__":
                     seq.append(s)
                     n_nt.append(len(s))
                     flg_reading = False
+                    s = ''
                 continue
 
             elif len(l.strip()) == 0:
