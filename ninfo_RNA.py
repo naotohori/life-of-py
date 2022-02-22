@@ -784,61 +784,61 @@ if __name__ == "__main__":
                     print('Error: unknown format in nnhb_exclude_file:\n' + l)
                     sys.exit(2)
 
-        for ichain1 in range(1, n_RNA+1):
+        for chain1 in range(1, n_RNA+1):
 
-            for ichain2 in range(ichain1, n_RNA+1):
+            for chain2 in range(chain1, n_RNA+1):
 
                 '''
                 HB interactions between bases need Ps in the downstream.
                 '''
-                if ichain1 == ichain2:
+                if chain1 == chain2:
                     nt1_begin = 1
-                    nt1_end = n_nt[ichain1] - model.NNHB_NT_SEP - 1
+                    nt1_end = n_nt[chain1] - model.NNHB_NT_SEP - 1
                 else:
                     nt1_begin = 1
-                    nt1_end = n_nt[ichain1] - 1
+                    nt1_end = n_nt[chain1] - 1
 
                 for nt1 in range(nt1_begin, nt1_end+1):
 
-                    if (ichain1, nt1) in nnhb_exclude_nts:
+                    if (chain1, nt1) in nnhb_exclude_nts:
                         continue
 
-                    if ichain1 == ichain2:
+                    if chain1 == chain2:
                         nt2_begin = nt1 + model.NNHB_NT_SEP
-                        nt2_end = n_nt[ichain2] - 1
+                        nt2_end = n_nt[chain2] - 1
                     else:
                         nt2_begin = 1
-                        nt2_end = n_nt[ichain2] - 1
+                        nt2_end = n_nt[chain2] - 1
 
                     for nt2 in range(nt2_begin, nt2_end + 1):
 
-                        if (ichain2, nt2) in nnhb_exclude_nts:
+                        if (chain2, nt2) in nnhb_exclude_nts:
                             continue
 
-                        if (ichain1, nt1, ichain2, nt2) in nnhb_exclude_pairs:
+                        if (chain1, nt1, chain2, nt2) in nnhb_exclude_pairs:
                             continue
 
-                        if   seq[ichain1][nt1-1] == 'G' and seq[ichain2][nt2-1] == 'C':
+                        if   seq[chain1][nt1-1] == 'G' and seq[chain2][nt2-1] == 'C':
                             atoms1 = ("N1", "N2", "O6")
                             atoms2 = ("N3", "O2", "N4")
                             nHB = 3
-                        elif seq[ichain1][nt1-1] == 'C' and seq[ichain2][nt2-1] == 'G':
+                        elif seq[chain1][nt1-1] == 'C' and seq[chain2][nt2-1] == 'G':
                             atoms1 = ("N3", "O2", "N4")
                             atoms2 = ("N1", "N2", "O6")
                             nHB = 3
-                        elif seq[ichain1][nt1-1] == 'A' and seq[ichain2][nt2-1] == 'U':
+                        elif seq[chain1][nt1-1] == 'A' and seq[chain2][nt2-1] == 'U':
                             atoms1 = ("N1", "N6")
                             atoms2 = ("N3", "O4")
                             nHB = 2
-                        elif seq[ichain1][nt1-1] == 'U' and seq[ichain2][nt2-1] == 'A':
+                        elif seq[chain1][nt1-1] == 'U' and seq[chain2][nt2-1] == 'A':
                             atoms1 = ("N3", "O4")
                             atoms2 = ("N1", "N6")
                             nHB = 2
-                        elif seq[ichain1][nt1-1] == 'G' and seq[ichain2][nt2-1] == 'U':
+                        elif seq[chain1][nt1-1] == 'G' and seq[chain2][nt2-1] == 'U':
                             atoms1 = ("N1", "O6")
                             atoms2 = ("O2", "N3")
                             nHB = 2
-                        elif seq[ichain1][nt1-1] == 'U' and seq[ichain2][nt2-1] == 'G':
+                        elif seq[chain1][nt1-1] == 'U' and seq[chain2][nt2-1] == 'G':
                             atoms1 = ("O2", "N3")
                             atoms2 = ("N1", "O6")
                             nHB = 2
@@ -872,7 +872,7 @@ if __name__ == "__main__":
                         if flg_exist:
                             continue
 
-                        nnlist.append(('CAN', ichain1, nt1, 'B', ichain2, nt2, 'B', nHB, atoms1, atoms2))
+                        nnlist.append(('CAN', chain1, nt1, 'B', chain2, nt2, 'B', nHB, atoms1, atoms2))
 
     for (hb_type, chain1, nt1, site1, chain2, nt2, site2, nHB, atoms1, atoms2) in hblist + nnlist:
     
