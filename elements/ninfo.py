@@ -726,23 +726,26 @@ class NinfoSet(object):
             bp.id = newid + 1
         for newid, bs in enumerate(self.basestacks) :
             bs.id = newid + 1
+
         ## Need to update angle and dihedral associated IDs
-        #for newid, bs in enumerate(self.basestackDTs) :
-        #    bs.id = newid + 1
+        for newid, bs in enumerate(self.basestackDTs) :
+            bs.id = newid + 1
+            bs.dih1_id = 2*newid + 1
+            bs.dih2_id = 2*newid + 2
         for newid, hb in enumerate(self.hbondDTs):
             hb.id = newid + 1
-            hb.ang1_id = 2*(newid+1) - 1
-            hb.ang2_id = 2*(newid+1)
-            hb.dih0_id = 3*(newid+1) - 2
-            hb.dih1_id = 3*(newid+1) - 1
-            hb.dih2_id = 3*(newid+1)
+            hb.ang1_id = 2*newid + 1
+            hb.ang2_id = 2*newid + 2
+            hb.dih0_id = 3*newid + 1
+            hb.dih1_id = 3*newid + 2
+            hb.dih2_id = 3*newid + 3
         for newid, tst in enumerate(self.tertiarystackDTs):
             tst.id = newid + 1
-            tst.ang1_id = 2*(newid+1) - 1
-            tst.ang2_id = 2*(newid+1)
-            tst.dih0_id = 3*(newid+1) - 2
-            tst.dih1_id = 3*(newid+1) - 1
-            tst.dih2_id = 3*(newid+1)
+            tst.ang1_id = 2*newid + 1
+            tst.ang2_id = 2*newid + 2
+            tst.dih0_id = 3*newid + 1
+            tst.dih1_id = 3*newid + 2
+            tst.dih2_id = 3*newid + 3
             
     def sort_by_mp(self):
         # hbond
