@@ -6,7 +6,7 @@ Created on 2011/03/17
 '''
 
 import sys
-from cafysis.file_io.dcd import DcdFile
+from lop.file_io.dcd import DcdFile
 from numpy import zeros, int32
 
 if not len(sys.argv) in (4,5):

@@ -4,7 +4,7 @@ import sys
 import math
 import numpy as np
 import scipy.cluster.hierarchy
-from cafysis.file_io.drid import DridFile
+from lop.file_io.drid import DridFile
 
 if len(sys.argv) != 5:
     print('Usage: SCRIPT [DRID file] [prefix] [cutoff] [nskip (to calculate frame id)]')

@@ -5,7 +5,7 @@
 @author: Naoto Hori
 '''
 import sys
-from cafysis.file_io.pdb import PdbFile
+from lop.file_io.pdb import PdbFile
 
 if len(sys.argv) != 4:
     print ('\n Usage: SCRIPT [bfactor file] [PDB file] [output bfactor file]\n')

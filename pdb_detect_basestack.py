@@ -13,8 +13,8 @@ Created on 2016/09/30
 import sys
 import math
 
-from cafysis.file_io.pdb import PdbFile
-from cafysis.elements.coord import Coord
+from lop.file_io.pdb import PdbFile
+from lop.elements.coord import Coord
 
 if len(sys.argv) not in (2,3):
     print('Usage: SCRIPT [PDB]  (score cutoff = 0.5)')

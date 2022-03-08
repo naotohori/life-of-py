@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from cafysis.file_io.sisbp import SisbpFile
+from lop.file_io.sisbp import SisbpFile
 import sys
 
 f = SisbpFile(sys.argv[1])

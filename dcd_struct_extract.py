@@ -6,7 +6,7 @@
 
 import sys
 import copy
-from cafysis.file_io.dcd import DcdFile
+from lop.file_io.dcd import DcdFile
 
 if len(sys.argv) < 5:
     print() 

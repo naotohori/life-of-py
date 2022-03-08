@@ -7,9 +7,9 @@ Return pdb which contains center of masses of nucleotides.
 '''
 
 import sys
-from cafysis.file_io.pdb import PdbFile
-from cafysis.elements.coord import Coord
-from cafysis.elements.pdb import Chain, Residue, Atom
+from lop.file_io.pdb import PdbFile
+from lop.elements.coord import Coord
+from lop.elements.pdb import Chain, Residue, Atom
 
 
 element2mass = {'P':30.973761, 'O':15.9994, 'C':12.0107, 'N':14.0067}
@@ -27,7 +27,7 @@ pdb_in.close()
 
 pdb_out = PdbFile(sys.argv[2])
 pdb_out.open_to_write()
-pdb_out.write_remark('Generated using cafysis/pdb_rna_nucleotide_com.py')
+pdb_out.write_remark('Generated using lop/pdb_rna_nucleotide_com.py')
 import time
 import datetime
 pdb_out.write_remark('At %s' % (datetime.datetime.fromtimestamp(time.time()).strftime('%Y%m%d %H:%M%S'),))

@@ -6,8 +6,8 @@ Created on 2013/08/20
 '''
 
 import sys
-from cafysis.file_io.dcd import DcdFile
-from cafysis.file_io.ts import TsFile
+from lop.file_io.dcd import DcdFile
+from lop.file_io.ts import TsFile
 
 if len(sys.argv) != 4:
     print('Usage: % SCRIPT [input DCD] [ts file] [output DCD]')

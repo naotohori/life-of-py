@@ -3,11 +3,11 @@
 import sys
 import math
 
-from cafysis.file_io.pdb import PdbFile
-from cafysis.file_io.ninfo import NinfoFile
-from cafysis.para.rnaAform import ARNA
-from cafysis.para.rnaDT15 import DT15
-from cafysis.elements.ninfo import NinfoSet, BondLength, BondAngle, BaseStackDT, HBondDT, TertiaryStackDT
+from lop.file_io.pdb import PdbFile
+from lop.file_io.ninfo import NinfoFile
+from lop.para.rnaAform import ARNA
+from lop.para.rnaDT15 import DT15
+from lop.elements.ninfo import NinfoSet, BondLength, BondAngle, BaseStackDT, HBondDT, TertiaryStackDT
 
 NNHB_NT_SEP = 5
 

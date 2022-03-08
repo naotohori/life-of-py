@@ -8,7 +8,7 @@ Created on 2013/03/12
 
 import sys
 import argparse
-from cafysis.file_io.dcd import DcdFile
+from lop.file_io.dcd import DcdFile
 import numpy as np
 from scipy.optimize import curve_fit
 

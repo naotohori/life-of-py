@@ -6,8 +6,8 @@ Created on 2012/01/21
 '''
 
 import sys
-from cafysis.elements.ninfo import NinfoSet
-from cafysis.file_io.ninfo import NinfoFile
+from lop.elements.ninfo import NinfoSet
+from lop.file_io.ninfo import NinfoFile
 
 if __name__ == '__main__':
     if len(sys.argv) != 6:

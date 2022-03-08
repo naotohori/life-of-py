@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #vim:fileencoding=UTF-8
 
-from cafysis.file_io.dcd import DcdFile
+from lop.file_io.dcd import DcdFile
 import copy
 import sys
 

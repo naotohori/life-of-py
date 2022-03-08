@@ -10,9 +10,9 @@ if __name__ == '__main__':
 
     
 import sys
-from cafysis.elements.ninfo import NinfoSet
-from cafysis.file_io.ninfo import NinfoFile
-from cafysis.file_io.pdb import PdbFile
+from lop.elements.ninfo import NinfoSet
+from lop.file_io.ninfo import NinfoFile
+from lop.file_io.pdb import PdbFile
 
 if len(sys.argv) != 4:
     print ("Usage: SCRIPT [ninfo file] [pdb file] [output file]")

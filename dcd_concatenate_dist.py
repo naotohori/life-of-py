@@ -8,11 +8,11 @@ Created on 2011/11/09
 import sys
 import os
 import struct
-from cafysis.file_io.dcd import DcdFile
+from lop.file_io.dcd import DcdFile
 from copy import copy
 
 ############################
-# cafysis.elements.error
+# lop.elements.error
 ############################
 class MyError(Exception) :
     def __init__(self, classname='unknown', funcname='unknown', title='unknown'):
@@ -26,7 +26,7 @@ class MyError(Exception) :
         print('matter:', self._title)
 
 ############################
-# cafysis.file_io.dcd
+# lop.file_io.dcd
 ############################
 class DcdHeader(object):
     def __init__(self):
@@ -235,7 +235,7 @@ class DcdFile :
         return self.read_onestep()
         
 ############################
-# cafysis.dcd_concatenate
+# lop.dcd_concatenate
 ############################
 if __name__ == '__main__':
     if len(sys.argv) < 4:

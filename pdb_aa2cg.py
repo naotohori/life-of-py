@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
-from cafysis.elements.pdb import Chain, Residue, Atom
-from cafysis.elements.coord import Coord
+from lop.elements.pdb import Chain, Residue, Atom
+from lop.elements.coord import Coord
 
 import sys
 
@@ -109,7 +109,7 @@ def aa2cg(chains_aa, flg_start_P=False):
 
 if __name__ == '__main__':
     
-    from cafysis.file_io.pdb import PdbFile
+    from lop.file_io.pdb import PdbFile
 
     if len(sys.argv) not in (3,4):
         print('Usage: SCRIPT [input aa PDB] [flag to start with P (Y/n)] [output cg PDB]')

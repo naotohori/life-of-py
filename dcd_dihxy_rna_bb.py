@@ -7,9 +7,9 @@ Created on 2017/03/21
 
 import sys
 import struct
-from cafysis.torsion import torsion_xy
-from cafysis.file_io.psf import PsfFile
-from cafysis.file_io.dcd import DcdFile
+from lop.torsion import torsion_xy
+from lop.file_io.psf import PsfFile
+from lop.file_io.dcd import DcdFile
 
 if len(sys.argv) != 4:
     print ('\n Usage: SCRIPT [input DCD] [input PSF] [output]\n')

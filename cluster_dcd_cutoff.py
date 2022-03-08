@@ -5,7 +5,7 @@ import math
 import numpy as np
 from Superimpose import superimpose
 import scipy.cluster.hierarchy
-from cafysis.file_io.dcd import DcdFile
+from lop.file_io.dcd import DcdFile
 
 if len(sys.argv) != 6:
     print('Usage: SCRIPT [DCD file] [Native (reference) DCD] [prefix] [cutoff] [nskip (to calculate frame id)]')

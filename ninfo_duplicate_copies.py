@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
 import copy
-from cafysis.file_io.ninfo import NinfoFile
-from cafysis.elements.ninfo import NinfoSet
+from lop.file_io.ninfo import NinfoFile
+from lop.elements.ninfo import NinfoSet
 
 Nunit_per_repeat = 2
 Nmp_per_repeat = 130   # The last mp of the unit dimer (dsRNA)

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from cafysis.file_io.drid import DridFile
+from lop.file_io.drid import DridFile
 import numpy as np
 import sys
 import math

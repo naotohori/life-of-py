@@ -3,7 +3,7 @@
 
 import copy
 import sys
-from cafysis.file_io.pdb import PdbFile
+from lop.file_io.pdb import PdbFile
 from scipy import linalg
 from numpy import zeros, float32
 import glob

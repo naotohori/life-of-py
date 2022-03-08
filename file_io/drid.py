@@ -9,7 +9,7 @@ Modified as ver2 on 2017/04/12 (mask is enabled)
 import os
 import struct
 import numpy as np
-from cafysis.elements.error import MyError
+from lop.elements.error import MyError
 
 class DridHeader(object):
     def __init__(self):

@@ -4,7 +4,7 @@ import sys
 import scipy.cluster
 import numpy as np
 from CalcRMSD import calcrmsd
-from cafysis.file_io.dcd import DcdFile
+from lop.file_io.dcd import DcdFile
 
 if len(sys.argv) != 4:
     print('Usage: % SCRIPT [input DCD] [#frame to skip] [output prefix]')

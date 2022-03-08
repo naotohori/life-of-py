@@ -6,7 +6,7 @@ Created on 2015/06/30
 '''
 
 import sys
-from cafysis.elements.ninfo import Fene, LJ
+from lop.elements.ninfo import Fene, LJ
 
 fene_SC = False #  True: 2-beads model,  False: 1-bead model
 fene_coef  = 20.0
@@ -85,9 +85,9 @@ if __name__ == '__main__':
         print ('Usage: %SCRIPT [input PDB] [output ninfo]')
         sys.exit(2)
 
-    from cafysis.file_io.pdb import PdbFile
-    from cafysis.file_io.ninfo import NinfoFile
-    from cafysis.elements.ninfo import NinfoSet
+    from lop.file_io.pdb import PdbFile
+    from lop.file_io.ninfo import NinfoFile
+    from lop.elements.ninfo import NinfoSet
 
     f = PdbFile(sys.argv[1])
     f.open_to_read()

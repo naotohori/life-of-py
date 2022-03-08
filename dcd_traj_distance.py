@@ -6,7 +6,7 @@ Created on 2016/08/05
 
 import sys
 import math
-from cafysis.file_io.dcd import DcdFile
+from lop.file_io.dcd import DcdFile
 
 if len(sys.argv) != 5:
     print(' Usage: % SCRIPT [input DCD] [ID1] [ID2] [output PDB] ')

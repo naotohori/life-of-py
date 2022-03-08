@@ -7,7 +7,7 @@ based on dcd_traj_distance.py
 
 import sys
 import math
-from cafysis.file_io.dcd import DcdFile
+from lop.file_io.dcd import DcdFile
 
 if len(sys.argv) != 6:
     print(' Usage: % SCRIPT [input DCD] [boxsize] [ID1] [ID2] [output PDB] ')

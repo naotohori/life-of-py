@@ -5,7 +5,7 @@
 '''
 
 import sys
-from cafysis.file_io.pdb import PdbFile
+from lop.file_io.pdb import PdbFile
 
 if len(sys.argv) < 5:
     print('Usage: % SCRIPT [average file] [input pdb] [ev file] [,ev file ....] [output PC file]')

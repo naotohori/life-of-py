@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import sys
-from cafysis.file_io.pdb import PdbFile
+from lop.file_io.pdb import PdbFile
 
 NNHB_NT_SEP = 5
 

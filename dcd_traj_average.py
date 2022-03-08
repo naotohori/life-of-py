@@ -5,8 +5,8 @@ Created on 2011/05/25
 '''
 
 import sys
-from cafysis.file_io.dcd import DcdFile
-from cafysis.file_io.pdb import PdbFile
+from lop.file_io.dcd import DcdFile
+from lop.file_io.pdb import PdbFile
 
 if len(sys.argv) != 4:
     print(' Usage: % SCRIPT [input DCD] [input PDB] [output PDB] ')

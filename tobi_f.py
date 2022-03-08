@@ -196,7 +196,7 @@ if __name__ == "__main__":
         
     import os
     
-    #params = TobiParam('~/python/cafysis/param/')
+    #params = TobiParam('~/python/lop/param/')
     params = TobiParam(os.path.dirname(__file__) + '/para/')
         
     if len(sys.argv) == 2:

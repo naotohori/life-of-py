@@ -4,7 +4,7 @@
 '''
 
 import sys
-from cafysis.file_io.dcd import DcdFile
+from lop.file_io.dcd import DcdFile
 
 if (len(sys.argv) != 2):
     print('Usage: % SCRIPT [filename]')

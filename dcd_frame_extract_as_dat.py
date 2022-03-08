@@ -8,8 +8,8 @@ Modified from dcd_frame_extract.py on 2011/12/20
 '''
 
 import sys
-from cafysis.file_io.dcd import DcdFile
-from cafysis.file_io.pdb import PdbFile
+from lop.file_io.dcd import DcdFile
+from lop.file_io.pdb import PdbFile
 
 if (not len(sys.argv) in (5, 6)):
     print('Usage: % SCRIPT [input DCD] [beginning (0)] [end] [output movie]')

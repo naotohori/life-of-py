@@ -17,7 +17,7 @@ Domain B P7-P3-P8:    42 -  47
 import sys
 import numpy as np
 import math
-from cafysis.file_io.dcd import DcdFile
+from lop.file_io.dcd import DcdFile
 
 if len(sys.argv) != 3:
     print ('Usage: SCRIPT [DCD file] [angle file]')

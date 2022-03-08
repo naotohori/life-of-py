@@ -3,8 +3,8 @@
 @author: Naoto Hori
 '''
 
-from cafysis.file_io.ninfo import NinfoFile
-from cafysis.elements.ninfo import NinfoSet
+from lop.file_io.ninfo import NinfoFile
+from lop.elements.ninfo import NinfoSet
 import sys
 
 if not len(sys.argv) in (3,4):

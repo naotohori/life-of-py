@@ -17,7 +17,7 @@ Domain B P7-P3-P8:    42 -  47
 '''
 
 import sys
-from cafysis.file_io.pdb import PdbFile
+from lop.file_io.pdb import PdbFile
 import numpy as np
 import math
 

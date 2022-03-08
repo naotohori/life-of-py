@@ -23,7 +23,7 @@ Dima and Thirumalai, J. Phys. Chem. B 2004, 108: 6564-6570
 '''
 
 import sys
-from cafysis.file_io.dcd import DcdFile
+from lop.file_io.dcd import DcdFile
 import numpy as np
 import math
 

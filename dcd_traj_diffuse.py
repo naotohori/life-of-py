@@ -6,7 +6,7 @@ Created on 2014/11/03
 '''
 import sys
 import math
-from cafysis.file_io.dcd import DcdFile
+from lop.file_io.dcd import DcdFile
 
 if len(sys.argv) != 4:
     print ('\n Usage: SCRIPT [input DCD file] [interval] [output diffuse file]\n')

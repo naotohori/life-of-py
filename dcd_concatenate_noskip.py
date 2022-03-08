@@ -6,7 +6,7 @@ Created on 2011/11/09
 '''
 
 import sys
-from cafysis.file_io.dcd import DcdFile
+from lop.file_io.dcd import DcdFile
 from copy import copy
 
 if __name__ == '__main__':

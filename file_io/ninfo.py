@@ -5,9 +5,9 @@
 '''
 
 import sys
-from cafysis.elements.error import MyError
-from cafysis.file_io.func_line2ninfo import *
-from cafysis.file_io.func_ninfo2line import *
+from lop.elements.error import MyError
+from lop.file_io.func_line2ninfo import *
+from lop.file_io.func_ninfo2line import *
 
 class NinfoFile(object):
     def __init__(self, filename):

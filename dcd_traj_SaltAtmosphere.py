@@ -10,9 +10,9 @@ Ref. pdb_centroid_origin_PBC.py
 import sys
 import math
 import numpy as np
-from cafysis.file_io.dcd import DcdFile
-from cafysis.file_io.psf import PsfFile
-from cafysis.mtx_coord_transform import mtx_crd_transform
+from lop.file_io.dcd import DcdFile
+from lop.file_io.psf import PsfFile
+from lop.mtx_coord_transform import mtx_crd_transform
 
 if len(sys.argv) != 5:
     print ('\n Usage: SCRIPT [input DCD] [input PSF] [Box size] [output]\n')

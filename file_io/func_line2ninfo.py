@@ -4,8 +4,8 @@
 @author: Naoto Hori
 '''
 
-from cafysis.elements.error import MyError
-from cafysis.elements.ninfo import BondLength, Fene, BondAngle, Dihedral, Contact, LJ, BaseStack, BasePair, BaseStackDT, TertiaryStackDT, HBondDT
+from lop.elements.error import MyError
+from lop.elements.ninfo import BondLength, Fene, BondAngle, Dihedral, Contact, LJ, BaseStack, BasePair, BaseStackDT, TertiaryStackDT, HBondDT
 
 def line2bondlength(line) :
     it = iter(line.split())

@@ -6,7 +6,7 @@
 
 import os
 import struct
-from cafysis.elements.error import MyError
+from lop.elements.error import MyError
 
         
 class CoordFile :

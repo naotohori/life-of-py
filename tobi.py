@@ -111,7 +111,7 @@ if __name__ == "__main__":
         sys.exit(2)
         
     import os
-    #params = TobiParam('~/python/cafysis/param/')
+    #params = TobiParam('~/python/lop/param/')
     params = TobiParam(os.path.dirname(__file__) + '/para/')
         
     p = PDB.PDBParser(PERMISSIVE=1)

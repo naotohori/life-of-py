@@ -9,9 +9,9 @@ import sys
 import math
 import copy
 import re
-from cafysis.file_io.dcd import DcdFile
-from cafysis.file_io.ninfo import NinfoFile
-from cafysis.elements.ninfo import NinfoSet
+from lop.file_io.dcd import DcdFile
+from lop.file_io.ninfo import NinfoFile
+from lop.elements.ninfo import NinfoSet
 from numpy import array, dot, arccos
 from numpy.linalg import norm
 

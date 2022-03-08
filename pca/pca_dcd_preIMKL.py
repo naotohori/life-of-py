@@ -2,7 +2,7 @@
 # 2011/03/17 coded by Naoto HORI
 
 import sys
-from cafysis.file_io.dcd import DcdFile
+from lop.file_io.dcd import DcdFile
 from numpy import zeros, float32
 
 if len(sys.argv) != 3:

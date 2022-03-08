@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
 import sys
-from cafysis.file_io.ninfo import NinfoFile
-from cafysis.elements.ninfo import NinfoSet
+from lop.file_io.ninfo import NinfoFile
+from lop.elements.ninfo import NinfoSet
 
 if len(sys.argv) < 3 :
     print("Usage: SCRIPT [input ninfo] [factor] [output ninfo]")

@@ -4,8 +4,8 @@
 '''
 
 import sys
-from cafysis.file_io.ninfo import NinfoFile
-from cafysis.elements.ninfo import NinfoSet
+from lop.file_io.ninfo import NinfoFile
+from lop.elements.ninfo import NinfoSet
 
 if len(sys.argv) != 6 :
     print ('Usage: SCRIPT [ninfo file] [edc file] [dist(aln) file] [factor] [output ninfo file]')

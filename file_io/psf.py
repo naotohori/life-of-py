@@ -4,8 +4,8 @@
 Created on 2011/12/08
 @author: Naoto Hori
 '''
-from cafysis.elements.error import MyError
-from cafysis.elements.psf import Psf, Atom
+from lop.elements.error import MyError
+from lop.elements.psf import Psf, Atom
 
 def line2atom(line):
     line.rstrip()

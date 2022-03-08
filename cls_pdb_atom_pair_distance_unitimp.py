@@ -4,7 +4,7 @@
 @author: Naoto Hori
 '''
 import sys
-from cafysis.file_io.pdb import PdbFile
+from lop.file_io.pdb import PdbFile
 
 if len(sys.argv) != 5 :
     print ('\n Usage: SCRIPT [list file] [input PDB1] [input PDB2] [output]\n')

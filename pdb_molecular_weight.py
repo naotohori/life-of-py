@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
 import sys
-from cafysis.file_io.pdb import PdbFile
-from cafysis.para.mass import ATOM_MASS
+from lop.file_io.pdb import PdbFile
+from lop.para.mass import ATOM_MASS
 
 if len(sys.argv) != 2:
     print('Usage: SCRIPT (PDB file)')

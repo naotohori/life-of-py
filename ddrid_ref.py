@@ -8,8 +8,8 @@ Created on 2015/05/26
 
 import sys
 import numpy as np
-from cafysis.file_io.drid import DridFile, DridHeader
-from cafysis.lib_f2py import py_ddrid
+from lop.file_io.drid import DridFile, DridHeader
+from lop.lib_f2py import py_ddrid
 
 if len(sys.argv) != 4:
     print('Usage: % SCRIPT [input drid] [reference drid] [output dDRID]')

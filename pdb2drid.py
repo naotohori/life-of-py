@@ -7,9 +7,9 @@ Created on 2015/05/26
 '''
 
 import sys
-from cafysis.file_io.pdb import PdbFile
-from cafysis.file_io.drid import DridFile, DridHeader
-from cafysis.lib_f2py import py_drid
+from lop.file_io.pdb import PdbFile
+from lop.file_io.drid import DridFile, DridHeader
+from lop.lib_f2py import py_drid
 import numpy as np
 
 if len(sys.argv) != 4:

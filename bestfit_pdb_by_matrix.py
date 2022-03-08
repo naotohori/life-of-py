@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from cafysis.file_io.pdb import PdbFile
+from lop.file_io.pdb import PdbFile
 from numpy import zeros, ones, float64, dot
 import sys
 

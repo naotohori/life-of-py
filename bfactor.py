@@ -6,8 +6,8 @@
 import sys
 import math
 from numpy import zeros, float64, array
-from cafysis.file_io.dcd import DcdFile
-from cafysis.file_io.pdb import PdbFile
+from lop.file_io.dcd import DcdFile
+from lop.file_io.pdb import PdbFile
 
 if len(sys.argv) != 5:
     print('Usage: % SCRIPT [PDB filename] [DCD filename] [out PDB filename] [out bfactor file]')

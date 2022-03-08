@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
-from cafysis.file_io.pdb import PdbFile
-from cafysis.elements.pdb import Chain, Residue, Atom
+from lop.file_io.pdb import PdbFile
+from lop.elements.pdb import Chain, Residue, Atom
 import copy
 import sys
 

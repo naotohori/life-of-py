@@ -10,11 +10,11 @@ import sys
 import math
 import argparse
 
-from cafysis.file_io.pdb import PdbFile
-from cafysis.file_io.ninfo import NinfoFile
-from cafysis.para.dnaBform import BDNA
-from cafysis.para.dnaCHT18 import CHT18
-from cafysis.elements.ninfo import NinfoSet, BondLength, BondAngle, BaseStackDT, HBondDT
+from lop.file_io.pdb import PdbFile
+from lop.file_io.ninfo import NinfoFile
+from lop.para.dnaBform import BDNA
+from lop.para.dnaCHT18 import CHT18
+from lop.elements.ninfo import NinfoSet, BondLength, BondAngle, BaseStackDT, HBondDT
 
 NNHB_NT_SEP = 5
 

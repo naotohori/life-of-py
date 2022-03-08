@@ -6,7 +6,7 @@ Created on 2014/06/17
 '''
 
 import sys
-from cafysis.file_io.dcd import DcdFile
+from lop.file_io.dcd import DcdFile
 
 def count_frame(path):
 

@@ -6,9 +6,9 @@ RN20:107
 Ste7のPDBについて、位置と配向を揃える
 '''
 
-from cafysis.elements.coord import Coord
-from cafysis.mtx_coord_transform import mtx_crd_transform
-from cafysis.file_io.pdb import PdbFile
+from lop.elements.coord import Coord
+from lop.mtx_coord_transform import mtx_crd_transform
+from lop.file_io.pdb import PdbFile
 import sys
 from math import hypot, atan2
 

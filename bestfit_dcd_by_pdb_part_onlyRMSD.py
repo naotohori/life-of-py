@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
-from cafysis.file_io.dcd import DcdFile
-from cafysis.file_io.pdb import PdbFile
+from lop.file_io.dcd import DcdFile
+from lop.file_io.pdb import PdbFile
 import py_bestfit
 from numpy import zeros, asarray, float64
 import sys

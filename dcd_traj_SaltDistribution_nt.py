@@ -8,9 +8,9 @@ Created on 2016/06/18
 import sys
 import math
 import numpy as np
-from cafysis.lib_f2py import py_distance2_hist_nt
-from cafysis.file_io.dcd import DcdFile
-from cafysis.file_io.psf import PsfFile
+from lop.lib_f2py import py_distance2_hist_nt
+from lop.file_io.dcd import DcdFile
+from lop.file_io.psf import PsfFile
 
 if len(sys.argv) != 4:
     print ('\n Usage: SCRIPT [input DCD] [input PSF] [output]\n')

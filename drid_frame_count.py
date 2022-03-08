@@ -6,7 +6,7 @@ Created on 2017/04/19
 '''
 
 import sys
-from cafysis.file_io.drid import DridFile
+from lop.file_io.drid import DridFile
 
 def count(path):
 

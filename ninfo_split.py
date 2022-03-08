@@ -5,7 +5,7 @@
 '''
 
 import sys
-from cafysis.file_io.ninfo import NinfoFile, NinfoSet
+from lop.file_io.ninfo import NinfoFile, NinfoSet
 
 def show_usage() :
     print('')

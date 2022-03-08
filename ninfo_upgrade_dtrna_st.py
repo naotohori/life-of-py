@@ -2,14 +2,14 @@
 
 
 import sys
-from cafysis.file_io.func_line2ninfo import line2basestackDT
-from cafysis.file_io.func_ninfo2line import basestackDTdist2line
-from cafysis.file_io.ninfo import NinfoFile
-from cafysis.para.rnaAform import ARNA
-from cafysis.para.rnaDT15 import DT15
-from cafysis.para.rnaDT13 import DT13
-from cafysis.para.rnaNHT19 import NHT19
-from cafysis.elements.ninfo import NinfoSet, BondLength, BondAngle, BaseStackDT, HBondDT, TertiaryStackDT
+from lop.file_io.func_line2ninfo import line2basestackDT
+from lop.file_io.func_ninfo2line import basestackDTdist2line
+from lop.file_io.ninfo import NinfoFile
+from lop.para.rnaAform import ARNA
+from lop.para.rnaDT15 import DT15
+from lop.para.rnaDT13 import DT13
+from lop.para.rnaNHT19 import NHT19
+from lop.elements.ninfo import NinfoSet, BondLength, BondAngle, BaseStackDT, HBondDT, TertiaryStackDT
 
 
 if len(sys.argv) != 4:

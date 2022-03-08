@@ -8,8 +8,8 @@ Calculate the centroid for particular part of molecule (defined by ID1 and ID2)
 transfer all coordinates so that the centroid comes to the origin (0,0,0).
 '''
 
-from cafysis.mtx_coord_transform import mtx_crd_transform
-from cafysis.file_io.dcd import DcdFile
+from lop.mtx_coord_transform import mtx_crd_transform
+from lop.file_io.dcd import DcdFile
 import sys
 
 if len(sys.argv) != 5:

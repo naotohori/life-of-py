@@ -5,7 +5,7 @@
 '''
 
 import sys
-from cafysis.file_io.dcd import DcdFile
+from lop.file_io.dcd import DcdFile
 
 if len(sys.argv) < 5:
     print('Usage: % SCRIPT [input dcd] [ev file] [,ev file ....] [output average file] [output PC file]')

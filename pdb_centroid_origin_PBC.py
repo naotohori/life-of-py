@@ -10,8 +10,8 @@ translate all coordinates so that the centroid comes to the origin (0,0,0).
 Particles outside the box will be wrapped into the box in the origin.
 '''
 
-from cafysis.mtx_coord_transform import mtx_crd_transform
-from cafysis.file_io.pdb import PdbFile
+from lop.mtx_coord_transform import mtx_crd_transform
+from lop.file_io.pdb import PdbFile
 import sys
 import math
 import copy

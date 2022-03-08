@@ -4,7 +4,7 @@
 @author: Naoto Hori
 '''
 
-from cafysis.elements.error import MyError
+from lop.elements.error import MyError
 
 class TsHeader(object):
     def __init__(self) :

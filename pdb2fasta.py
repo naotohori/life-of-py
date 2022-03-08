@@ -10,7 +10,7 @@ if not len(sys.argv) in (3,4) :
     show_usage()
     sys.exit(2)
 
-from cafysis.file_io.pdb import PdbFile
+from lop.file_io.pdb import PdbFile
 
 f_pdb = PdbFile(sys.argv[1])
 f_pdb.open_to_read()

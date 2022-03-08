@@ -8,8 +8,8 @@ Created on 2019/04/27
 import sys
 import os.path
 import copy
-from cafysis.file_io.pdb import PdbFile
-from cafysis.mtx_coord_transform import mtx_crd_transform
+from lop.file_io.pdb import PdbFile
+from lop.mtx_coord_transform import mtx_crd_transform
 
 '''
 PDB BIOMT format

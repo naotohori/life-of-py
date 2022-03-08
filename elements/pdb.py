@@ -3,7 +3,7 @@
 @author: Naoto Hori
 '''
 
-from cafysis.elements.coord import Coord
+from lop.elements.coord import Coord
 
 class Atom :
     def __init__(self) :

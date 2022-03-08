@@ -10,8 +10,8 @@ Modified from dcd_frame_extract.py on 2011/12/20
 import sys
 import argparse
 
-from cafysis.file_io.dcd import DcdFile
-from cafysis.file_io.pdb import PdbFile
+from lop.file_io.dcd import DcdFile
+from lop.file_io.pdb import PdbFile
 
 parser = argparse.ArgumentParser(description='Convert DCD to Movie (sequence of pdb format)',
                                  formatter_class=argparse.ArgumentDefaultsHelpFormatter)

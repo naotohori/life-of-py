@@ -16,7 +16,7 @@ chain2 354-868
 Fus3ドメインのIDは、1-353
 '''
 
-from cafysis.file_io.dcd import DcdFile
+from lop.file_io.dcd import DcdFile
 import sys
 from math import atan2, sqrt, acos
 

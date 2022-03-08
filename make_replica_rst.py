@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import sys
-from cafysis.file_io.dcd import DcdFile
+from lop.file_io.dcd import DcdFile
 
 if len(sys.argv) != 6:
     print ('Usage: SCRIPT [Nrep] [nmp] [step] [path/prefix] [output restart file]')

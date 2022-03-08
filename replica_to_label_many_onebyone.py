@@ -6,8 +6,8 @@ Created on 2014/06/17
 '''
 
 import sys
-from cafysis.file_io.dcd import DcdFile
-from cafysis.file_io.ts import TsFile
+from lop.file_io.dcd import DcdFile
+from lop.file_io.ts import TsFile
 #import resource
 
 #resource.setrlimit(resource.RLIMIT_NOFILE, (2000,2000))

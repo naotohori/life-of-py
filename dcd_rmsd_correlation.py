@@ -3,8 +3,8 @@
 import sys
 import argparse
 from CalcRMSD import calcrmsd
-from cafysis.file_io.dcd import DcdFile
-from cafysis.dcd_frame_count import count
+from lop.file_io.dcd import DcdFile
+from lop.dcd_frame_count import count
 
 parser = argparse.ArgumentParser(description='Compute auto-correation of RMSD from a dcd trajectory',
                                  formatter_class=argparse.ArgumentDefaultsHelpFormatter)

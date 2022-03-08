@@ -19,10 +19,10 @@ SEP_B_S = 2  # residue (i) and residue (i+2)
 SEP_S_S = 2  # residue (i) and residue (i+2)
 
 import sys
-from cafysis.file_io.pdb import PdbFile
-from cafysis.file_io.ninfo import NinfoFile
-from cafysis.elements.ninfo import NinfoSet, Fene, LJ
-from cafysis.para.BetancourtThirumalai import BTmatrix
+from lop.file_io.pdb import PdbFile
+from lop.file_io.ninfo import NinfoFile
+from lop.elements.ninfo import NinfoSet, Fene, LJ
+from lop.para.BetancourtThirumalai import BTmatrix
 
 if len(sys.argv) != 3:
     print('Usage: SCRIPT [input PDB] [output ninfo]')

@@ -5,10 +5,10 @@
 '''
 
 import sys, os
-from cafysis.file_io.dcd import DcdHeader,DcdFile
-from cafysis.file_io.coord import CoordFile
-from cafysis.file_io.psf import PsfFile
-from cafysis.elements.psf import Atom, Psf
+from lop.file_io.dcd import DcdHeader,DcdFile
+from lop.file_io.coord import CoordFile
+from lop.file_io.psf import PsfFile
+from lop.elements.psf import Atom, Psf
 
 if not len(sys.argv) in (4,5):
     print('Usage: % SCRIPT [input Coord] [#atom] [output DCD]')

@@ -6,7 +6,7 @@ Created on 2014/07/17
 '''
 import sys
 import math
-from cafysis.file_io.dcd import DcdFile
+from lop.file_io.dcd import DcdFile
 
 if len(sys.argv) != 5:
     print ('\n Usage: SCRIPT [input DCD file] [input SO list] [tolerance distance] [output SO file]\n')

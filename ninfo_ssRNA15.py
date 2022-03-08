@@ -4,9 +4,9 @@ seq = 'UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU'
 n_nt = len(seq)
 #n_mp = 3 * n_nt - 1
 
-from cafysis.para.rnaAform import ARNA
-from cafysis.para.rnaDT15 import DT15
-from cafysis.elements.ninfo import NinfoSet, BondLength, BondAngle, BaseStackDT
+from lop.para.rnaAform import ARNA
+from lop.para.rnaDT15 import DT15
+from lop.elements.ninfo import NinfoSet, BondLength, BondAngle, BaseStackDT
 
 ns = NinfoSet()
 
@@ -109,7 +109,7 @@ for i in range(3,n_nt):
                        dih2_native=ARNA.DIH_SPSP,dih2_coef=DT15.ST_DIH,dih2_type_str='SPSP')
     ns.basestackDTs.append(bs)
 
-from cafysis.file_io.ninfo import NinfoFile
+from lop.file_io.ninfo import NinfoFile
 nf = NinfoFile('ninfo_ssRNA15.ninfo')
 nf.open_to_write()
 nf.write_all(ns)

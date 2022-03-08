@@ -7,8 +7,8 @@ Created on 2015/06/17
 import sys
 import math
 import numpy as np
-from cafysis.lib_f2py import py_dcd_r2_histogram
-from cafysis.file_io.dcd import DcdFile
+from lop.lib_f2py import py_dcd_r2_histogram
+from lop.file_io.dcd import DcdFile
 
 if len(sys.argv) != 5:
     print ('\n Usage: SCRIPT [input DCD] [nmp] [nskip] [max r]\n')

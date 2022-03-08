@@ -10,9 +10,9 @@ Based on dcd_traj_SaltDistribution_nt.py
 import sys
 import math
 import numpy as np
-from cafysis.lib_f2py import py_distance_count_within
-from cafysis.file_io.dcd import DcdFile
-from cafysis.file_io.psf import PsfFile
+from lop.lib_f2py import py_distance_count_within
+from lop.file_io.dcd import DcdFile
+from lop.file_io.psf import PsfFile
 
 if len(sys.argv) != 4:
     print ('\n Usage: SCRIPT [input DCD] [input PSF] [output]\n')

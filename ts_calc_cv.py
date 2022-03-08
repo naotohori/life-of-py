@@ -6,7 +6,7 @@ Created on 2014/06/17
 '''
 
 import sys
-from cafysis.file_io.ts import TsFile
+from lop.file_io.ts import TsFile
 import glob
 
 BOLTZC = 0.0019872041

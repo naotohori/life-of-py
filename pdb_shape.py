@@ -23,7 +23,7 @@ Dima and Thirumalai, J. Phys. Chem. B 2004, 108: 6564-6570
 '''
 
 import sys
-from cafysis.file_io.pdb import PdbFile
+from lop.file_io.pdb import PdbFile
 import numpy as np
 
 if len(sys.argv) != 2:

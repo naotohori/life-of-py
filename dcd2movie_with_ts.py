@@ -6,9 +6,9 @@ Created on 2013/08/06
 '''
 
 import sys
-from cafysis.file_io.dcd import DcdFile
-from cafysis.file_io.ts import TsFile
-from cafysis.file_io.pdb import PdbFile
+from lop.file_io.dcd import DcdFile
+from lop.file_io.ts import TsFile
+from lop.file_io.pdb import PdbFile
 
 if len(sys.argv) != 5:
     print('Usage: % SCRIPT [input DCD] [ts file] [reference PDB] [output movie]')

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
-from cafysis.file_io.pdb import PdbFile
-from cafysis.file_io.dcd import DcdFile, DcdHeader
+from lop.file_io.pdb import PdbFile
+from lop.file_io.dcd import DcdFile, DcdHeader
 
 import sys
 

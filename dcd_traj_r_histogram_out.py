@@ -6,8 +6,8 @@ Created on 2015/06/17
 '''
 import sys
 import struct
-from cafysis.lib_f2py import py_dcd_r2_histogram
-from cafysis.file_io.dcd import DcdFile
+from lop.lib_f2py import py_dcd_r2_histogram
+from lop.file_io.dcd import DcdFile
 
 if len(sys.argv) != 6:
     print ('\n Usage: SCRIPT [input DCD] [nmp] [nskip] [max r] [output prefix]\n')

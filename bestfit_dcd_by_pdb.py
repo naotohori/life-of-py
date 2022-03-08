@@ -3,8 +3,8 @@
 @author: Naoto Hori
 '''
 
-from cafysis.file_io.dcd import DcdFile
-from cafysis.file_io.pdb import PdbFile
+from lop.file_io.dcd import DcdFile
+from lop.file_io.pdb import PdbFile
 from Superimpose import superimpose
 from numpy import zeros, float64
 import sys

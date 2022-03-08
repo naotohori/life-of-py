@@ -8,9 +8,9 @@ Created on 2015/05/15
 
 import sys
 import math
-from cafysis.file_io.dcd import DcdFile
-from cafysis.file_io.drid import DridFile, DridHeader
-import cafysis.lib_f2py.py_drid as py_drid
+from lop.file_io.dcd import DcdFile
+from lop.file_io.drid import DridFile, DridHeader
+import lop.lib_f2py.py_drid as py_drid
 import numpy as np
 
 if len(sys.argv) not in (4,5):

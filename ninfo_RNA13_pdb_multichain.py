@@ -3,11 +3,11 @@
 import sys
 import math
 
-from cafysis.file_io.pdb import PdbFile
-from cafysis.file_io.ninfo import NinfoFile
-from cafysis.para.rnaAform import ARNA
-from cafysis.para.rnaDT13 import DT13
-from cafysis.elements.ninfo import NinfoSet, BondLength, BondAngle, BaseStackDT, HBondDT
+from lop.file_io.pdb import PdbFile
+from lop.file_io.ninfo import NinfoFile
+from lop.para.rnaAform import ARNA
+from lop.para.rnaDT13 import DT13
+from lop.elements.ninfo import NinfoSet, BondLength, BondAngle, BaseStackDT, HBondDT
 
 if len(sys.argv) != 4:
     print('Usage: SCRIPT [cg pdb] [hb list file] [output ninfo]')

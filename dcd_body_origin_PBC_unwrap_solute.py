@@ -10,8 +10,8 @@ To do so, firstly find most lateral coordinates.
 Particles outside the box will be wrapped into the box in the origin.
 '''
 
-from cafysis.mtx_coord_transform import mtx_crd_transform
-from cafysis.file_io.dcd import DcdFile
+from lop.mtx_coord_transform import mtx_crd_transform
+from lop.file_io.dcd import DcdFile
 import sys
 import math
 import copy

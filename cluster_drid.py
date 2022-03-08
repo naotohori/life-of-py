@@ -5,7 +5,7 @@ import scipy
 import scipy.spatial
 import scipy.cluster
 import numpy as np
-from cafysis.file_io.drid import DridFile
+from lop.file_io.drid import DridFile
 import math
 
 if len(sys.argv) != 4:

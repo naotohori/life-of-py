@@ -15,8 +15,8 @@ chain2 354-868
  
 '''
 
-from cafysis.mtx_coord_transform import mtx_crd_transform
-from cafysis.file_io.dcd import DcdFile
+from lop.mtx_coord_transform import mtx_crd_transform
+from lop.file_io.dcd import DcdFile
 import sys
 from math import hypot, atan2
 

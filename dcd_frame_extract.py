@@ -7,7 +7,7 @@ Added stride mode 2011/07/29
 '''
 
 import sys
-from cafysis.file_io.dcd import DcdFile
+from lop.file_io.dcd import DcdFile
 
 if (not len(sys.argv) in (5, 6)):
     print (

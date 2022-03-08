@@ -4,9 +4,9 @@
 @author: Naoto Hori
 '''
 
-from cafysis.elements.coord import Coord
-from cafysis.elements.error import MyError
-from cafysis.elements.pdb import Atom, Chain, Residue
+from lop.elements.coord import Coord
+from lop.elements.error import MyError
+from lop.elements.pdb import Atom, Chain, Residue
 
 class PdbFile(object) :
     def __init__(self, filename, openmode=None, flg_HETATM=False):

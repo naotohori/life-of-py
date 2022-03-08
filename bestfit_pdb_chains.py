@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
-from cafysis.file_io.pdb import PdbFile
+from lop.file_io.pdb import PdbFile
 from CalcROT import calcrotation
-from cafysis.util_pdb import chains_to_ndarray
+from lop.util_pdb import chains_to_ndarray
 from numpy import dot
 
 def fit(chains_ref, chains_que):

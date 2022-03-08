@@ -6,7 +6,7 @@ if len(sys.argv) != 3:
     print('Usage: SCRIPT [DCD] [output matrix file]')
     sys.exit(2)
 
-from cafysis.file_io.dcd import DcdFile
+from lop.file_io.dcd import DcdFile
 from CalcRMSD import calcrmsd
 
 dcd = DcdFile(sys.argv[1])
