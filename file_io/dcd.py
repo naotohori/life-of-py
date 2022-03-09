@@ -11,6 +11,7 @@ from lop.elements.error import MyError
 class DcdHeader(object):
     def __init__(self):
         self.format = 'cafemol'
+        self.block1 = None
         self.nset = None
         self.istart = None
         self.nstep_save = None
@@ -25,6 +26,9 @@ class DcdHeader(object):
         
     def show(self):
         print('format', self.format)
+        print('The 1st block:')
+        for i, data in enumerate(self.block1):
+            print('   {:2d}:'.format(i+1), self.block1[i])
         if self.title is not None:
             for line in self.title :
                 print(line.decode('utf-8'))
@@ -97,6 +101,9 @@ class DcdFile :
             b = self._pick_data()
             bdata = struct.unpack('4siii5iifi9i', b)
             #bdata = struct.unpack('4siii5iid9i',b)
+
+            self._header.block1 = bdata
+
             if bdata[0].decode("utf-8") != 'CORD' :
                 raise MyError('DcdFile', 'read_header', '%s is not coordinate file' % (self._filename,))
             self._header.nset = bdata[1]
@@ -124,7 +131,11 @@ class DcdFile :
         elif self._header.format == 'charmm':
             # first block 
             b = self._pick_data()
-            bdata = struct.unpack('4s20i', b)
+            #bdata = struct.unpack('4s20i', b)
+            bdata = struct.unpack('4s9if10i', b)
+
+            self._header.block1 = bdata
+
             if (bdata[11] == 1):
                 self._header.with_unit_cell = True
             #bdata = struct.unpack('4siii5iid9i',b)
