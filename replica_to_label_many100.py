@@ -6,6 +6,7 @@ Created on 2014/06/17
 '''
 
 import sys
+import argparse
 from lop.file_io.dcd import DcdFile
 from lop.file_io.ts import TsFile
 #import resource
@@ -19,6 +20,76 @@ if __name__ == '__main__':
         print('Usage: %SCRIPT [input Dir] [name] [final ID] [output DIR]')
         print('       ID shoule be from 1 to final ID.')
         sys.exit(2)
+
+    ###########################################
+    ## Define the Parser and check errors    ##
+    ###########################################
+    parser = argparse.ArgumentParser(
+             description='Convert REMD simulation results',
+             formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    
+    parser.add_argument('indir', help='Input directory')
+    parser.add_argument('nrep', help='Number of replicas')
+    parser.add_argument('outdir',help='Output directory')
+
+    group_seq = parser.add_mutually_exclusive_group(required=True)
+    group_seq.add_argument('--pdb', type=PdbFile, help='PDB file')
+    group_seq.add_argument('--seq', help='Sequence')
+    group_seq.add_argument('--seqfile', type=argparse.FileType('r'), help='Sequence FASTA file')
+
+    parser.add_argument('--hbfile', type=argparse.FileType('r'), help='HB list file')
+
+    parser.add_argument('--circ', action="store_true", help='Flag for circRNA')
+    
+    parser.add_argument('--end5', default='S', help="5'-end P or S")
+
+    parser.add_argument('--exvfile', type=argparse.FileType('w'), help='output exv pair file')
+
+    args = parser.parse_args()
+
+    if args.pdb is not None:
+        #pdb = PdbFile(sys.argv[1])
+        args.pdb.open_to_read()
+        chains = args.pdb.read_all()
+        args.pdb.close()
+        
+        chain = chains[0]
+        n_nt = chain.num_res()
+        
+        seq = []
+        for r in chain.residues:
+            # "RA " ---> "A"
+            seq.append(r.atoms[0].res_name.strip()[1])
+
+    elif args.seq is not None:
+        seq = args.seq
+        n_nt = len(seq)
+
+    elif args.seqfile is not None:
+        seq = ''
+        for l in args.seqfile:
+            if l[0] == '>' or l[0] == '#' or l[0] == ';':
+                continue
+            seq += l.strip()
+        n_nt = len(seq)
+
+    else:
+        print ('Error: this error should be detected by mutually_exclusive_group of the parser')
+        sys.exit(2)
+
+    if args.circ:
+        if args.end5 == 'S':
+            print ('end5 option is ignored for circRNA')
+            args.end5 = 'P'
+
+    if args.end5 == 'P':
+        offset_end5 = 1
+    elif args.end5 == 'S':
+        offset_end5 = 0
+    else:
+        print ('end5 option has to be Either S or P')
+        sys.exit(2)
+
 
     dir_in = sys.argv[1]
     name = sys.argv[2]
