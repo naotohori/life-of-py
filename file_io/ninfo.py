@@ -10,9 +10,10 @@ from lop.file_io.func_line2ninfo import *
 from lop.file_io.func_ninfo2line import *
 
 class NinfoFile(object):
-    def __init__(self, filename):
+    def __init__(self, filename, cfml=False):
         self._filename = filename
         self._status = 'Closed'
+        self._cfml = cfml
         
     def open_to_read(self):
         if self._status != 'Closed' :
@@ -425,7 +426,10 @@ class NinfoFile(object):
             self._file.write('** total_contact = %i\n'%(len(ni.basestackDTs),))
             self._file.write('**        icon iunit1-iunit2   imp1 - imp2 imp1un-imp2un      go_nat   factor_go     coef_go\n')
             for bs in ni.basestackDTs :
-                self._file.write(basestackDTdist2line(bs))
+                if self._cfml:
+                    self._file.write(basestackDTdist2line_cfml(bs))
+                else:
+                    self._file.write(basestackDTdist2line(bs))
             for bs in ni.basestackDTs :
                 self._file.write(basestackDTdih2line(bs))
             self._file.write('>>>>\n')

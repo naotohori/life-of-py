@@ -171,6 +171,19 @@ def basestackDTdist2line(bs):
     s += '\n'
     return s 
 
+def basestackDTdist2line_cfml(bs):
+    s =  'bs-dist'
+    s += ' %6i' % (bs.id,)
+    s += ' %6i %6i' % (bs.iunit1, bs.iunit2)
+    s += ' %6i %6i' % (bs.imp1, bs.imp2)
+    s += ' %6i %6i' % (bs.imp1un, bs.imp2un)
+    s += ' 1.0'
+    s += ' %11.4f' % (bs.native,)
+    s += ' %11.4f' % (bs.coef,)
+    s += ' ' + bs.type
+    s += '\n'
+    return s
+
 def basestackDTdih2line(bs):
     s =  'bs-dihd'
     s += ' %6i' % (bs.id,)
