@@ -205,7 +205,7 @@ if __name__ == "__main__":
     group_seq.add_argument('--seq', help='Sequence')
     group_seq.add_argument('--seqfile', type=argparse.FileType('r'), help='Sequence FASTA file')
 
-    parser.add_argument('--model', required=True, help='model (DT13, NHT19)')
+    parser.add_argument('--model', required=True, help='model (DT13, DT15, NHT19)')
 
     parser.add_argument('--hbfile', type=argparse.FileType('r'), help='HB list file')
 
@@ -226,10 +226,12 @@ if __name__ == "__main__":
 
     if args.model == 'DT13':
         model = DT13
+    elif args.model == 'DT15':
+        model = DT15
     elif args.model == 'NHT19':
         model = NHT19
     else:
-        print ('Error: model has to be either DT13 or NHT19')
+        print ('Error: model has to be either DT13, DT15, or NHT19')
         sys.exit(2)
 
     if args.pdb is not None:
@@ -708,7 +710,7 @@ if __name__ == "__main__":
                 nt1, nt2 = nt2, nt1
                 atoms1, atom2 = atom2, atoms1
 
-            if hb_type == 'CAN' and args.model == 'NHT19':
+            if hb_type == 'CAN' and args.model in ('DT15', 'NHT19'):
                 if len(atoms1) == 0 and len(atoms2) == 0:
                     if   seq[chain1][nt1-1] == 'G' and seq[chain2][nt2-1] == 'C':
                         atoms1 = ("N1", "N2", "O6")
