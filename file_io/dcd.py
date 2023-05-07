@@ -186,6 +186,7 @@ class DcdFile :
             self._header.tempk = 0.0
         if self._header.lunit2mp is None:
             self._header.lunit2mp = []
+
         #first block
         form = '4siii5iifi9i'
         binary = struct.pack(form,
@@ -201,22 +202,30 @@ class DcdFile :
         self._put_data(binary, struct.calcsize(form))
         
         #title block
-        binary = struct.pack('i' + '80s' * 2,
-                             (3 + len(self._header.lunit2mp)),
-                             self._header.title[0],
-                             self._header.title[1])
-        
-        import re
-        re_null = re.compile(b'\0')
-        
-        p = struct.pack('80s', bytes('%f' % self._header.tempk, 'utf-8'))
-        binary += re_null.sub(b' ', p)
-        for i in range(self._header.nunit_real) :
-            p = struct.pack('80s', bytes('%i' % self._header.lunit2mp[i], 'utf-8'))
+        if self._header.format == 'cafemol':
+            binary = struct.pack('i' + '80s' * 2,
+                                 (3 + len(self._header.lunit2mp)),
+                                 self._header.title[0],
+                                 self._header.title[1])
+
+            import re
+            re_null = re.compile(b'\0')
+
+            p = struct.pack('80s', bytes('%f' % self._header.tempk, 'utf-8'))
             binary += re_null.sub(b' ', p)
-            
-        form = 'i' + '80s' * (3 + self._header.nunit_real)
-        self._put_data(binary, struct.calcsize(form))
+            for i in range(self._header.nunit_real) :
+                p = struct.pack('80s', bytes('%i' % self._header.lunit2mp[i], 'utf-8'))
+                binary += re_null.sub(b' ', p)
+
+            form = 'i' + '80s' * (3 + self._header.nunit_real)
+            self._put_data(binary, struct.calcsize(form))
+
+        else:
+            binary = struct.pack('i', len(self._header.title))
+            for t in self._header.title:
+                binary += struct.pack('80s', t)
+            form = 'i' + '80s' * len(self._header.title)
+            self._put_data(binary, struct.calcsize(form))
         
         # nmp_real
         binary = struct.pack('i', self._header.nmp_real)
