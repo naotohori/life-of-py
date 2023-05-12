@@ -134,16 +134,18 @@ for ibp in range(nbp):
     bpinfo_DSSR = l_main_sp[7]
 
     if len(bpinfo_bp) > 3:
-        print("Error: len(bpinfo_bp) > 3")
+        print("Warning: len(bpinfo_bp) > 3")
     if len(bpinfo_name) > 8:
-        print("Error: len(bpinfo_name) > 8")
-        ''' "~Sheared", "Platform" '''
+        if bpinfo_name != "~rHoogsteen":
+            print("Warning: len(bpinfo_name) > 8")
+        ''' 8 "~Sheared", "Platform" '''
+        ''' 11 "~rHoogsteen" '''
     if len(bpinfo_Saenger) > 9:
-        print("Error: len(bpinfo_Saenger) > 9")
+        print("Warning: len(bpinfo_Saenger) > 9")
     if len(bpinfo_LW) > 3:
-        print("Error: len(bpinfo_LW) > 3")
+        print("Warning: len(bpinfo_LW) > 3")
     if len(bpinfo_DSSR) > 4:
-        print("Error: len(bpinfo_DSSR) > 4")
+        print("Warning: len(bpinfo_DSSR) > 4")
 
 
     """ Write specific to out file """
