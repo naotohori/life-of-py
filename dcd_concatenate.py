@@ -7,6 +7,7 @@ Created on 2011/11/09
 
 import sys
 from lop.file_io.dcd import DcdFile
+from lop.dcd_frame_count import count_frame
 from copy import copy
         
 
@@ -22,18 +23,24 @@ def dcd_concatenate(filepaths):
     
     # Count the total frame number
     num_frame = 1
-    for i in range(0,num_dcd-1) :
-        f_in = DcdFile(filepaths[i])
-        f_in.open_to_read()
-        f_in.read_header()
-        num_frame += f_in.get_header().nset - 1
-        f_in.close()
+    #for i in range(0,num_dcd-1) :
+    for i in range(0,num_dcd) :
+        #f_in = DcdFile(filepaths[i])
+        #f_in.open_to_read()
+        #f_in.read_header()
+        #nset = f_in.get_header().nset
+        #if nset is not None:
+        #    num_frame += nset - 1
+        #f_in.close()
+        num_frame += count_frame(filepaths[i]) - 1
         
     # Get the total step number from final DCD file
     f_in = DcdFile(filepaths[num_dcd-1])
     f_in.open_to_read()
     f_in.read_header()
-    num_frame += f_in.get_header().nset - 1
+    #nset = f_in.get_header().nset
+    #if nset is not None:
+    #    num_frame += nset - 1
     num_step = f_in.get_header().nstep
     f_in.close()
         
@@ -46,9 +53,12 @@ def dcd_concatenate(filepaths):
     f_out.set_header(header)
     f_out.write_header()
     #print filepaths[0], f_in.get_header().nset
-    n_frames.append(f_in.get_header().nset)
+    #n_frames.append(f_in.get_header().nset)
+    i = 0
     while f_in.has_more_data() :
         f_out.write_onestep(f_in.read_onestep())
+        i += 1
+    n_frames.append(i)
     f_in.close()
     
     for i in range(1,num_dcd) :
@@ -57,9 +67,12 @@ def dcd_concatenate(filepaths):
         f_in.read_header()
         f_in.skip_onestep()  # skip the first step
         #print filepaths[i], f_in.get_header().nset - 1
-        n_frames.append(f_in.get_header().nset - 1)
+        #n_frames.append(f_in.get_header().nset - 1)
+        i = 0
         while f_in.has_more_data() :
             f_out.write_onestep(f_in.read_onestep())
+            i += 1
+        n_frames.append(i)
         f_in.close()
 
     f_out.close()
