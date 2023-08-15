@@ -28,35 +28,39 @@ while dcd.has_more_data() :
     
     for i_mp in range(nmp) :
         for i_xyz in range(3) :
-            i = i_mp + i_xyz
+            i = i_mp*3 + i_xyz
             for j_mp in range(i_mp+1) :
                 for j_xyz in range(3):
-                    j = j_mp + j_xyz
+                    j = j_mp*3 + j_xyz
                     covariance[i,j] += data[i_mp][i_xyz] * data[j_mp][j_xyz]
             variance[i] += data[i_mp][i_xyz]
             
 a = zeros((nmp*3,nmp*3), dtype=float32)
-for i in range(nmp):
+for i in range(nmp*3):
     for j in range(i+1) :
         a[i,j] = covariance[i,j] / float(num_model) \
                 - variance[i] * variance[j] / (float(num_model) **2)
-    for j in range(i+1, nmp) :
+    for j in range(i+1, nmp*3) :
         a[i,j] = covariance[j,i] / float(num_model) \
                 - variance[i] * variance[j] / (float(num_model) **2)
 
-(w, v) = linalg.eigh(a,eigvalus=(0,1))
 
-print(w) 
-print(v)
+#(w, v) = linalg.eigh(a,eigvalus=(0,1))
+(w, v) = linalg.eig(a)
 
+idx = w.argsort()[::-1]   
+w = w[idx]
+v = v[:,idx]
 
+#print(w) 
+#print(v)
 
 file_out = open(filename_out,'w')
 file_out.write('#value\n')
-for i in range(1) :
+for i in range(nmp*3) :
     file_out.write('%20e\n' % w[i])
 
-for i in range(1) :
+for i in range(nmp*3) :
     file_out.write('#vector%10i\n' % i)
     for j in range(nmp*3) :
         file_out.write('%20e\n' % v[j,i])
