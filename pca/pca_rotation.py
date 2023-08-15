@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import sys
-from file_pdb import PdbFile
+from lop.file_io.pdb import PdbFile
 
 if (len(sys.argv) < 5) or (len(sys.argv) % 2 != 1) :
     print('')

@@ -2,7 +2,7 @@
 # 2011/03/17 coded by Naoto HORI
 
 import sys
-from file_dcd import DcdFile
+from lop.file_io.dcd import DcdFile
 from scipy import linalg
 from numpy import zeros, float32
 
