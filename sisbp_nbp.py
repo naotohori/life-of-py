@@ -66,8 +66,15 @@ if __name__ == "__main__":
     parser.add_argument('outfile', default='nbp.out', help='output filename')
 
     parser.add_argument('--ss', help='Secondary structure (.db/.bpseq/.ct)')
+    parser.add_argument('--ene', type=float, help='Energy threshold')
 
     args = parser.parse_args()
+
+    if args.ene is None:
+        args.ene = 0.0
+    else:
+        if args.ene > 0.0:
+            print ('Warning: a positive value was specified for --ene. Note that BP energies are normally negative.')
 
     native_pairs = None
     sequence = None
@@ -87,12 +94,16 @@ if __name__ == "__main__":
 
         n = 0
         if native_pairs is not None:
-            for pair in pairs:
+            for pair, e in zip(pairs, energies):
                 if pair in native_pairs:
-                    n += 1
+                    if e < args.ene:
+                        n += 1
 
             fout.write(f"{n} {n/n_native:6.4f}\n")
         else:
+            for pair, e in zip(pairs, energies):
+                if e < args.ene:
+                    n += 1
             fout.write(f"{n}\n")
 
     f.close()
