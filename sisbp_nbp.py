@@ -6,23 +6,24 @@ import sys
 import argparse
 
 def interpret_dot_bracket(dot_bracket):
-    stack = []
-    brackets = {'(': ')', '[': ']', '{': '}', '<': '>'}
+    bras = {1: '(', 2: '[', 3: '{', 4: '<'}
+    kets = {')': 1, ']': 2, '}': 3, '>': 4}
+    stack = {'(': [], '[': [], '{': [], '<': []}
     pairs = []
 
     for i, char in enumerate(dot_bracket):
-        if char in brackets.keys():
-            stack.append((char, i))
-        elif char in brackets.values():
-            if not stack:
+        if char in bras.values():
+            stack[char].append(i)
+        elif char in kets.keys():
+            opening = bras[kets[char]]
+            if len(stack[opening]) == 0:
                 raise ValueError("Unbalanced brackets in the input string.")
-            opening_bracket, opening_index = stack.pop()
-            if brackets[opening_bracket] != char:
-                raise ValueError("Mismatched brackets in the input string.")
-            pairs.append((opening_index+1, i+1))  # ID starting from 1
+            opening_index = stack[opening].pop()
+            pairs.append((opening_index+1, i+1))
 
-    if stack:
-        raise ValueError("Unbalanced brackets in the input string.")
+    for s in stack.values():
+        if len(s) != 0:
+            raise ValueError("Unbalanced brackets in the input string.")
 
     return pairs
 
