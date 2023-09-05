@@ -34,7 +34,7 @@ class SisbpFile :
 
     def read_header(self):
         if not self._file :
-            raise MyError('DcdFile', 'read_header', 'Logical: _file is None')
+            raise MyError('SisbpFile', 'read_header', 'Logical: _file is None')
 
         self._file.seek(0)
 
