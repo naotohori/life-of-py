@@ -65,6 +65,18 @@ class SisbpFile :
         self._kind_str = int_kind_str + int_kind_str + real_kind_str
         self._seek_data = self._file.tell()
 
+    def copy_header(self, src):
+        self._int_kind = src._int_kind
+        self._real_kind = src._real_kind
+        self._kind_str = src._kind_str
+        self._step_byte = src._step_byte
+
+    def write_header(self):
+        if not self._file :
+            raise MyError('SisbpFile', 'write_header', 'Logical: _file is None')
+
+        self._file.write(struct.pack('ii', self._int_kind, self._real_kind))
+
     def read_onestep(self):
 
         pairs = []
@@ -80,6 +92,14 @@ class SisbpFile :
             energies.append(e)
 
         return pairs, energies
+
+    def write_onestep(self, pairs, energies):
+
+        form = self._kind_str  # 'hhf'
+        for (i, j), energy in zip(pairs, energies):
+            self._file.write(struct.pack(form, i, j, energy))
+
+        self._file.write(struct.pack(form, 0, 0, 0.0))
 
     def skip_onestep(self):
         try:
@@ -144,6 +164,12 @@ class SisbpFile :
 
     def _pick_data(self):
         return struct.unpack(self._kind_str, self._file.read(self._step_byte))
+
+    def _put_data(self, binary, size):
+        self._file.write(struct.pack('<L', size))
+        self._file.write(binary)
+        self._file.write(struct.pack('<L', size))
+        # '<' indicates little endian, 'L' stands 4 byte data
 
     def _read_at(self, num):
         self._file.seek(0)
