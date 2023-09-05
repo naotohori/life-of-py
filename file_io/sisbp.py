@@ -18,24 +18,24 @@ class SisbpFile :
         self._real_kind = None
         self._kind_str = None
         self._step_byte = None
-        
+
     def open_to_read(self):
         self._file = open(self._filename, 'rb')
         self.read_header()
-        
+
     def open_to_write(self):
         self._file = open(self._filename, 'wb')
-        
+
     def close(self):
         self._file.close()
-        
+
     def flush(self):
         self._file.flush()
-        
+
     def read_header(self):
         if not self._file :
             raise MyError('DcdFile', 'read_header', 'Logical: _file is None')
-        
+
         self._file.seek(0)
 
         # Read kind
@@ -64,7 +64,7 @@ class SisbpFile :
         self._step_byte = 2 * self._int_kind + self._real_kind
         self._kind_str = int_kind_str + int_kind_str + real_kind_str
         self._seek_data = self._file.tell()
-        
+
     def read_onestep(self):
 
         pairs = []
@@ -103,7 +103,7 @@ class SisbpFile :
             except EOFError:
                 return i
         return num
-            
+
     def has_more_data(self):
         """return True or False"""
         char = self._file.read(self._int_kind)
@@ -120,7 +120,7 @@ class SisbpFile :
             self.read_header()
 
         self.rewind()
-        
+
         n = 0
         while self.has_more_data():
             try:
@@ -128,7 +128,7 @@ class SisbpFile :
             except EOFError:
                 break
             n += 1
-        
+
         self.go_mark()
 
         return n
@@ -151,4 +151,4 @@ class SisbpFile :
         for i in range(num - 1) :
             self.skip_onestep()
         return self.read_onestep()
-        
+
