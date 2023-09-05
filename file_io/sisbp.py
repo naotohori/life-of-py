@@ -65,6 +65,19 @@ class SisbpFile :
         self._kind_str = int_kind_str + int_kind_str + real_kind_str
         self._seek_data = self._file.tell()
 
+    def set_header(self, header):
+        (int_kind, real_kind, kind_str, step_byte) = header
+        self._int_kind = int_kind
+        self._real_kind = real_kind
+        self._kind_str = kind_str
+        self._step_byte = step_byte
+
+    def get_header(self):
+        return (self._int_kind,
+                self._real_kind,
+                self._kind_str,
+                self._step_byte)
+
     def copy_header(self, src):
         self._int_kind = src._int_kind
         self._real_kind = src._real_kind
