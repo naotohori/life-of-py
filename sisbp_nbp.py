@@ -46,7 +46,10 @@ def parse_input_file(input_file):
 
             for line in f:
                 fields = line.strip().split()
-                i, nt, partner = int(fields[0]), fields[1], int(fields[4])
+                if extension == '.ct':
+                    i, nt, partner = int(fields[0]), fields[1], int(fields[4])
+                else:
+                    i, nt, partner = int(fields[0]), fields[1], int(fields[2])
 
                 sequence += nt
                 if extension == '.ct' and partner > i:
