@@ -54,6 +54,29 @@ class Coord(object) :
         self.x = c[0]
         self.y = c[1]
         self.z = c[2]
+
+    def transform_perspective_projection(self, mtx): 
+        c = [self.x, self.y, self.z, 1.0] 
+        c = dot(mtx,c)
+        self.x = c[0]
+        self.y = c[1]
+        self.z = c[2]
+    
+    def transform_rot_tran(self, rot, tran):
+        import numpy 
+        c = numpy.array([self.x, self.y, self.z]) 
+        c = dot(c, rot) + tran
+        self.x = c[0]
+        self.y = c[1]
+        self.z = c[2]
+
+    def transform_rot(self, rot):
+        import numpy 
+        c = [self.x, self.y, self.z] 
+        c = rot.dot(c)
+        self.x = c[0]
+        self.y = c[1]
+        self.z = c[2]    
     
     def __add__(self, other):
         self.x += other.x
