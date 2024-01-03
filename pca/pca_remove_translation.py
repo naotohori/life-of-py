@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import sys
-from file_pdb import PdbFile
+from lop.file_io.pdb import PdbFile
 from numpy import float64, zeros
 
 if (len(sys.argv) < 6) or (len(sys.argv) % 2 != 0) :

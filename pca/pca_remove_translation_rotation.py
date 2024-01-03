@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import sys
-from file_pdb import PdbFile
+from lop.file_io.pdb import PdbFile
 from py_gauss_jordan import gauss_jordan
 from numpy import float64, zeros
 

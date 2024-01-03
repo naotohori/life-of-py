@@ -18,24 +18,24 @@ class SisbpFile :
         self._real_kind = None
         self._kind_str = None
         self._step_byte = None
-        
+
     def open_to_read(self):
         self._file = open(self._filename, 'rb')
         self.read_header()
-        
+
     def open_to_write(self):
         self._file = open(self._filename, 'wb')
-        
+
     def close(self):
         self._file.close()
-        
+
     def flush(self):
         self._file.flush()
-        
+
     def read_header(self):
         if not self._file :
-            raise MyError('DcdFile', 'read_header', 'Logical: _file is None')
-        
+            raise MyError('SisbpFile', 'read_header', 'Logical: _file is None')
+
         self._file.seek(0)
 
         # Read kind
@@ -64,7 +64,32 @@ class SisbpFile :
         self._step_byte = 2 * self._int_kind + self._real_kind
         self._kind_str = int_kind_str + int_kind_str + real_kind_str
         self._seek_data = self._file.tell()
-        
+
+    def set_header(self, header):
+        (int_kind, real_kind, kind_str, step_byte) = header
+        self._int_kind = int_kind
+        self._real_kind = real_kind
+        self._kind_str = kind_str
+        self._step_byte = step_byte
+
+    def get_header(self):
+        return (self._int_kind,
+                self._real_kind,
+                self._kind_str,
+                self._step_byte)
+
+    def copy_header(self, src):
+        self._int_kind = src._int_kind
+        self._real_kind = src._real_kind
+        self._kind_str = src._kind_str
+        self._step_byte = src._step_byte
+
+    def write_header(self):
+        if not self._file :
+            raise MyError('SisbpFile', 'write_header', 'Logical: _file is None')
+
+        self._file.write(struct.pack('ii', self._int_kind, self._real_kind))
+
     def read_onestep(self):
 
         pairs = []
@@ -80,6 +105,14 @@ class SisbpFile :
             energies.append(e)
 
         return pairs, energies
+
+    def write_onestep(self, pairs, energies):
+
+        form = self._kind_str  # 'hhf'
+        for (i, j), energy in zip(pairs, energies):
+            self._file.write(struct.pack(form, i, j, energy))
+
+        self._file.write(struct.pack(form, 0, 0, 0.0))
 
     def skip_onestep(self):
         try:
@@ -103,7 +136,7 @@ class SisbpFile :
             except EOFError:
                 return i
         return num
-            
+
     def has_more_data(self):
         """return True or False"""
         char = self._file.read(self._int_kind)
@@ -120,7 +153,7 @@ class SisbpFile :
             self.read_header()
 
         self.rewind()
-        
+
         n = 0
         while self.has_more_data():
             try:
@@ -128,7 +161,7 @@ class SisbpFile :
             except EOFError:
                 break
             n += 1
-        
+
         self.go_mark()
 
         return n
@@ -145,10 +178,16 @@ class SisbpFile :
     def _pick_data(self):
         return struct.unpack(self._kind_str, self._file.read(self._step_byte))
 
+    def _put_data(self, binary, size):
+        self._file.write(struct.pack('<L', size))
+        self._file.write(binary)
+        self._file.write(struct.pack('<L', size))
+        # '<' indicates little endian, 'L' stands 4 byte data
+
     def _read_at(self, num):
         self._file.seek(0)
         self.read_header()
         for i in range(num - 1) :
             self.skip_onestep()
         return self.read_onestep()
-        
+
