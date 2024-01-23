@@ -704,11 +704,11 @@ if __name__ == "__main__":
             if chain1 > chain2:
                 chain1, chain2 = chain2, chain1
                 nt1, nt2 = nt2, nt1
-                atoms1, atom2 = atom2, atoms1
+                atoms1, atoms2 = atoms2, atoms1
 
             elif chain1 == chain2 and nt1 > nt2:
                 nt1, nt2 = nt2, nt1
-                atoms1, atom2 = atom2, atoms1
+                atoms1, atoms2 = atoms2, atoms1
 
             if hb_type == 'CAN' and args.model in ('DT15', 'NHT19'):
                 if len(atoms1) == 0 and len(atoms2) == 0:
