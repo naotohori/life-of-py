@@ -157,7 +157,7 @@ class PdbFile(object) :
         #line += '%3i ' % (atom.res_seq,)
         #line += atom.ins_code
         #line += '   '
-        line += '%4i' % (atom.res_seq,)
+        line += '%4i' % (atom.res_seq % 10000,)
         line += '%4s' % (atom.ins_code,)
         line += '%8.3f' % (atom.xyz.x,)
         line += '%8.3f' % (atom.xyz.y,)
