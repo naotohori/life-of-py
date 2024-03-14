@@ -89,21 +89,8 @@ if __name__ == "__main__":
         if not os.path.isfile(args.output):
             f_out = open(args.output, 'w')
         else:
-            print('Error: the output file exsits. Please delete it first.')
+            print('Error: the output file exsits. Please delete it first, or use --overwrite option.')
             sys.exit(2)
-
-    #filenames = sys.argv[2:len(sys.argv)-1]
-
-    #flows = [0]*(nrep+1)
-    #up = [0]*(nrep+1)
-    #up_steps = [0]*(nrep+1)
-    #down = [0]*(nrep+1)
-    #down_steps = [0]*(nrep+1)
-
-    #last_visit = [0]*(nrep+1)
-    #memory = [0]*(nrep+1)
-    #exchange = [0]*nrep
-    #steps = 0
 
     flows = [[0]*(nrep+1)]*ndim
     up = [[0]*(nrep+1)]*ndim
@@ -112,7 +99,7 @@ if __name__ == "__main__":
     down_steps = [[0]*(nrep+1)]*ndim
 
     last_visit = [[0]*(nrep+1)]*ndim
-    memory = [[0]*(nrep+1)]*ndim
+    #memory = [[0]*(nrep+1)]*ndim
     #exchange = []
     #for idim in range(ndim):
     #    exchange.append([0]*nrep_var[idim])
