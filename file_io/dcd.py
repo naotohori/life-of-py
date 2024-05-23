@@ -23,6 +23,8 @@ class DcdHeader(object):
         self.lunit2mp = None
         self.nmp_real = None
         self.with_unit_cell = False
+        self.unit_cell_xyz = None
+        self.unit_cell_abc = None
         
     def show(self):
         print('format', self.format)
@@ -236,6 +238,10 @@ class DcdFile :
         """print header information"""
         self._header.show()
         
+    def show_unit_cell(self):
+        print('x, y, z = ', self.unit_cell_xyz)
+        print('alpha, beta, gamma = ', self.unit_cell_abc)
+
     def set_header(self, header):
         import copy
         self._header = copy.deepcopy(header)
@@ -246,8 +252,12 @@ class DcdFile :
     def read_onestep(self):
 
         if (self._header.with_unit_cell):
-            num = struct.unpack('i', self._file.read(4))[0]
-            self._file.seek(4+num, os.SEEK_CUR)
+            #num = struct.unpack('i', self._file.read(4))[0]
+            #self._file.seek(4+num, os.SEEK_CUR)
+            b = self._pick_data()
+            x, gamma, y, beta, alpha, z = struct.unpack('d' * 6, b)
+            self.unit_cell_xyz = [x, y, z]
+            self.unit_cell_abc = [alpha, beta, gamma]
 
         """return 2-dimensional lists"""
         coord_matrix = []
