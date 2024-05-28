@@ -7,38 +7,45 @@ Created on 2011/11/09
 
 import sys
 from lop.file_io.dcd import DcdFile
+from lop.dcd_frame_count import count_frame
 from copy import copy
-
-if __name__ == '__main__':
-    if len(sys.argv) < 4:
-        print('Usage: % SCRIPT [DCD1] [DCD2] ([DCD3] ...) [output DCD]')
-        sys.exit(2)
         
+
+def dcd_concatenate(filepaths):
+    n_frames = []  # To return the number of frames
+
     # Number of input DCD files
-    num_dcd = len(sys.argv) - 2
+    num_dcd = len(filepaths) - 1
     
     # New DCD file
-    f_out  = DcdFile(sys.argv[-1])
+    f_out  = DcdFile(filepaths[-1])
     f_out.open_to_write()
     
     # Count the total frame number
-    num_frame = 1
-    for i in range(1,num_dcd) :
-        f_in = DcdFile(sys.argv[i])
-        f_in.open_to_read()
-        f_in.read_header()
-        num_frame += f_in.get_header().nset
-        f_in.close()
+    #num_frame = 1
+    num_frame = 0
+    #for i in range(0,num_dcd-1) :
+    for i in range(0,num_dcd) :
+        #f_in = DcdFile(filepaths[i])
+        #f_in.open_to_read()
+        #f_in.read_header()
+        #nset = f_in.get_header().nset
+        #if nset is not None:
+        #    num_frame += nset - 1
+        #f_in.close()
+        num_frame += count_frame(filepaths[i])
         
     # Get the total step number from final DCD file
-    f_in = DcdFile(sys.argv[num_dcd])
+    f_in = DcdFile(filepaths[num_dcd-1])
     f_in.open_to_read()
     f_in.read_header()
-    num_frame += f_in.get_header().nset
+    #nset = f_in.get_header().nset
+    #if nset is not None:
+    #    num_frame += nset - 1
     num_step = f_in.get_header().nstep
     f_in.close()
         
-    f_in = DcdFile(sys.argv[1])
+    f_in = DcdFile(filepaths[0])
     f_in.open_to_read()
     f_in.read_header() 
     header = copy(f_in.get_header())
@@ -46,19 +53,38 @@ if __name__ == '__main__':
     header.nstep = num_step
     f_out.set_header(header)
     f_out.write_header()
-    print(sys.argv[1], f_in.get_header().nset)
+    #print filepaths[0], f_in.get_header().nset
+    #n_frames.append(f_in.get_header().nset)
+    i = 0
     while f_in.has_more_data() :
         f_out.write_onestep(f_in.read_onestep())
+        i += 1
+    n_frames.append(i)
     f_in.close()
     
-    for i in range(2,num_dcd+1) :
-        f_in = DcdFile(sys.argv[i])
+    for i in range(1,num_dcd) :
+        f_in = DcdFile(filepaths[i])
         f_in.open_to_read()
         f_in.read_header()
         #f_in.skip_onestep()  # skip the first step
-        print(sys.argv[i], f_in.get_header().nset)
+        #print filepaths[i], f_in.get_header().nset - 1
+        #n_frames.append(f_in.get_header().nset - 1)
+        i = 0
         while f_in.has_more_data() :
             f_out.write_onestep(f_in.read_onestep())
+            i += 1
+        n_frames.append(i)
         f_in.close()
 
     f_out.close()
+
+    return n_frames
+
+
+if __name__ == '__main__':
+    if len(sys.argv) < 4:
+        print('Usage: % SCRIPT [DCD1] [DCD2] ([DCD3] ...) [output DCD]')
+        sys.exit(2)
+    n_frames = dcd_concatenate(sys.argv[1:])
+    for i,n in enumerate(n_frames):
+        print('file ',i+1,': ', n)
