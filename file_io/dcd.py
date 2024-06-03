@@ -10,7 +10,8 @@ from lop.elements.error import MyError
 
 class DcdHeader(object):
     def __init__(self):
-        self.format = 'cafemol'
+        #self.format = 'cafemol'
+        self.format = 'charmm'
         self.block1 = None
         self.nset = None
         self.istart = None
