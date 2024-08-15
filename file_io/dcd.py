@@ -174,13 +174,13 @@ class DcdFile :
         self._file.seek(0)
         
         if self._header.nset is None:
-            self._header.nset = 0
+            self._header.nset = 1
         if self._header.istart is None:
             self._header.istart = 0
         if self._header.nstep_save is None:
             self._header.nstep_save = 0
         if self._header.nstep is None:
-            self._header.nstep = 0
+            self._header.nstep = 1
         if self._header.nunit_real is None:
             self._header.nunit_real = 0
         if self._header.delta is None:
@@ -191,6 +191,10 @@ class DcdFile :
             self._header.lunit2mp = []
 
         #first block
+        if self._header.with_unit_cell:
+            with_box = 1
+        else:
+            with_box = 0
         form = '4siii5iifi9i'
         binary = struct.pack(form,
                              b'CORD',
@@ -201,7 +205,7 @@ class DcdFile :
                              self._header.nunit_real,
                              0, 0, 0, 0,
                              self._header.delta,
-                             0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+                             with_box, 0, 0, 0, 0, 0, 0, 0, 0, 0)
         self._put_data(binary, struct.calcsize(form))
         
         #title block
@@ -240,8 +244,11 @@ class DcdFile :
         self._header.show()
         
     def show_unit_cell(self):
-        print('x, y, z = ', self.unit_cell_xyz)
-        print('alpha, beta, gamma = ', self.unit_cell_abc)
+        if self._header.with_unit_cell:
+            print('x, y, z = ', self.unit_cell_xyz)
+            print('alpha, beta, gamma = ', self.unit_cell_abc)
+        else:
+            print('No box information.')
 
     def set_header(self, header):
         import copy
@@ -344,6 +351,15 @@ class DcdFile :
         return num
             
     def write_onestep(self, coord_matrix):
+
+        if (self._header.with_unit_cell):
+            #num = struct.unpack('i', self._file.read(4))[0]
+            #self._file.seek(4+num, os.SEEK_CUR)
+            x, y, z = self._header.unit_cell_xyz
+            alpha, beta, gamma = self._header.unit_cell_abc
+            binary = struct.pack('6d', x, gamma, y, beta, alpha, z )
+            self._put_data(binary, 8*6)
+
         # for X
         binary = b''
         for xyz in coord_matrix :
