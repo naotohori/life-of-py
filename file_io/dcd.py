@@ -31,7 +31,10 @@ class DcdHeader(object):
         print('format', self.format)
         print('The 1st block:')
         for i, data in enumerate(self.block1):
-            print('   {:2d}:'.format(i+1), self.block1[i])
+            if i == 0:
+                print('   Type:', self.block1[i])
+            else:
+                print('   {:2d}:'.format(i), self.block1[i])
         if self.title is not None:
             for line in self.title :
                 print(line.decode('utf-8'))
@@ -134,8 +137,8 @@ class DcdFile :
         elif self._header.format == 'charmm':
             # first block 
             b = self._pick_data()
-            #bdata = struct.unpack('4s20i', b)
-            bdata = struct.unpack('4s9if10i', b)
+            bdata = struct.unpack('4s20i', b)
+            #bdata = struct.unpack('4s9if10i', b)
 
             self._header.block1 = bdata
 
@@ -245,8 +248,8 @@ class DcdFile :
         
     def show_unit_cell(self):
         if self._header.with_unit_cell:
-            print('x, y, z = ', self.unit_cell_xyz)
-            print('alpha, beta, gamma = ', self.unit_cell_abc)
+            print('x, y, z = ', self._header.unit_cell_xyz)
+            print('alpha, beta, gamma = ', self._header.unit_cell_abc)
         else:
             print('No box information.')
 
@@ -264,8 +267,8 @@ class DcdFile :
             #self._file.seek(4+num, os.SEEK_CUR)
             b = self._pick_data()
             x, gamma, y, beta, alpha, z = struct.unpack('d' * 6, b)
-            self.unit_cell_xyz = [x, y, z]
-            self.unit_cell_abc = [alpha, beta, gamma]
+            self._header.unit_cell_xyz = [x, y, z]
+            self._header.unit_cell_abc = [alpha, beta, gamma]
 
         """return 2-dimensional lists"""
         coord_matrix = []
