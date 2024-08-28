@@ -253,6 +253,12 @@ class DcdFile :
         else:
             print('No box information.')
 
+    def show_unit_cell_oneline(self):
+        if self._header.with_unit_cell:
+            print(self._header.unit_cell_xyz, self._header.unit_cell_abc)
+        else:
+            print('No box information.')
+
     def set_header(self, header):
         import copy
         self._header = copy.deepcopy(header)
