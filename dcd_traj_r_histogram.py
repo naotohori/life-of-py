@@ -10,15 +10,16 @@ import numpy as np
 from lop.lib_f2py import py_dcd_r2_histogram
 from lop.file_io.dcd import DcdFile
 
-if len(sys.argv) != 5:
-    print ('\n Usage: SCRIPT [input DCD] [nmp] [nskip] [max r]\n')
+if len(sys.argv) != 6:
+    print ('\n Usage: SCRIPT [input DCD] [nmp] [ninitial_skip] [nstride] [max r]\n')
     sys.exit(2)
 
 print('#',sys.argv)
     
 nmp = int(sys.argv[2])
-nskip = int(sys.argv[3])
-max_r = int(sys.argv[4])
+ninitial_skip = int(sys.argv[3])
+nstride = int(sys.argv[4])
+max_r = int(sys.argv[5])
 nbin = max_r * 10
 bin_edges = [x*0.1 for x in range(nbin+1)]
 bin_edges_sq = [(x*0.1)**2 for x in range(nbin+1)]
@@ -29,6 +30,10 @@ dcd.read_header()
 
 hist_all = [0] * nbin
 icount = 0
+
+if ninitial_skip > 0:
+    dcd.skip(ninitial_skip)
+
 while dcd.has_more_data() :
 
     data = dcd.read_onestep_npF()
@@ -39,7 +44,7 @@ while dcd.has_more_data() :
     icount += 1
     
     if dcd.has_more_data():
-        dcd.skip(nskip-1)
+        dcd.skip(nstride-1)
 
 dcd.close()
 
