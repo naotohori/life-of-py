@@ -37,7 +37,10 @@ class DcdHeader(object):
                 print('   {:2d}:'.format(i), self.block1[i])
         if self.title is not None:
             for line in self.title :
-                print(line.decode('utf-8'))
+                try:
+                    print(line.decode('utf-8'))
+                except:
+                    print(line)
         print('nset', self.nset)
         print('istart', self.istart)
         print('nstep_save', self.nstep_save)
@@ -213,7 +216,9 @@ class DcdFile :
                              self._header.nunit_real,
                              0, 0, 0, 0,
                              self._header.delta,
-                             with_box, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+                             with_box, 0, 0, 0, 0, 0, 0, 0, 0,
+                             self._header.block1[20])
+                             # The last number block1[20] (e.g. 24) seems important for VMD
         self._put_data(binary, struct.calcsize(form))
         
         #title block

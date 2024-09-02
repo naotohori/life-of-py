@@ -100,7 +100,14 @@ for i in range(frame_num) :
     else :
         dcd.skip(1)
         continue
-    dcd_out.write_onestep(dcd.read_onestep())
+
+    data = dcd.read_onestep()
+
+    if dcd_out._header.with_unit_cell:
+        dcd_out._header.unit_cell_xyz = dcd._header.unit_cell_xyz
+        dcd_out._header.unit_cell_abc = dcd._header.unit_cell_abc
+
+    dcd_out.write_onestep(data)
 
 dcd.close()
 dcd_out.close()

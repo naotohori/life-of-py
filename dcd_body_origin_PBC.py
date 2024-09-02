@@ -105,6 +105,10 @@ while dcd.has_more_data() :
     # Wrap particles outside the box at the orgin
     wrap(data)
 
+    # Copy the unit cell information
+    dcd_out._header.unit_cell_xyz = dcd._header.unit_cell_xyz
+    dcd_out._header.unit_cell_abc = dcd._header.unit_cell_abc
+
     dcd_out.write_onestep(data) 
 
     iframe += 1
