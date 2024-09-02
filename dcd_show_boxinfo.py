@@ -10,8 +10,7 @@ from lop.file_io.dcd import DcdFile
 parser = argparse.ArgumentParser(description='Script to check periodic boundary box information in DCD file',
                                  formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 group_frame = parser.add_mutually_exclusive_group(required=True)
-group_frame.add_argument('--frame', default=0,
-                    action='store', type=int, help='Frame number (0 start)')
+group_frame.add_argument('--frame', action='store', type=int, help='Frame number (0 start)')
 group_frame.add_argument('--allframes', default=False,
                     action='store_true', help='Show for all frames.')
 parser.add_argument('dcdfile', help='Input DCD file')
