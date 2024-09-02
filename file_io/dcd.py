@@ -49,6 +49,11 @@ class DcdHeader(object):
             for i in range(self.nunit_real) :
                 print('lunit2mp[', i, ']', self.lunit2mp[i])
         print('nmp_real', self.nmp_real)
+        print('unit_cell', self.with_unit_cell)
+        if self.with_unit_cell:
+            print('', self.with_unit_cell)
+            print('unit_cell_xyz', self.unit_cell_xyz)
+            print('unit_cell_abc', self.unit_cell_abc)
         
 class DcdFile :
     def __init__(self, filename) :
