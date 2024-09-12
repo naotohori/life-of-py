@@ -69,7 +69,7 @@ if __name__ == "__main__":
     parser.add_argument('bpfile', type=SisbpFile, help='input bp file')
     parser.add_argument('outfile', default='nbp.out', help='output filename')
 
-    parser.add_argument('--ss', help='Secondary structure (.db/.bpseq/.ct)')
+    parser.add_argument('--ss', action='append', help='Secondary structure (.db/.bpseq/.ct)', required=False)
     parser.add_argument('--ene', type=float, help='Energy threshold')
 
     args = parser.parse_args()
@@ -80,12 +80,12 @@ if __name__ == "__main__":
         if args.ene > 0.0:
             print ('Warning: a positive value was specified for --ene. Note that BP energies are normally negative.')
 
-    native_pairs = None
-    sequence = None
-    n_native = 0
+    list_native_pairs = None
     if args.ss is not None:
-        sequence, native_pairs = parse_input_file(args.ss)
-        n_native = len(native_pairs)
+        list_native_pairs = []
+        for ss_file in args.ss:
+            _, native_pairs = parse_input_file(ss_file)
+            list_native_pairs.append(native_pairs)
 
     f = args.bpfile
 
@@ -97,17 +97,21 @@ if __name__ == "__main__":
         pairs, energies = f.read_onestep()
 
         n = 0
-        if native_pairs is not None:
-            for pair, e in zip(pairs, energies):
-                if pair in native_pairs:
-                    if e < args.ene:
-                        n += 1
+        for pair, e in zip(pairs, energies):
+            if e < args.ene:
+                n += 1
+        fout.write(f"{n}")
 
-            fout.write(f"{n} {n/n_native:6.4f}\n")
-        else:
-            for pair, e in zip(pairs, energies):
-                if e < args.ene:
-                    n += 1
-            fout.write(f"{n}\n")
+        if list_native_pairs is not None:
+            for native_pairs in list_native_pairs:
+                n = 0
+                for pair, e in zip(pairs, energies):
+                    if pair in native_pairs:
+                        if e < args.ene:
+                            n += 1
+
+                n_native = len(native_pairs)
+                fout.write(f" {n} {n/n_native:6.4f}")
+        fout.write('\n')
 
     f.close()
