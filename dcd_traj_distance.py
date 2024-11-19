@@ -9,7 +9,7 @@ import math
 from lop.file_io.dcd import DcdFile
 
 if len(sys.argv) != 5:
-    print(' Usage: % SCRIPT [input DCD] [ID1] [ID2] [output PDB] ')
+    print(' Usage: % SCRIPT [input DCD] [ID1] [ID2] [output file] ')
     sys.exit(2)
     
 dcd = DcdFile(sys.argv[1])
