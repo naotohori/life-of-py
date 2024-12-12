@@ -6,6 +6,9 @@ Created on 2024/12/12
 adopted from pdb_centeroid_origin_PBC.py from Naoto
 
 Unwrap particles outside the box.
+
+Note: Box size need to be bigger than individual chain sizes.
+
 '''
 
 from lop.mtx_coord_transform import mtx_crd_transform
@@ -71,7 +74,7 @@ for c in chains:
     ID_DOM_INI = nmp
     nmp += c.num_atom()
     ID_DOM_END = nmp - 1
-    print(str(ID_DOM_INI)+'_'+str(ID_DOM_END))
+#    print(str(ID_DOM_INI)+'_'+str(ID_DOM_END))
     COM = calc_com_PBC(data[ID_DOM_INI:ID_DOM_END+1])
 
     ####################################3
