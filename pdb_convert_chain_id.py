@@ -39,7 +39,7 @@ for l in open(input_PDB):
 
     elif l.startswith('TER'):
         try:
-            chainid = int(l[20:22])
+            a = int(l[20:22])
         except:
             f_out.write(l)
         else:
