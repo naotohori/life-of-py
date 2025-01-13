@@ -17,10 +17,6 @@ parser.add_argument('dcdfile', help='Input DCD file')
 
 args = parser.parse_args()
 
-if args.frame < 0:
-    print('Error: --frame is invalid.')
-    sys.exit(2)
-
 dcd = DcdFile(args.dcdfile)
 dcd.open_to_read()
 dcd.read_header()
@@ -35,6 +31,11 @@ if args.allframes:
         i += 1
 
 else:
+
+    if args.frame < 0:
+        print('Error: --frame is invalid.')
+        sys.exit(2)
+
     for i in range(args.frame):
         dcd.skip_onestep()
 

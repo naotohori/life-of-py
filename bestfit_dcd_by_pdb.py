@@ -52,6 +52,9 @@ while dcd.has_more_data() :
     rmsd = superimpose(ref, data.T) 
 
     print(k, rmsd)
+    if dcd._header.with_unit_cell:
+        out_dcd._header.unit_cell_xyz = dcd._header.unit_cell_xyz
+        out_dcd._header.unit_cell_abc = dcd._header.unit_cell_abc
     out_dcd.write_onestep(data)
         
 dcd.close()

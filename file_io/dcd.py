@@ -302,6 +302,13 @@ class DcdFile :
         return coord_matrix
 
     def read_onestep_np(self):
+
+        if (self._header.with_unit_cell):
+            b = self._pick_data()
+            x, gamma, y, beta, alpha, z = struct.unpack('d' * 6, b)
+            self._header.unit_cell_xyz = [x, y, z]
+            self._header.unit_cell_abc = [alpha, beta, gamma]
+
         """return ndarray"""
         import numpy as np
         data = np.empty((self._header.nmp_real, 3))
