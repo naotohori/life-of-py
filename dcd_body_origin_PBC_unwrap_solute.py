@@ -36,10 +36,11 @@ dcd_out.open_to_write()
 dcd.read_header()
 header = dcd.get_header()
 dcd_out.set_header(header)
-dcd_out._header.nmp_real = ID_DOM_END - ID_DOM_INI + 1
-dcd_out._header.nunit_real = 1
-dcd_out._header.lunit2mp = []
-dcd_out._header.lunit2mp.append(ID_DOM_END - ID_DOM_INI + 1)
+if dcd_out._header.format == 'cafemol':
+    dcd_out._header.nmp_real = ID_DOM_END - ID_DOM_INI + 1
+    dcd_out._header.nunit_real = 1
+    dcd_out._header.lunit2mp = []
+    dcd_out._header.lunit2mp.append(ID_DOM_END - ID_DOM_INI + 1)
 dcd_out.write_header()
 
 #nmp = header.nmp_real

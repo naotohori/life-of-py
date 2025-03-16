@@ -4,6 +4,7 @@
 Created on 2011/03/17 (dcd_frame_extract.py)
 Added stride mode on 2011/07/29 (dcd_frame_extract.py)
 Modified from dcd_frame_extract_as_movie.py on 2023/01/22
+Added flg_4500, 2025/3/16
 @author: Naoto Hori
 '''
 
@@ -21,8 +22,13 @@ parser.add_argument('--frame', dest='frame', default=None,
 parser.add_argument('--id-offset', dest='id_offset', default=0,
                     action='store', type=int, help='ID offset for MODEL')
 
-parser.add_argument('--origin', dest='flg_origin', default=False,
+
+group = parser.add_mutually_exclusive_group()
+group.add_argument('--origin', dest='flg_origin', default=False,
                     action='store_true', help='Move the molecule to the origin')
+
+group.add_argument('--4500', dest='flg_4500', default=False,
+                    action='store_true', help='Move the molecule centre to (4500, 4500, 4500)')
 
 parser.add_argument('dcd', help='Input DCD file')
 parser.add_argument('xyz', help='Reference xyz file')
@@ -84,7 +90,7 @@ if not dcd.has_more_data() :
 struct = dcd.read_onestep()
 
 """ Move to the origin """
-if args.flg_origin:
+if args.flg_origin or args.flg_4500:
     com = [0.0, 0.0, 0.0]
     for v in struct:
         com = [com[i]+v[i] for i in range(3)]
@@ -92,7 +98,10 @@ if args.flg_origin:
     com = [com[i]/float(len(struct)) for i in range(3)]
 
     for i in range(len(struct)):
-        struct[i] = [struct[i][j] - com[j] for j in range(3)]
+        if args.flg_4500:
+            struct[i] = [struct[i][j] - com[j] + 4500.0 for j in range(3)]
+        else:
+            struct[i] = [struct[i][j] - com[j] for j in range(3)]
 
 for i in range(N):
     fout.write(seq[i])

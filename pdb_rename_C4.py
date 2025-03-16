@@ -68,7 +68,7 @@ def change_resid_to_fasta(chains, fasta_file):
     ic = -1
     ir = -1
     chain_id = ''
-    res_name
+    #res_name
     c_cg = Chain()
     for c in chains:
         
