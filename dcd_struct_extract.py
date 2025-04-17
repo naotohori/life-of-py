@@ -60,6 +60,10 @@ while f_dcd_in.has_more_data() :
         data_out.extend(data[id_pair[0]-1 : id_pair[1]])
     ##debug
     #print len(data_out)
+
+    if f_dcd_in._header.with_unit_cell:
+        f_dcd_out._header.unit_cell_xyz = f_dcd_in._header.unit_cell_xyz
+        f_dcd_out._header.unit_cell_abc = f_dcd_in._header.unit_cell_abc
     
     f_dcd_out.write_onestep(data_out) 
 
