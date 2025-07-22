@@ -43,8 +43,11 @@ while dcd.has_more_data() :
     hist_all += hist
     icount += 1
     
-    if dcd.has_more_data():
-        dcd.skip(nstride-1)
+    for _ in range(nstride-1):
+        if dcd.has_more_data():
+            dcd.skip(1)
+        else:
+            break
 
 dcd.close()
 
