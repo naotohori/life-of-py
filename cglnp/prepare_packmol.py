@@ -3,6 +3,11 @@
 import numpy as np
 import random as rng
 
+def psf_atom(f, lines, atomid, atomname, resid, resname, chainid):
+    if f is None:
+        return
+    lines.append(f'{atomid:8d} {resname[:4]:4s} {str(resid)[-4:]:4s} {resname[:4]:4s} {atomname[:4]:4s} {str(chainid)[-4:]:4s} {0.0:14.8g} {0.0:13.8g} {0:8d}\n')
+
 #salts = ['Inf']
 #replicates = 1
 salts = [0.05, 0.1, 0.2, 0.5, 1.0, 'Inf']
@@ -39,6 +44,11 @@ _atom_site.Cartn_z
 _atom_site.type_symbol
 ''')
 
+#fpsf = None
+fpsf = open(f'./ALC.psf', 'w')
+bonds = []     # for PSF
+psf_atom_lines = []
+
 rnain = f'./../flucmRNA/CInf/00/last-relax.cg.cif'
 catin = './structures/ALC-0315.cif'
 dspcin = './structures/dspc.cif'
@@ -51,16 +61,21 @@ with open(rnain, 'r') as f:
         id = line.split()[0]
         if id.isdigit():
             lsp = line.split()
-            x = float(line.split()[8])
-            y = float(line.split()[9])
-            z = float(line.split()[10])
-            newx = 0.0
-            newy = 0.0
-            newz = 0.0
-            out.write(f'{id} {lsp[1]} {lsp[2]} {lsp[3]} {lsp[4]} {lsp[5]} {lsp[6]} {lsp[7]} {newx:.3f} {newy:.3f} {newz:.3f} {lsp[11]}\n')
-            rnachainid = int(line.split()[5])
-            rnaresid = int(line.split()[6])
-            rnaatomid = int(line.split()[0])
+            x = float(lsp[8])
+            y = float(lsp[9])
+            z = float(lsp[10])
+            out.write(f'{id} {lsp[1]} {lsp[2]} {lsp[3]} {lsp[4]} {lsp[5]} {lsp[6]} {lsp[7]} 0.0 0.0 0.0 {lsp[11]}\n')
+            atomname = lsp[1]
+            resname = lsp[3]
+            rnachainid = int(lsp[5])
+            rnaresid = int(lsp[6])
+            rnaatomid = int(lsp[0])
+            psf_atom(fpsf, psf_atom_lines, rnaatomid, atomname, rnaresid, resname, rnachainid)
+            if atomname[0:3] == 'RBB':
+                if resname[-1] != '5':
+                    bonds.append((rnaatomid-2, rnaatomid))
+            else:
+                bonds.append((rnaatomid-1, rnaatomid))
 
 chainid = rnachainid
 resid = rnaresid
@@ -95,6 +110,13 @@ while i < ncat:
     for atom in range(nbeads_cat):
         id += 1
         out.write(f'{id} {resnames[atom]} . ILN {chainid} {chainid} {resid} . {0.0:.3f} {0.0:.3f} {0.0:.3f} {atomnames[atom]}\n')
+        psf_atom(fpsf, psf_atom_lines, id, resnames[atom], resid, 'ILN', chainid)
+    bonds.append((id-6, id-5))
+    bonds.append((id-5, id-4))
+    bonds.append((id-4, id-3))
+    bonds.append((id-3, id-2))
+    bonds.append((id-2, id-1))
+    bonds.append((id-1, id))
     i += 1
 print(f'Added {i} cationic lipids')
 log.write(f'Added {i} cationic lipids\n')
@@ -126,6 +148,11 @@ while i < ndspc:
     for atom in range(nbeads_dspc):
         id += 1
         out.write(f'{id} {resnames[atom]} . DSPC {chainid} {chainid} {resid} . {0.0:.3f} {0.0:.3f} {0.0:.3f} {atomnames[atom]}\n')
+        psf_atom(fpsf, psf_atom_lines, id, resnames[atom], resid, 'DSPC', chainid)
+    bonds.append((id-4, id-3))
+    bonds.append((id-3, id-4))
+    bonds.append((id-3, id-1))
+    bonds.append((id-1, id))
     i += 1
 print(f'Added {i} dspc lipids')
 log.write(f'Added {i} dspc lipids\n')
@@ -157,6 +184,9 @@ while i < nchol:
     for atom in range(nbeads_chol):
         id += 1
         out.write(f'{id} {resnames[atom]} . CHOL {chainid} {chainid} {resid} . {0.0:.3f} {0.0:.3f} {0.0:.3f} {atomnames[atom]}\n')
+        psf_atom(fpsf, psf_atom_lines, id, resnames[atom], resid, 'CHOL', chainid)
+    bonds.append((id-2, id-1))
+    bonds.append((id-1, id))
     i += 1
 print(f'Added {i} chol lipids')
 log.write(f'Added {i} chol lipids\n')
@@ -193,6 +223,21 @@ while i < npeg:
         if chainnames[atom].startswith('PEG'):
             resid += 1
         out.write(f'{id} {resnames[atom]} . {chainnames[atom]} {chainid} {chainid} {resid} . {0.0:.3f} {0.0:.3f} {0.0:.3f} {atomnames[atom]}\n')
+        psf_atom(fpsf, psf_atom_lines, id, resnames[atom], resid, chainnames[atom], chainid)
+    bonds.append((id-14, id-13))
+    bonds.append((id-14, id-12))
+    bonds.append((id-14, id-11))
+    bonds.append((id-11, id-10))
+    bonds.append((id-10, id-9))
+    bonds.append((id-9, id-8))
+    bonds.append((id-8, id-7))
+    bonds.append((id-7, id-6))
+    bonds.append((id-6, id-5))
+    bonds.append((id-5, id-4))
+    bonds.append((id-4, id-3))
+    bonds.append((id-3, id-2))
+    bonds.append((id-2, id-1))
+    bonds.append((id-1, id))
     i += 1
 print(f'Added {i} peg lipids')
 log.write(f'Added {i} peg lipids\n')
@@ -223,6 +268,7 @@ for i in range(nethanol):
     id += 1
     iETOH += 1
     out.write(f'{id} ETH . ETH {chainid} {chainid} {resid} . {0.0:.3f} {0.0:.3f} {0.0:.3f} Th\n')
+    psf_atom(fpsf, psf_atom_lines, id, 'ETH', resid, 'ETH', chainid)
 
 chainid += 1
 iW = 0
@@ -231,6 +277,7 @@ for i in range(nwater):
     id += 1
     iW += 1
     out.write(f'{id} WAT . WAT {chainid} {chainid} {resid} . {0.0:.3f} {0.0:.3f} {0.0:.3f} W\n')
+    psf_atom(fpsf, psf_atom_lines, id, 'WAT', resid, 'WAT', chainid)
 
 log.write(f'Added {iETOH} Ethanols\n')
 log.write(f'Added {iW} waters\n')
@@ -298,6 +345,29 @@ for i in range(npeg):
 
 out.write('''#''')
 out.close()
+
+if fpsf is not None:
+    fpsf.write('PSF\n')
+    fpsf.write('\n')
+
+    n = len(psf_atom_lines)
+    n_solute = 0
+    fpsf.write(f'{n:8d} !NATOM\n')
+    for l in psf_atom_lines:
+        fpsf.write(l)
+        if l[9:12] not in ['WAT', 'ETH']:
+            n_solute += 1
+    fpsf.write('\n')
+
+    n = len(bonds)
+    fpsf.write(f'{n:8d} !NBOND: bonds\n')
+    for ibond, bond in enumerate(bonds):
+        fpsf.write(f'{bond[0]:8d}{bond[1]:8d}')
+        if ibond % 4 == 3:
+            fpsf.write('\n')
+    fpsf.write('\n')
+
+    fpsf.close()
 
 
 for salt in salts:

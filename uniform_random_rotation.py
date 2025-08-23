@@ -4,7 +4,7 @@ import numpy as np
 
 """
 Based on a test (see main code below), using quaternion is about twice faster
-thatn Avro's method. Therefore, using quaternion is the default.
+than Avro's method. Therefore, using quaternion is the default.
 """
 
 """
