@@ -7,10 +7,12 @@ Added stride mode 2011/07/29
 '''
 
 import sys
+import argparse
+
 from lop.file_io.dcd import DcdFile
 
-if (not len(sys.argv) in (5, 6)):
-    print (
+#if (not len(sys.argv) in (5, 6)):
+#    print (
 '''
  Usage: % SCRIPT [input DCD] [beginning (0)] [end] [output DCD]
         % SCRIPT [input DCD] [beginning (0)] [end] [stride] [output DCD]
@@ -39,33 +41,44 @@ if (not len(sys.argv) in (5, 6)):
 
  frame_num   6                  21                 9              10
 '''
-    )
+#    )
+#    sys.exit(2)
+
+parser = argparse.ArgumentParser(description='Extract frames from DCD',
+                                 formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+
+parser.add_argument('--from', dest='frame_begin', default=0,
+                    action='store', type=int, help='Beginning frame ID (starting from 0)')
+
+parser.add_argument('--to', dest='frame_end', default=-1,
+                    action='store', type=int, help='End frame ID (until the end of file if -1)')
+
+parser.add_argument('--stride', dest='frame_stride', default=1,
+                    action='store', type=int, help='Stride of frame')
+
+parser.add_argument('--id-offset', dest='id_offset', default=0,
+                    action='store', type=int, help='ID offset for MOdEL')
+
+parser.add_argument('--origin', dest='flg_origin', default=False,
+                    action='store_true', help='Move the molecule to the origin')
+
+parser.add_argument('dcd', help='Input DCD file')
+parser.add_argument('out', help='Output DCD file')
+
+args = parser.parse_args()
+
+
+if args.frame_begin < 0:
+    print('Error: Beginning frame must be > 0')
     sys.exit(2)
 
-frame_begin = int(sys.argv[2])
-if frame_begin < 0:
-    print('Error: beginning frame should not less than 0')
-    sys.exit(2)
-frame_end = int(sys.argv[3])
-if (len(sys.argv) == 5) :
-    frame_stride = 1
-else:
-    frame_stride = int(sys.argv[4])
-    if frame_stride <= 0:
-        print('The frame stride is invalid')
-        sys.exit(2)
-        
-frame_num = frame_end - frame_begin + 1
-if frame_num < 1 :
-    print('The number of frames is invalid.')
+if args.frame_stride <= 0:
+    print('Error: Frame stride must be > 0')
     sys.exit(2)
 
-dcd = DcdFile(sys.argv[1])
+dcd = DcdFile(args.dcd)
 dcd.open_to_read()
-if (len(sys.argv) == 5):
-    dcd_out = DcdFile(sys.argv[4])
-else:
-    dcd_out = DcdFile(sys.argv[5])
+dcd_out = DcdFile(args.out)
 dcd_out.open_to_write()
 
 # header
@@ -80,34 +93,65 @@ header = dcd.get_header()
 dcd_out.set_header(header)
 dcd_out.write_header()
 
-def error_no_data() :
-    print('The number of frames is invalid.')
-    print('Header information:')
-    dcd.show_header()
-    sys.exit(2)
+num_dcd_frames = dcd.count_frame()
+
+if args.frame_end == -1:
+    frame_end = num_dcd_frames - 1
+
+elif args.frame_end > num_dcd_frames - 1:
+    print('Warning: There are only %i frames found in the dcd while you specified --to %i' % (num_dcd_frames, args.frame_end))
+    print('         Output only %i frames.' % (num_dcd_frames))
+    frame_end = num_dcd_frames - 1
+
+else:
+    frame_end = args.frame_end
 
 # skip
-dcd.skip(frame_begin - 1)
+skipped = dcd.skip_as_many_as_possible_upto(args.frame_begin)
+if skipped < args.frame_begin:
+    print('Only %i frames could be read from the dcd file, which is less than the one specified as --from %i.' % (skipped, args.frame_begin))
+    print('No output file generated.')
+    sys.exit(2)
+
+frame_num = frame_end - args.frame_begin + 1
+i_orig = args.frame_begin
+
 
 # read and write
-icount = -1
-for i in range(frame_num) :
+for iframe in range(frame_num) :
     if not dcd.has_more_data() :
-        error_no_data()
-    icount += 1
-    if icount % frame_stride == 0 :
-        icount = 0
-    else :
+        print('The number of frames is invalid.')
+        print('Header information:')
+        dcd.show_header()
+        dcd.close()
+        dcd_out.close()
+        sys.exit(2)
+        
+    if iframe % args.frame_stride != 0 :
         dcd.skip(1)
+        i_orig += 1
         continue
 
-    data = dcd.read_onestep()
+    struct = dcd.read_onestep()
 
     if dcd_out._header.with_unit_cell:
         dcd_out._header.unit_cell_xyz = dcd._header.unit_cell_xyz
         dcd_out._header.unit_cell_abc = dcd._header.unit_cell_abc
 
-    dcd_out.write_onestep(data)
+    """ Move to the origin """
+    if args.flg_origin:
+        com = [0.0, 0.0, 0.0]
+        for v in struct:
+            com = [com[i]+v[i] for i in range(3)]
+
+        com = [com[i]/float(len(struct)) for i in range(3)]
+
+        for i in range(len(struct)):
+            struct[i] = [struct[i][j] - com[j] for j in range(3)]
+
+    dcd_out.write_onestep(struct)
+    i_orig += 1
 
 dcd.close()
 dcd_out.close()
+

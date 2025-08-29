@@ -138,5 +138,6 @@ for iframe in range(frame_num) :
     movie.write_all(chains)
     i_orig += 1
 
+dcd.close()
 movie.close()
 pdb.close()
