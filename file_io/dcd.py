@@ -6,7 +6,23 @@
 
 import os
 import struct
+import numpy as np
 from lop.elements.error import MyError
+
+def _read_vec_f32(fin, n):
+    size = struct.unpack('i', fin.read(4))[0]
+    buf  = fin.read(size)
+    fin.read(4)
+    return np.frombuffer(buf, dtype=np.float32, count=n)
+
+def _write_vec_f32(fout, arr1d):
+    arr1d = np.asarray(arr1d, dtype=np.float32, order='C')
+    n = arr1d.shape[0]
+    b = memoryview(arr1d).tobytes()
+    fout.write(struct.pack('<L', 4*n))
+    fout.write(b)
+    fout.write(struct.pack('<L', 4*n))
+
 
 class DcdHeader(object):
     def __init__(self):
@@ -64,7 +80,8 @@ class DcdFile :
         self._header = DcdHeader()
         self._seek_data = None
         self._seek_mark = None
-        
+        self._bpf = None  # byte per frame
+
     def open_to_read(self):
         self._file = open(self._filename, 'rb')
         
@@ -176,6 +193,7 @@ class DcdFile :
             self._header.nmp_real = struct.unpack('i', b)[0]
 
         self._seek_data = self._file.tell()
+        self._bpf = self._byte_per_frame()
         
         
     def write_header(self):
@@ -272,7 +290,8 @@ class DcdFile :
     def set_header(self, header):
         import copy
         self._header = copy.deepcopy(header)
-    
+        self._bpf = self._byte_per_frame()
+
     def get_header(self):
         return self._header
     
@@ -310,7 +329,6 @@ class DcdFile :
             self._header.unit_cell_abc = [alpha, beta, gamma]
 
         """return ndarray"""
-        import numpy as np
         data = np.empty((self._header.nmp_real, 3))
         b = self._pick_data()
         data[:,0] = struct.unpack('f' * self._header.nmp_real, b)
@@ -323,7 +341,6 @@ class DcdFile :
 
     def read_onestep_np_solute(self, nsolute):
         """return ndarray"""
-        import numpy as np
         data = np.empty((self._header.nmp_real, 3))
         b = self._pick_data()
         data[:,0] = struct.unpack('f' * self._header.nmp_real, b)
@@ -336,7 +353,6 @@ class DcdFile :
 
     def read_onestep_npF(self):
         """return ndarray in Fortran format"""
-        import numpy as np
         data = np.empty((3,self._header.nmp_real), order='F')
         b = self._pick_data()
         data[0,:] = struct.unpack('f' * self._header.nmp_real, b)
@@ -363,8 +379,9 @@ class DcdFile :
 
     ''' This will throw EOFError exception if there are not enough frames.'''
     def skip(self, num):
-        for _ in range(num):
-            self.skip_onestep()
+        #for _ in range(num):
+        #    self.skip_onestep()
+        self._file.seek(self._bpf * num, os.SEEK_CUR)
 
     ''' This does NOT throw EOFError exception if there are not enough frames.'''
     ''' Instead, this function will return the number of frames skipped successfully.'''
@@ -401,7 +418,45 @@ class DcdFile :
         for xyz in coord_matrix :
             binary += struct.pack('f', xyz[2])
         self._put_data(binary, 4 * self._header.nmp_real)
-    
+
+    def copy_one_frame(self, dcd_out, origin=False):
+        """ Copy one frame data to dcd_out. False if fail to read. """
+
+        if origin:
+            N = self._header.nmp_real
+
+            # Copy the unit cell without change
+            if self._header.with_unit_cell:
+                if not self._copy_record(dcd_out): return False
+
+            # Read as Numpy
+            try:
+                x = _read_vec_f32(self._file, N)
+                y = _read_vec_f32(self._file, N)
+                z = _read_vec_f32(self._file, N)
+            except Exception:
+                return False
+            data = np.empty((N, 3), dtype=np.float32)
+            data[:,0] = x
+            data[:,1] = y
+            data[:,2] = z
+            com = data.mean(axis=0, dtype=np.float64)
+            data -= com.astype(np.float32)
+
+            _write_vec_f32(dcd_out._file, data[:,0])
+            _write_vec_f32(dcd_out._file, data[:,1])
+            _write_vec_f32(dcd_out._file, data[:,2])
+
+        else:
+            # If not origin, no need to read coordinates, just copy as raw.
+            if self._header.with_unit_cell:
+                if not self._copy_record(dcd_out): return False # unit cell
+            if not self._copy_record(dcd_out): return False  # X
+            if not self._copy_record(dcd_out): return False  # Y
+            if not self._copy_record(dcd_out): return False  # Z
+
+        return True
+
     def has_more_data(self):
         """return True or False"""
         char = self._file.read(4)
@@ -432,13 +487,21 @@ class DcdFile :
         return n
 
     def rewind(self):
-        self._file.seek( self._seek_data, os.SEEK_SET)
+        self._file.seek(self._seek_data, os.SEEK_SET)
 
     def set_mark(self):
         self._seek_mark = self._file.tell()
 
     def go_mark(self):
-        self._file.seek( self._seek_mark, os.SEEK_SET)
+        self._file.seek(self._seek_mark, os.SEEK_SET)
+
+    def go_to_frame(self, frame):
+        self._file.seek(self._seek_data + self._bpf * frame, os.SEEK_SET)
+
+    def _byte_per_frame(self):
+        xyz_block = 8 + 4 * self._header.nmp_real
+        unit_block = (8 + 8*6) if self._header.with_unit_cell else 0
+        return unit_block + 3 * xyz_block
 
     def _pick_data(self):
         """return binary data between 'integer' and 'integer'. 'integer' indicates the number of bytes"""
@@ -459,4 +522,17 @@ class DcdFile :
         for i in range(num - 1) :
             self.read_onestep()
         return self.read_onestep()
-        
+
+    def _copy_record(self, dcd_out):
+        """ Copy a block of Fortran record to dcd_out. False if fail to read. """
+        size_head = self._file.read(4)
+        if not size_head:
+            return False
+        size = struct.unpack('i', size_head)[0]
+        buf  = self._file.read(size)
+        size_tail = self._file.read(4)
+        dcd_out._file.write(size_head)
+        dcd_out._file.write(buf)
+        dcd_out._file.write(size_tail)
+        return True
+
