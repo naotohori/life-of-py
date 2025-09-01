@@ -15,15 +15,22 @@ from lop.file_io.dcd import DcdFile
 import sys
 import math
 import copy
+import numpy as np
 
-if len(sys.argv) != 6:
-    print('Usage: SCRIPT [input DCD] [ID domain begin] [ID domain end] [Box size] [output DCD]')
-    sys.exit(2)
+import argparse
 
-ID_DOM_INI = int(sys.argv[2]) - 1  # 重心を求める際に必要
-ID_DOM_END = int(sys.argv[3]) - 1
-BOXSIZE = float(sys.argv[4])
+parser = argparse.ArgumentParser()
+parser.add_argument("--box", nargs="+", type=float, required=True, help="Box dimensions")
+parser.add_argument("--begin", type=int, required=True, help="domain ID begin")
+parser.add_argument("--end", type=int, required=True, help="domain ID end")
+parser.add_argument('input_dcd', help="input DCD")
+parser.add_argument('output_dcd', help="output DCD")
+args = parser.parse_args()
 
+ID_DOM_INI = args.begin - 1  # 重心を求める際に必要
+ID_DOM_END = args.end - 1
+
+BOXSIZE = np.array(args.box)
 BOXMAX = 0.5 * BOXSIZE
 BOXMIN = -0.5 * BOXSIZE
 
@@ -48,7 +55,7 @@ def calc_com_PBC(d):
     sin = [0.0] * 3
     for xyz in d:
         for i in range(3):
-            theta = (xyz[i] + BOXMAX) / BOXSIZE * 2 * math.pi
+            theta = (xyz[i] + BOXMAX[i]) / BOXSIZE[i] * 2 * math.pi
             cos[i] += math.cos(theta)
             sin[i] += math.sin(theta)
 
@@ -57,7 +64,7 @@ def calc_com_PBC(d):
         cos[i] = cos[i] / float(len(d))
         sin[i] = sin[i] / float(len(d))
         theta = math.atan2(-sin[i],-cos[i]) + math.pi
-        com[i] = 0.5 * BOXSIZE * theta / math.pi - BOXMAX
+        com[i] = 0.5 * BOXSIZE[i] * theta / math.pi - BOXMAX[i]
 
     return com
 
@@ -65,10 +72,10 @@ def wrap(d):
     for i in range(len(d)):
         for j in range(3):
             p = d[i][j]
-            if p > BOXMAX:
-                d[i][j] = p - BOXSIZE * (int((p - BOXMAX)/BOXSIZE) + 1)
-            elif p < BOXMIN:
-                d[i][j] = p + BOXSIZE * (int((BOXMIN - p)/BOXSIZE) + 1)
+            if p > BOXMAX[j]:
+                d[i][j] = p - BOXSIZE[j] * (int((p - BOXMAX[j])/BOXSIZE[j]) + 1)
+            elif p < BOXMIN[j]:
+                d[i][j] = p + BOXSIZE[j] * (int((BOXMIN[j] - p)/BOXSIZE[j]) + 1)
 
 while dcd.has_more_data() :
     data = dcd.read_onestep()

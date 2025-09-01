@@ -1,34 +1,46 @@
 #!/usr/bin/env python
 
 import sys
-from file_pdb import PdbFile
-from my_element import Coord
+from lop.file_io.pdb import PdbFile
+from lop.elements.coord import Coord
+import argparse
 
-if len(sys.argv) != 3:
-    print('Usage: % SCRIPT [input pdb] [output pdb]')
-    sys.exit(2)
-    
-f_pdb_in = PdbFile(sys.argv[1])
+parser = argparse.ArgumentParser()
+parser.add_argument("--begin", type=int, default=None, help="domain ID begin")
+parser.add_argument("--end", type=int, default=None, help="domain ID end")
+parser.add_argument('input_pdb', type=PdbFile, help="input PDB")
+parser.add_argument('output_pdb', type=PdbFile, help="output PDB")
+args = parser.parse_args()
+
+f_pdb_in = args.input_pdb
 f_pdb_in.open_to_read()
 chains = f_pdb_in.read_all()
 f_pdb_in.close()
 
 com = Coord()
-total_atom = 0
+natom_total = 0
+natom_COM = 0
 for c in chains :
-    total_atom += c.num_atom()
+    if args.end is not None and natom_total > args.begin:
+        break
     for iatom in range(c.num_atom()) :
+        natom_total += 1
+        if args.begin is not None and natom_total < args.begin:
+            continue
+        if args.end is not None and natom_total > args.begin:
+            continue
         com.move(c.get_atom(iatom).xyz)
-        
-com.x = - com.x / float(total_atom)
-com.y = - com.y / float(total_atom)
-com.z = - com.z / float(total_atom)
+        natom_COM += 1
+
+com.x = - com.x / float(natom_COM)
+com.y = - com.y / float(natom_COM)
+com.z = - com.z / float(natom_COM)
 
 for c in chains :
     for iatom in range(c.num_atom()) :
         c.get_atom(iatom).xyz.move(com)
 
-f_pdb_out = PdbFile(sys.argv[2])
+f_pdb_out = args.output_pdb
 f_pdb_out.open_to_write()
 f_pdb_out.write_all(chains)
 f_pdb_out.close()
