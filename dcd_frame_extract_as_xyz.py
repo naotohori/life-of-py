@@ -5,6 +5,7 @@ Created on 2011/03/17 (dcd_frame_extract.py)
 Added stride mode on 2011/07/29 (dcd_frame_extract.py)
 Modified from dcd_frame_extract_as_movie.py on 2023/01/22
 Added flg_4500, 2025/3/16
+Added stage option 2025/11/14
 @author: Naoto Hori
 '''
 
@@ -29,6 +30,12 @@ group.add_argument('--origin', dest='flg_origin', default=False,
 
 group.add_argument('--4500', dest='flg_4500', default=False,
                     action='store_true', help='Move the molecule centre to (4500, 4500, 4500)')
+
+group.add_argument('--stage', dest='flg_stage', default=False,
+                    action='store_true', help='Move the molecule on the staze (plane z=0) with margin defined by --stage-margin')
+
+parser.add_argument('--stage-margin', dest='stage_margin', default=10.0,
+                    action='store', type=float, help='Only for --stage option, the minimum distance between the stage (z=0) and the bottom of the molecule.')
 
 parser.add_argument('dcd', help='Input DCD file')
 parser.add_argument('xyz', help='Reference xyz file')
@@ -87,15 +94,20 @@ if not dcd.has_more_data() :
     fout.close()
     sys.exit(2)
     
-struct = dcd.read_onestep()
+struct = dcd.read_onestep_np()
 
 """ Move to the origin """
-if args.flg_origin or args.flg_4500:
+if args.flg_origin or args.flg_4500 or args.flg_stage:
     com = [0.0, 0.0, 0.0]
     for v in struct:
         com = [com[i]+v[i] for i in range(3)]
 
     com = [com[i]/float(len(struct)) for i in range(3)]
+
+    if args.flg_stage:
+        # Check the smallest Z coordinates and adjust com
+        zmin = min(struct[:,2])
+        com[2] += zmin - args.stage_margin
 
     for i in range(len(struct)):
         if args.flg_4500:
