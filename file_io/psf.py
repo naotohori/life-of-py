@@ -8,25 +8,31 @@ from lop.elements.error import MyError
 from lop.elements.psf import Psf, Atom
 
 def line2atom(line):
+    """Parse a NAMD-style PSF atom line.
+    Format: (I8,1X,A4,1X,A4,1X,A4,1X,A4,1X,A4,1X,2G14.6,I8)
+    """
     line.rstrip()
     atom = Atom()
-    
+
     atom.atom_id = int(line[0:8])
-    atom.seg_name = line[8:12]
-    atom.res_id = int(line[12:18])
-    atom.res_name = line[18:22]
-    atom.atom_name = line[22:27]
-    atom.atom_type = line[27:31]
-    atom.charge = float(line[31:44])
-    atom.mass = float(line[44:58])
-    atom.unused = int(line[58:70])
+    atom.seg_name = line[9:13]
+    atom.res_id = int(line[14:18])
+    atom.res_name = line[19:23]
+    atom.atom_name = line[24:28]
+    atom.atom_type = line[29:33]
+    atom.charge = float(line[34:48])
+    atom.mass = float(line[48:62])
+    atom.unused = int(line[62:70])
     return atom
 
 def atom2line(atom):
-    return ('%8i  %3s %4i  %3s %4s %4s  %9.6f      %8.4f%12i' %
-             (atom.atom_id, atom.seg_name,
-              atom.res_id, atom.res_name,
-              atom.atom_name, atom.atom_type,
+    """Write a NAMD-style PSF atom line.
+    Format: (I8,1X,A4,1X,A4,1X,A4,1X,A4,1X,A4,1X,2G14.6,I8)
+    """
+    return ('%8d %-4s %4d %-4s %-4s %-4s %14.6f%14.4f%8d' %
+             (atom.atom_id, atom.seg_name.strip(),
+              atom.res_id, atom.res_name.strip(),
+              atom.atom_name.strip(), atom.atom_type.strip(),
               atom.charge, atom.mass,
               atom.unused) )
     
