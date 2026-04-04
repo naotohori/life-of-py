@@ -13,6 +13,7 @@ import sys
 import argparse
 
 from lop.file_io.dcd import DcdFile
+from lop.file_io.psf import PsfFile
 
 parser = argparse.ArgumentParser(description='Convert DCD to Movie (sequence of pdb format)',
                                  formatter_class=argparse.ArgumentDefaultsHelpFormatter)
@@ -38,8 +39,11 @@ parser.add_argument('--stage-margin', dest='stage_margin', default=10.0,
                     action='store', type=float, help='Only for --stage option, the minimum distance between the stage (z=0) and the bottom of the molecule.')
 
 parser.add_argument('dcd', help='Input DCD file')
-parser.add_argument('xyz', help='Reference xyz file')
 parser.add_argument('out', help='Output xyz file')
+
+ref_group = parser.add_mutually_exclusive_group()
+ref_group.add_argument('--xyz', dest='xyz', default=None, help='Reference XYZ file (atom names from first column)')
+ref_group.add_argument('--psf', dest='psf', default=None, help='Reference PSF file (atom names from PSF)')
 
 args = parser.parse_args()
 
@@ -48,29 +52,32 @@ if args.frame is not None and  args.frame < 0:
     print('Error: Frame ID must be >= 0')
     sys.exit(2)
 
-# Read the reference XYZ
-seq = []
-il = 0
-for l in open(args.xyz):
-    if il > 1:
-        lsp = l.split()
-        #xyz.append([float(lsp[1]), float(lsp[2]), float(lsp[3])])
-        seq.append(lsp[0])
-
-    if il == 0:
-        N = int(l)
-
-    il += 1
-
-# Output PDB
-fout = open(args.out, 'w')
-fout.write('%i\n' % N)
-fout.write('\n')
-
 # Open DCD and read the header
 dcd = DcdFile(args.dcd)
 dcd.open_to_read()
 dcd.read_header()
+
+N = dcd.get_header().nmp_real
+
+# Read atom names from reference file
+if args.xyz is not None:
+    seq = []
+    for il, l in enumerate(open(args.xyz)):
+        if il > 1:
+            seq.append(l.split()[0])
+elif args.psf is not None:
+    psf_file = PsfFile(args.psf)
+    psf_file.open_to_read()
+    psf = psf_file.read_all()
+    psf_file.close()
+    seq = [atom.atom_name.strip() for atom in psf.atoms]
+else:
+    seq = ['C'] * N
+
+# Output XYZ
+fout = open(args.out, 'w')
+fout.write('%i\n' % N)
+fout.write('\n')
 
 num_dcd_frames = dcd.count_frame()
 
