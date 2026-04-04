@@ -1,0 +1,28 @@
+PSF NAMD
+
+       0 !NTITLE
+
+      10 !NATOM
+       1 A       1 POL  O    O          0.000000       16.0000       0
+       2 A       2 POL  C    C          0.000000       12.0000       0
+       3 A       3 POL  C    C          0.000000       12.0000       0
+       4 A       4 POL  O    O          0.000000       16.0000       0
+       5 A       5 POL  C    C          0.000000       12.0000       0
+       6 A       6 POL  C    C          0.000000       12.0000       0
+       7 A       7 POL  O    O          0.000000       16.0000       0
+       8 A       8 POL  C    C          0.000000       12.0000       0
+       9 A       9 POL  C    C          0.000000       12.0000       0
+      10 A      10 POL  O    O          0.000000       16.0000       0
+
+       9 !NBOND: bonds
+       1       2       2       3       3       4       4       5
+       5       6       6       7       7       8       8       9
+       9      10
+
+       0 !NTHETA: angles
+
+       0 !NPHI: dihedrals
+
+       0 !NIMPHI: impropers
+
+       0 !NCRTERM: cross-terms
