@@ -1,0 +1,3 @@
+[submodule "fQCP"]
+	path = fQCP
+	url = https://github.com/naotohori/fQCP.git
