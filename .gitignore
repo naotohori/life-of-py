@@ -4,3 +4,4 @@
 .pydevproject
 *.so
 *.dSYM/
+__pycache__/

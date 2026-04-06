@@ -5,7 +5,7 @@ Compute a 3D density map of molecule B around molecule A (parallelised version).
 
 For each (frame, mol-A copy) pair:
   1. Unwrap mol-A beads (sequential MAXD algorithm, PBC).
-  2. Superimpose mol-A onto a native reference via CalcROT → 4×4 matrix.
+  2. Superimpose mol-A onto a native reference via fQCP → 4×4 matrix.
   3. Find mol-B chains that may have atoms inside the cubic box [-R, R]^3:
      conservative filter — skip a chain only if its centre is farther than
      R + chain_max_radius from the mol-A centre (minimum-image convention).
@@ -30,10 +30,7 @@ from numpy import zeros, float64
 from lop.file_io.dcd import DcdFile
 from lop.file_io.pdb import PdbFile
 
-# ------------------------------------------------------------
-# CalcROT import
-# ------------------------------------------------------------
-from fQCP.CalcROT import calcrotation
+from lop.fQCP import calc_rotation # uses Fortran backend if compiled, else NumPy
 
 # ------------------------------------------------------------
 # Constants
@@ -233,19 +230,48 @@ def write_opendx(filename, grid, origin, grid_size):
         fout.write('component "data" value 3\n')
 
 
+def resolve_frame_indices(frames_arg, nframes_total):
+    """
+    Return a range of 0-based frame indices to sample from the DCD.
+    """
+    if frames_arg is None:
+        return range(nframes_total)
+
+    frame_start_1based, frame_end_1based, frame_stride = frames_arg
+
+    if frame_start_1based < 1:
+        print('ERROR: --frames START must be >= 1')
+        sys.exit(1)
+    if frame_end_1based < frame_start_1based:
+        print('ERROR: --frames END must be >= START')
+        sys.exit(1)
+    if frame_stride < 1:
+        print('ERROR: --frames STRIDE must be >= 1')
+        sys.exit(1)
+    if frame_end_1based > nframes_total:
+        print('ERROR: --frames END {:d} is out of range (DCD has {:d} frames)'.format(
+            frame_end_1based, nframes_total))
+        sys.exit(1)
+
+    frame_start = frame_start_1based - 1
+    frame_end   = frame_end_1based - 1
+    return range(frame_start, frame_end + 1, frame_stride)
+
+
 # ============================================================
 # Parallelism helpers
 # ============================================================
 
-def _make_chunks(frame_start, frame_end, nproc):
-    """Split the inclusive 0-based frame range into nproc contiguous chunks."""
-    total = frame_end - frame_start + 1
+def _make_chunks(frame_indices, nproc):
+    """Split sampled frame indices into nproc chunks with near-equal lengths."""
+    total = len(frame_indices)
     base, rem = divmod(total, nproc)
-    chunks, cur = [], frame_start
+    chunks = []
+    cur = 0
     for i in range(nproc):
         size = base + (1 if i < rem else 0)
         if size > 0:
-            chunks.append((cur, cur + size - 1))
+            chunks.append(frame_indices[cur:cur + size])
         cur += size
     return chunks
 
@@ -253,8 +279,8 @@ def _make_chunks(frame_start, frame_end, nproc):
 def _density_worker(args):
     """
     Top-level (picklable) worker function.
-    Re-imports CalcROT and DcdFile inside the function so each worker process
-    gets its own independent copy of the Fortran extension.
+    Re-imports fQCP and DcdFile inside the function so each worker process
+    gets its own independent copy.
     Returns (local_grid, local_samples, rmsd_list) where
     rmsd_list = [(iframe_0based, avg_rmsd), ...].
     """
@@ -262,18 +288,16 @@ def _density_worker(args):
     import numpy as _np
     from numpy import zeros as _zeros, float64 as _f64
 
-    _sys.path.insert(0, args['calccrot_path'])
-    from CalcROT import calcrotation as _calcrotation
+    from fQCP import calc_rotation as _calc_rotation
     from lop.file_io.dcd import DcdFile as _DcdFile
 
-    ref_mol_a_F         = args['ref_mol_a_F']
+    ref_np              = args['ref_np']
     mol_a_slices        = args['mol_a_slices']
     mol_b_slices        = args['mol_b_slices']
     mol_b_global_radius = args['mol_b_global_radius']   # single float
     R, dx, ngrid        = args['R'], args['dx'], args['ngrid']
     origin              = args['origin']
-    chunk_start         = args['chunk_start']
-    chunk_end           = args['chunk_end']
+    frame_indices       = args['frame_indices']
 
     local_grid    = _zeros((ngrid, ngrid, ngrid), dtype=_f64)
     local_samples = 0
@@ -282,9 +306,9 @@ def _density_worker(args):
     dcd = _DcdFile(args['dcd_filename'])
     dcd.open_to_read()
     dcd.read_header()
-    dcd.go_to_frame(chunk_start)
 
-    for iframe in range(chunk_start, chunk_end + 1):
+    for iframe in frame_indices:
+        dcd.go_to_frame(iframe)
         if not dcd.has_more_data():
             break
         coords  = dcd.read_onestep_np()
@@ -296,8 +320,7 @@ def _density_worker(args):
             mol_a_unwrp  = unwrap_molecule(mol_a_raw, box_np)
             mol_a_center = mol_a_unwrp.mean(axis=0)
 
-            mol_a_F   = _np.asfortranarray(mol_a_unwrp.T)
-            rmsd, mat = _calcrotation(ref_mol_a_F, mol_a_F)
+            rmsd, mat = _calc_rotation(ref_np, mol_a_unwrp)
             frame_rmsd_list.append(rmsd)
 
             mol_b_tr_batch = []
@@ -360,9 +383,10 @@ def main():
                         help='Voxel spacing in Å')
     parser.add_argument('--output',    required=True,
                         help='Output OpenDX density filename')
-    parser.add_argument('--frames',    type=int, nargs=2, metavar=('START', 'END'),
+    parser.add_argument('--frames',    type=int, nargs=3, metavar=('START', 'END', 'STRIDE'),
                         default=None,
-                        help='1-based inclusive frame range (default: all frames)')
+                        help='1-based inclusive frame range with stride '
+                             '(default: all frames, stride 1)')
     parser.add_argument('--movie',     default=None, metavar='FILE',
                         help='Output sequential PDB movie file '
                              '(one MODEL per mol-A copy per frame)')
@@ -441,7 +465,7 @@ def main():
               mol_b_max_radii.min(), mol_b_max_radii.max(), mol_b_global_radius))
 
     # ----------------------------------------------------------
-    # Read native mol-A → reference coords (3, N_a) Fortran order
+    # Read native mol-A → reference coords (N_a, 3)
     # ----------------------------------------------------------
     nat_pdb = PdbFile(args.native)
     nat_pdb.open_to_read()
@@ -454,7 +478,6 @@ def main():
             for atom in residue.atoms:
                 ref_list.append(atom.xyz.get_as_tuple())
     ref_np   = np.array(ref_list, dtype=float64)   # (N_a, 3)
-    ref_mol_a_F = np.asfortranarray(ref_np.T)       # (3, N_a) Fortran order
 
     center_native = ref_np.mean(axis=0)
     N_mol_a_atoms = ref_np.shape[0]
@@ -479,13 +502,8 @@ def main():
     nframes_total = dcd.count_frame()
     print('DCD frames: {:d}, atoms: {:d}'.format(nframes_total, header.nmp_real))
 
-    # Frame range (1-based → 0-based internally)
-    if args.frames is not None:
-        frame_start = args.frames[0] - 1
-        frame_end   = args.frames[1] - 1
-    else:
-        frame_start = 0
-        frame_end   = nframes_total - 1
+    # Frame selection (1-based CLI → 0-based internal indices)
+    frame_indices = resolve_frame_indices(args.frames, nframes_total)
 
     # ----------------------------------------------------------
     # Density grid
@@ -500,11 +518,8 @@ def main():
         movie_fout = open(args.movie, 'w')
         model_num  = 0
 
-        dcd.rewind()
-        if frame_start > 0:
-            dcd.skip(frame_start)
-
-        for iframe in range(frame_start, frame_end + 1):
+        for iframe in frame_indices:
+            dcd.go_to_frame(iframe)
             if not dcd.has_more_data():
                 print('Warning: DCD ended at frame {:d}'.format(iframe + 1))
                 break
@@ -523,8 +538,7 @@ def main():
                 mol_a_center = mol_a_unwrp.mean(axis=0)
 
                 # ---- Superimpose onto native ----
-                mol_a_F = np.asfortranarray(mol_a_unwrp.T)          # (3, N_a)
-                rmsd, mat = calcrotation(ref_mol_a_F, mol_a_F)      # mat: 4×4
+                rmsd, mat = calc_rotation(ref_np, mol_a_unwrp)      # mat: 4×4
                 frame_rmsd_list.append(rmsd)
 
                 # Transform mol-A itself (needed for movie)
@@ -587,21 +601,22 @@ def main():
     else:
         dcd.close()   # workers open their own handles
 
-        chunks = _make_chunks(frame_start, frame_end, args.nproc)
+        chunks = _make_chunks(frame_indices, args.nproc)
         task_dicts = [{
             'dcd_filename'       : args.dcd,
-            'calccrot_path'      : '/Users/hori/python/fQCP',
-            'ref_mol_a_F'        : ref_mol_a_F,
+            'ref_np'             : ref_np,
             'mol_a_slices'       : mol_a_slices,
             'mol_b_slices'       : mol_b_slices,
             'mol_b_global_radius': mol_b_global_radius,
             'R'                  : R, 'dx': dx, 'ngrid': ngrid, 'origin': origin,
-            'chunk_start'        : cs, 'chunk_end': ce,
-        } for cs, ce in chunks]
+            'frame_indices'      : chunk,
+        } for chunk in chunks]
 
         all_rmsd = []
 
-        if args.nproc == 1:
+        if not task_dicts:
+            pass
+        elif args.nproc == 1:
             local_grid, local_samples, rmsd_list = _density_worker(task_dicts[0])
             grid += local_grid
             total_samples += local_samples

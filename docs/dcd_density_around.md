@@ -18,7 +18,7 @@ This analysis answers **where mol-B tends to sit relative to mol-A.** This is do
 | `--range R` | Half-size of the analysis box in Å; defines the cubic region `[-R, R]³` |
 | `--grid_size dx` | Voxel spacing in Å |
 | `--output` | Output `.dx` file name |
-| `--frames START END` | Optional frame range (default: all) |
+| `--frames START END STRIDE` | Optional 1-based inclusive frame range with stride (default: all frames, stride 1) |
 | `--movie` | Optional output PDB movie file |
 
 ----
@@ -31,14 +31,14 @@ This analysis answers **where mol-B tends to sit relative to mol-A.** This is do
 
 2. **Conservative radius per mol-B chain.** For each mol-B chain, `chain_max_radius` computes the maximum distance from the chain's geometric center to any of its beads (from static PDB coords). This is used later as a spatial filter.
 
-3. **Native mol-A reference.** The native PDB is read, its bead coordinates stored as `ref_mol_a_F` in Fortran-order `(3, N_a)` shape, ready for `calcrotation`.
+3. **Native mol-A reference.** The native PDB is read and its bead coordinates are stored as an `(N_a, 3)` array, ready for `calc_rotation`.
 
 4. **Grid allocation.** A `(ngrid, ngrid, ngrid)` array of zeros is created where `ngrid = floor(2R / dx)`.
 
 
 ## Per-frame loop
 
-For each DCD frame within the requested range:
+For each sampled DCD frame in the requested sequence `START, START + STRIDE, START + 2*STRIDE, ...` up to `END`:
 
 ### For each mol-A copy (there can be multiple identical chains in the system)
 
@@ -46,7 +46,7 @@ For each DCD frame within the requested range:
 The raw PBC-wrapped coordinates of this mol-A copy are unwrapped using the **sequential MAXD algorithm**: beads are walked in order; if bead `i` jumps more than `MAXD = 20 Å` from bead `i-1`, the entire box vector is added or subtracted. This assumes connectivity is sequential and chain bonds never exceed 20 Å.
 
 **Step 2 — Superimpose onto native.**
-`calcrotation(ref_mol_a_F, mol_a_F)` (from an external `fQCP` library) computes the optimal rotation+translation that minimizes RMSD between the unwrapped mol-A copy and the native reference. It returns:
+`calc_rotation(ref_np, mol_a_unwrp)` (from `fQCP`) computes the optimal rotation+translation that minimizes RMSD between the unwrapped mol-A copy and the native reference. It returns:
 - `rmsd` — the fit quality
 - `mat` — a **4×4 homogeneous transformation matrix** encoding the combined rotation and translation
 
@@ -69,7 +69,7 @@ For each transformed mol-B bead, its position is converted to grid indices: `i =
 
 ## Normalization and output
 
-After all frames:
+After all sampled frames:
 - `grid` holds raw bead counts (total hits per voxel summed across all frames and mol-A copies).
 - It is divided by `total_samples × dx³` to give units of **beads/Å³** — a proper volumetric density.
 - Written as an **OpenDX file**, which VMD or PyMOL can display as an isosurface or volumetric map overlaid on structure.
