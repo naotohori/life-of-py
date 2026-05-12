@@ -91,6 +91,59 @@ def chain_max_radius(chain):
     return float(np.sqrt(((xyz - centre) ** 2).sum(axis=1)).max())
 
 
+def parse_residue_ranges(s):
+    """Parse a comma-separated residue-range string into a list of inclusive
+    (lo, hi) tuples.  Examples:
+      "2-10,15-20"   -> [(2, 10), (15, 20)]
+      "5"            -> [(5, 5)]
+      "1-3, 7, 9-11" -> [(1, 3), (7, 7), (9, 11)]
+    """
+    ranges = []
+    for part in s.split(','):
+        part = part.strip()
+        if not part:
+            continue
+        if '-' in part:
+            a, b = part.split('-', 1)
+            lo, hi = int(a.strip()), int(b.strip())
+        else:
+            lo = hi = int(part)
+        if lo > hi:
+            raise ValueError("Invalid residue range '{:s}': low > high".format(part))
+        ranges.append((lo, hi))
+    return ranges
+
+
+def _res_seq_in_ranges(res_seq, ranges):
+    return any(lo <= res_seq <= hi for lo, hi in ranges)
+
+
+def build_native_fit_indices(chains, ranges):
+    """Return atom indices into the flat native atom array (iterated across all
+    native chains in order) whose res_seq falls into any of the given ranges."""
+    indices = []
+    idx = 0
+    for chain in chains:
+        for residue in chain.residues:
+            for atom in residue.atoms:
+                if _res_seq_in_ranges(atom.res_seq, ranges):
+                    indices.append(idx)
+                idx += 1
+    return np.array(indices, dtype=np.intp)
+
+
+def build_chain_fit_indices(chain, ranges):
+    """Return atom indices within a single chain whose res_seq falls into any range."""
+    indices = []
+    idx = 0
+    for residue in chain.residues:
+        for atom in residue.atoms:
+            if _res_seq_in_ranges(atom.res_seq, ranges):
+                indices.append(idx)
+            idx += 1
+    return np.array(indices, dtype=np.intp)
+
+
 def write_pdb_atom(fout, serial, name, res_name, chain_id, res_seq, ins_code, xyz,
                    occupancy=1.00, temp_factor=0.00):
     """Write one PDB ATOM line.
@@ -292,6 +345,13 @@ def main():
     parser.add_argument('--movie',     default=None, metavar='FILE',
                         help='Output sequential PDB movie file '
                              '(one MODEL per mol-A copy per frame)')
+    parser.add_argument('--mol_a_fit_residues', type=str, default=None, metavar='RANGES',
+                        help='Comma-separated res_seq ranges of mol-A used for the '
+                             'superposition fit, e.g. "2-10,15-20" (inclusive). The 4x4 '
+                             'transform is still applied to all mol-A and mol-B atoms; '
+                             'only the QCP fit uses the subset. The subset centroid (not '
+                             'the full mol-A centroid) is then used as the anchor for the '
+                             'mol-B proximity filter. Default: all mol-A atoms.')
     args = parser.parse_args()
 
     R     = args.half_box
@@ -378,13 +438,49 @@ def main():
     print('Native mol-A: {:d} atoms, center ({:.3f}, {:.3f}, {:.3f})'.format(
         N_mol_a_atoms, *center_native))
 
-    # Verify all mol-A copies have the same atom count as the native
-    for rank, (i, sl) in enumerate(zip(mol_a_indices, mol_a_slices)):
-        n = sl.stop - sl.start
-        if n != N_mol_a_atoms:
-            print('ERROR: mol-A chain {:d} (system chain {:d}) has {:d} atoms, '
-                  'native has {:d}'.format(rank + 1, i + 1, n, N_mol_a_atoms))
+    # ----------------------------------------------------------
+    # Atom-count verification and (optional) fit-subset selection
+    # ----------------------------------------------------------
+    if args.mol_a_fit_residues is not None:
+        # Subset fit: native only needs to contain the residues listed in the
+        # ranges (extra residues are allowed and ignored).  Verify that the
+        # subset atom count matches between native and every mol-A copy.
+        fit_ranges         = parse_residue_ranges(args.mol_a_fit_residues)
+        fit_indices_native = build_native_fit_indices(nat_chains, fit_ranges)
+        if len(fit_indices_native) == 0:
+            print('ERROR: --mol_a_fit_residues "{:s}" matched no atoms in native PDB'.format(
+                args.mol_a_fit_residues))
             sys.exit(1)
+        ref_fit_np        = ref_np[fit_indices_native]
+        fit_indices_chain = build_chain_fit_indices(sys_chains[mol_a_indices[0]], fit_ranges)
+        if len(fit_indices_chain) != len(fit_indices_native):
+            print('ERROR: --mol_a_fit_residues matched {:d} atoms in native but {:d} '
+                  'in mol-A chain {:d}'.format(
+                      len(fit_indices_native), len(fit_indices_chain),
+                      mol_a_indices[0] + 1))
+            sys.exit(1)
+        for i in mol_a_indices[1:]:
+            n = len(build_chain_fit_indices(sys_chains[i], fit_ranges))
+            if n != len(fit_indices_chain):
+                print('ERROR: --mol_a_fit_residues matched {:d} atoms in mol-A chain {:d} '
+                      'but {:d} in chain {:d}'.format(
+                          n, i + 1, len(fit_indices_chain), mol_a_indices[0] + 1))
+                sys.exit(1)
+        print('Superposition fit: {:d} atoms from res_seq ranges {:s}  '
+              '(native has {:d} atoms total, {:d} of which are in the fit subset)'.format(
+                  len(fit_indices_chain), args.mol_a_fit_residues,
+                  N_mol_a_atoms, len(fit_indices_native)))
+    else:
+        # Full-atom fit: native must match each mol-A copy atom count.
+        for rank, (i, sl) in enumerate(zip(mol_a_indices, mol_a_slices)):
+            n = sl.stop - sl.start
+            if n != N_mol_a_atoms:
+                print('ERROR: mol-A chain {:d} (system chain {:d}) has {:d} atoms, '
+                      'native has {:d}'.format(rank + 1, i + 1, n, N_mol_a_atoms))
+                sys.exit(1)
+        ref_fit_np        = ref_np
+        fit_indices_chain = None
+        print('Superposition fit: using all {:d} mol-A atoms'.format(N_mol_a_atoms))
 
     # ----------------------------------------------------------
     # Open DCD
@@ -431,10 +527,14 @@ def main():
             # ---- Extract and unwrap mol-A copy ----
             mol_a_raw   = coords[sl_a].astype(float64)
             mol_a_unwrp = unwrap_molecule(mol_a_raw, box_np)
-            mol_a_center = mol_a_unwrp.mean(axis=0)
+
+            # ---- Select fit subset (full mol-A if no residue filter) ----
+            mol_a_fit = (mol_a_unwrp[fit_indices_chain]
+                         if fit_indices_chain is not None else mol_a_unwrp)
+            mol_a_center = mol_a_fit.mean(axis=0)
 
             # ---- Superimpose onto native ----
-            rmsd, mat = calc_rotation(ref_np, mol_a_unwrp)      # mat: 4×4
+            rmsd, mat = calc_rotation(ref_fit_np, mol_a_fit)    # mat: 4×4
             frame_rmsd_list.append(rmsd)
 
             # Transform mol-A itself (needed for movie)
