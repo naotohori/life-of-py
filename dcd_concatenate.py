@@ -51,6 +51,19 @@ def _scan_input(path):
     return {'header': header, 'seek_data': seek_data, 'bpf': bpf, 'n_frame': n_frame}
 
 
+def _block1_values(header):
+    '''Return ISTART, NSAVC, NSTEP and DELTA from the first header block.
+
+    read_header() does not set these attributes for CHARMM-format files,
+    so they are taken from block1 directly. In CHARMM format, block1 is
+    unpacked as '4s20i', so DELTA (float32) is reinterpreted here.'''
+    b = header.block1
+    delta = b[10]
+    if header.format == 'charmm':
+        delta = struct.unpack('f', struct.pack('i', delta))[0]
+    return {'istart': b[2], 'nstep_save': b[3], 'nstep': b[4], 'delta': delta}
+
+
 def _copy_bytes(fin, fout, nbytes):
     while nbytes > 0:
         buf = fin.read(min(CHUNK_SIZE, nbytes))
@@ -90,10 +103,22 @@ def dcd_concatenate(filepaths, skip_first=True):
     n_skip = [0] + [1 if skip_first else 0] * (len(inputs) - 1)
     n_frames = [max(lay['n_frame'] - s, 0) for lay, s in zip(layouts, n_skip)]
 
+    # NSAVC and DELTA must agree among inputs; otherwise warn and use the first
+    values = [_block1_values(lay['header']) for lay in layouts]
+    for key, label in (('nstep_save', 'NSAVC'), ('delta', 'DELTA')):
+        for path, v in zip(inputs[1:], values[1:]):
+            if v[key] != values[0][key]:
+                print('Warning: %s of %s (%.7g) differs from that of %s (%.7g). '
+                      'The value of the first input is used.'
+                      % (label, path, v[key], inputs[0], values[0][key]), file=sys.stderr)
+
     # Header: taken from the first input, total frames, and nstep of the last input
     header = copy(h0)
     header.nset = sum(n_frames)
-    header.nstep = layouts[-1]['header'].nstep
+    header.istart = values[0]['istart']
+    header.nstep_save = values[0]['nstep_save']
+    header.delta = values[0]['delta']
+    header.nstep = values[-1]['nstep']
 
     f_out = DcdFile(output)
     f_out.open_to_write()
