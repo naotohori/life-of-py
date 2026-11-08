@@ -56,7 +56,11 @@ def dcd_concatenate(filepaths):
     #n_frames.append(f_in.get_header().nset)
     i = 0
     while f_in.has_more_data() :
-        f_out.write_onestep(f_in.read_onestep())
+        coords = f_in.read_onestep()
+        if f_in.get_header().with_unit_cell:
+            f_out.get_header().unit_cell_xyz = f_in.get_header().unit_cell_xyz
+            f_out.get_header().unit_cell_abc = f_in.get_header().unit_cell_abc
+        f_out.write_onestep(coords)
         i += 1
     n_frames.append(i)
     f_in.close()
@@ -70,7 +74,11 @@ def dcd_concatenate(filepaths):
         #n_frames.append(f_in.get_header().nset - 1)
         i = 0
         while f_in.has_more_data() :
-            f_out.write_onestep(f_in.read_onestep())
+            coords = f_in.read_onestep()
+            if f_in.get_header().with_unit_cell:
+                f_out.get_header().unit_cell_xyz = f_in.get_header().unit_cell_xyz
+                f_out.get_header().unit_cell_abc = f_in.get_header().unit_cell_abc
+            f_out.write_onestep(coords)
             i += 1
         n_frames.append(i)
         f_in.close()
