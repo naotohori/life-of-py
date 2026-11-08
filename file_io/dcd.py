@@ -49,6 +49,10 @@ class DcdHeader(object):
         for i, data in enumerate(self.block1):
             if i == 0:
                 print('   Type:', self.block1[i])
+            elif i == 10 and self.format == 'charmm':
+                # DELTA is float32, but CHARMM block1 is read as '4s20i'
+                delta = np.frombuffer(struct.pack('i', self.block1[i]), dtype=np.float32)[0]
+                print('   {:2d}:'.format(i), delta, '(DELTA)')
             else:
                 print('   {:2d}:'.format(i), self.block1[i])
         if self.title is not None:
